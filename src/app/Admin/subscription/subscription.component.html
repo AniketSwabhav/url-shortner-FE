@@ -1,0 +1,70 @@
+<div class="container mt-5">
+
+  <!-- Current Subscription -->
+  <div *ngIf="subscription">
+    <h4 class="mb-3">Current Subscription</h4>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <table class="table table-striped table-bordered mb-0">
+          <tbody>
+            <tr>
+              <th scope="row">Free Short URLs</th>
+              <td>{{ subscription.freeShortUrls }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Free Visits</th>
+              <td>{{ subscription.freeVisits }}</td>
+            </tr>
+            <tr>
+              <th scope="row">New URL Price</th>
+              <td>₹ {{ subscription.newUrlPrice }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Extra Visit Price</th>
+              <td>₹ {{ subscription.extraVisitPrice }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Subscription Form -->
+  <div class="card shadow-sm p-4">
+    <h4 class="mb-4">Manage Subscription</h4>
+    <form [formGroup]="subscriptionForm" class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Free Short URLs</label>
+        <input type="number" formControlName="freeShortUrls" class="form-control" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Free Visits</label>
+        <input type="number" formControlName="freeVisits" class="form-control" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">New URL Price</label>
+        <input type="number" formControlName="newUrlPrice" class="form-control" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Extra Visit Price</label>
+        <input type="number" formControlName="extraVisitPrice" class="form-control" />
+      </div>
+
+      <div class="col-12 mt-4 d-flex gap-2">
+        <button type="button" class="btn btn-success flex-fill" (click)="setPrice()">Set Price</button>
+        <button type="button" class="btn btn-primary flex-fill" (click)="updatePrice()">Update Price</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- No subscription case -->
+  <div class="mt-4 alert alert-info text-center" *ngIf="!subscription">
+    No subscription set yet. Please add one.
+  </div>
+
+</div>

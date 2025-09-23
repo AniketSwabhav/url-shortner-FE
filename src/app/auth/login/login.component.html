@@ -1,0 +1,26 @@
+<div class="container vh-100 d-flex justify-content-center align-items-center bg-light">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+        <!-- <h4 class="mb-4 text-center">Banking Application</h4> -->
+        <h3 class="mb-4 text-center">Login</h3>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" id="email" formControlName="email" class="form-control" placeholder="Your email..."
+                    required />
+            </div>
+            <div class="mb-3 position-relative">
+                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+                    class="form-control" placeholder="Your password..." required />
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success" [disabled]="loginForm.invalid">
+                    Login
+                </button>
+                <button type="reset" class="btn btn-secondary" [disabled]="loginForm.invalid">
+                    Reset
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

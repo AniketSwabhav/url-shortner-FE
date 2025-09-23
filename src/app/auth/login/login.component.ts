@@ -10,7 +10,7 @@ import { LoginService } from 'src/app/service/login.service';
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule,RouterModule]
 })
 export class LoginComponent {
 

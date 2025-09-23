@@ -1,1 +1,46 @@
-<p>register works!</p>
+<div class="register-container d-flex justify-content-center align-items-center min-vh-100 p-3">
+  <div class="card shadow-lg p-4 w-100" style="max-width: 400px;">
+    <div class="text-center mb-4">
+      <i class="bi bi-person-plus" style="font-size: 3rem; color: #0d6efd;"></i>
+      <h3 class="mt-2">Register User</h3>
+    </div>
+
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+      <div class="mb-3">
+        <label for="firstName" class="form-label">First Name</label>
+        <input type="text" id="firstName" name="firstName" [(ngModel)]="firstName" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="lastName" class="form-label">Last Name</label>
+        <input type="text" id="lastName" name="lastName" [(ngModel)]="lastName" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="phoneNo" class="form-label">Phone Number</label>
+        <input type="text" id="phoneNo" name="phoneNo" [(ngModel)]="phoneNo" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" [(ngModel)]="email" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control" required />
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger p-2 text-center">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="alert alert-success p-2 text-center">{{ successMessage }}</div>
+
+      <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid">Register</button>
+      </div>
+    </form>
+
+    <div class="text-center">
+      <p>Already have an account? <a routerLink="/login">Login here</a></p>
+    </div>
+  </div>
+</div>

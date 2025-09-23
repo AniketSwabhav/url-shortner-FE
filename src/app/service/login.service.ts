@@ -37,23 +37,23 @@ export class LoginService {
     this.authStatus.next(true);
   }
 
-  isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    return !this.jwtHelper.isTokenExpired(token || '');
-  }
+  // isAuthenticated(): boolean {
+  //   const token = localStorage.getItem('token');
+  //   return !this.jwtHelper.isTokenExpired(token || '');
+  // }
 
-  getRole(): 'admin' | 'user' | null {
-    return localStorage.getItem(this.roleKey) as 'admin' | 'user' | null;
-  }
+  // getRole(): 'admin' | 'user' | null {
+  //   return localStorage.getItem(this.roleKey) as 'admin' | 'user' | null;
+  // }
 
-  isAdmin(): boolean {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decodedToken = this.jwtHelper.decodeToken(token);
-      return decodedToken?.IsAdmin === true || decodedToken?.IsAdmin === '1';
-    }
-    return false;
-  }
+  // isAdmin(): boolean {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     const decodedToken = this.jwtHelper.decodeToken(token);
+  //     return decodedToken?.IsAdmin === true || decodedToken?.IsAdmin === '1';
+  //   }
+  //   return false;
+  // }
 
   logout(): void {
     localStorage.removeItem('token');

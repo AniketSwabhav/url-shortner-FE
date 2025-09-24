@@ -1,0 +1,31 @@
+<div class="container mt-4">
+  <h2>Your URLs</h2>
+
+  <div *ngIf="loading" class="alert alert-info">Loading URLs...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <table *ngIf="urls.length > 0" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Sr No</th>
+        <th>Short URL</th>
+        <th>Long URL</th>
+        <th>Visits</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let url of urls; let i = index">
+        <td>{{ i+1 }}</td>
+        <td>
+          <a [href]="url.longUrl" target="_blank">{{ url.shortUrl }}</a>
+        </td>
+        <td>{{ url.longUrl }}</td>
+        <td>{{ url.visits }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && urls.length === 0" class="alert alert-warning">
+    You have no URLs saved yet.
+  </div>
+</div>

@@ -18,14 +18,18 @@ export interface User {
   wallet: number;
 }
 
+export interface UserResponse {
+  users: User[];
+  total: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AdmindashboardService {
   private baseUrl = 'http://localhost:8001/api/v1/url-shortner/users';
 
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private getAuthHeaders() {
     const token = localStorage.getItem('token');
@@ -38,31 +42,17 @@ export class AdmindashboardService {
   }
 
   getAllUsers(params: HttpParams): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/`, {
-      ...this.getAuthHeaders(),
-      params,
-    });
-  }
+  return this.http.get<User[]>(`${this.baseUrl}/`, {
+    ...this.getAuthHeaders(),
+    params,
+  });
+}
 
   getUserById(userId: string): Observable<User> {
-    return this.http.get<User>(
-      `${this.baseUrl}/${userId}`,
-      this.getAuthHeaders()
-    );
-  }
-
-  updateUser(userId: string, user: Partial<User>): Observable<User> {
-    return this.http.put<User>(
-      `${this.baseUrl}/${userId}`,
-      user,
-      this.getAuthHeaders()
-    );
+    return this.http.get<User>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
   }
 
   deleteUser(userId: string): Observable<void> {
-    return this.http.delete<void>(
-      `${this.baseUrl}/${userId}`,
-      this.getAuthHeaders()
-    );
+    return this.http.delete<void>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
   }
 }

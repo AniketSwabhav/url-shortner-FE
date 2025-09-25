@@ -47,7 +47,7 @@ export class LoginComponent {
             this.snackbarService.showSuccessSnackbar("Admin logged in successfully");
           } else {
             this.router.navigate(['user/dashboard']);
-             this.snackbarService.showSuccessSnackbar("user logged in successfully");
+             this.snackbarService.showSuccessSnackbar("User logged in successfully");
           }
         } 
       },

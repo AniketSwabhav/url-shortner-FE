@@ -1,19 +1,34 @@
 <div class="container mt-3">
-
   <!-- Flash Messages -->
-  <div *ngIf="flash.message" class="alert" [ngClass]="{
-    'alert-success': flash.type === 'success',
-    'alert-danger': flash.type === 'danger'
-  }">
+  <div
+    *ngIf="flash.message"
+    class="alert"
+    [ngClass]="{
+      'alert-success': flash.type === 'success',
+      'alert-danger': flash.type === 'danger'
+    }"
+  >
     {{ flash.message }}
+  </div>
+
+  <!-- Search -->
+  <div class="input-group w-50 mb-3" [formGroup]="searchForm">
+    <input
+      type="text"
+      formControlName="searchTerm"
+      placeholder="Search by User ID or Username..."
+      class="form-control"
+    />
+    <button class="btn btn-primary" (click)="searchUsers()">Search</button>
+    <button class="btn btn-outline-secondary" (click)="clearSearch()">Clear</button>
   </div>
 
   <!-- Users Table -->
   <table class="table table-bordered table-hover">
     <thead class="table-dark">
       <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Sr No</th>
+        <th>Full Name</th>
         <th>Email</th>
         <th>Phone</th>
         <th>Admin</th>
@@ -24,19 +39,26 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.firstName }}</td>
-        <td>{{ user.lastName }}</td>
+      <tr *ngFor="let user of users; let i = index">
+        <td>{{ i + 1 + offset }}</td> <!-- Serial number across pages -->
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
         <td>{{ user.credential.email }}</td>
         <td>{{ user.phoneNo }}</td>
-        <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
-        <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
+        <td>{{ user.isAdmin ? "Admin" : "User" }}</td>
+        <td>{{ user.isActive ? "Yes" : "No" }}</td>
         <td>{{ user.wallet }}</td>
         <td>{{ user.urlCount }}</td>
         <td>
-          <button class="btn btn-sm btn-primary me-2" (click)="updateUser(user)">Update</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">Delete</button>
+          <button class="btn btn-sm btn-primary me-2">
+            Update
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
+            Delete
+          </button>
         </td>
+      </tr>
+      <tr *ngIf="users.length === 0">
+        <td colspan="9" class="text-center">No users found.</td>
       </tr>
     </tbody>
   </table>
@@ -47,7 +69,10 @@
     [totalItems]="totalUserRecords"
     [limit]="limit"
     [offset]="offset"
-    (pageChange)="changePage($event)">
+    (pageChange)="changePage($event)"
+  >
   </app-pagination>
-
 </div>
+
+
+<!-- Brijesh -->

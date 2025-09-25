@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import {
-  AdmindashboardService,
-  User,
-} from 'src/app/service/admindashboard.service';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { AdmindashboardService, User, UserResponse } from 'src/app/service/admindashboard.service';
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
@@ -14,7 +11,7 @@ import { HttpParams } from '@angular/common/http';
   templateUrl: './admindashboard.component.html',
   styleUrls: ['./admindashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, PaginationComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent],
 })
 export class AdmindashboardComponent implements OnInit {
   users: User[] = [];
@@ -25,59 +22,81 @@ export class AdmindashboardComponent implements OnInit {
   currentPage: number = 1;
   totalUserRecords: number = 0;
 
+  searchForm: FormGroup;
+
   constructor(
     private adminService: AdmindashboardService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {}
-
-  ngOnInit(): void {
-    this.loadUsers();
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {
+    this.searchForm = this.fb.group({
+      searchTerm: ['']
+    });
   }
 
+  ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['search']) this.searchForm.get('searchTerm')?.setValue(params['search']);
+      if (params['limit']) this.limit = +params['limit'];
+      if (params['offset']) {
+        this.offset = +params['offset'];
+        this.currentPage = Math.floor(this.offset / this.limit) + 1;
+      }
+      this.loadUsers();
+    });
+  }
+
+
+  
   changePage(pageNumber: number): void {
     this.currentPage = pageNumber;
     this.offset = (pageNumber - 1) * this.limit;
     this.loadUsers();
   }
 
-  loadUsers(): void {
-    const params = new HttpParams()
-      .set('limit', this.limit.toString())
-      .set('offset', this.offset.toString());
+loadUsers(): void {
+  let params = new HttpParams()
+    .set('limit', this.limit.toString())
+    .set('offset', this.offset.toString());
 
-    this.adminService.getAllUsers(params).subscribe({
-      next: (response) => {
-        console.log('API Response:', response);
-        this.users = response;
-        this.totalUserRecords = response.length;
+  const searchTerm = this.searchForm.get('searchTerm')?.value;
+  if (searchTerm) params = params.set('search', searchTerm);
 
-        this.router.navigate([], {
-          relativeTo: this.activatedRoute,
-          queryParams: { limit: this.limit, offset: this.offset },
-          queryParamsHandling: 'merge',
-        });
-      },
-      error: (err) => {
-        console.error('Error loading users:', err);
-        this.flash = { type: 'danger', message: 'Failed to load users' };
-      },
-    });
+  this.adminService.getAllUsers(params).subscribe({
+    next: (users: User[]) => {
+      this.users = users;
+      this.totalUserRecords = users.length; 
+
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: {
+          limit: this.limit,
+          offset: this.offset,
+          search: searchTerm || null
+        },
+        queryParamsHandling: 'merge',
+      });
+    },
+    error: () => {
+      this.flash = { type: 'danger', message: 'Failed to load users' };
+    },
+  });
+}
+
+
+  searchUsers(): void {
+    this.offset = 0;
+    this.currentPage = 1;
+    this.loadUsers();
   }
 
-  updateUser(user: User): void {
-    this.adminService.updateUser(user.id, user).subscribe({
-      next: () => {
-        this.flash = { type: 'success', message: 'User updated successfully' };
-        this.loadUsers();
-      },
-      error: (err) => {
-        console.error('Error updating user:', err);
-        this.flash = { type: 'danger', message: 'Failed to update user' };
-
-      },
-    });
+  clearSearch(): void {
+    this.searchForm.get('searchTerm')?.setValue('');
+    this.searchUsers();
   }
+
+
 
   deleteUser(userId: string): void {
     this.adminService.deleteUser(userId).subscribe({
@@ -85,8 +104,7 @@ export class AdmindashboardComponent implements OnInit {
         this.flash = { type: 'success', message: 'User deleted successfully' };
         this.loadUsers();
       },
-      error: (err) => {
-        console.error('Error deleting user:', err);
+      error: () => {
         this.flash = { type: 'danger', message: 'Failed to delete user' };
       },
     });

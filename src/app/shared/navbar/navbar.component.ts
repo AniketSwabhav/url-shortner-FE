@@ -20,6 +20,11 @@ export class NavbarComponent {
   ngOnInit() {
     this.isAuthenticated = this.loginService.isAuthenticated();
     this.isAdmin = this.loginService.isAdmin();
+
+    this.loginService.authStatus$.subscribe(status => {
+      this.isAuthenticated = status;
+      this.isAdmin = this.loginService.isAdmin();
+    });
   }
 
   logout() {

@@ -1,5 +1,4 @@
 <div class="container mt-5">
-
   <!-- Current Subscription -->
   <div *ngIf="subscription">
     <h4 class="mb-3">Current Subscription</h4>
@@ -28,6 +27,11 @@
         </table>
       </div>
     </div>
+  </div>
+
+  <!-- No subscription case -->
+  <div *ngIf="!subscription" class="alert alert-info text-center mt-3">
+    No subscription set yet. Please add one.
   </div>
 
   <!-- Manage Subscription Form -->
@@ -61,10 +65,4 @@
       </div>
     </form>
   </div>
-
-  <!-- No subscription case -->
-  <div class="mt-4 alert alert-info text-center" *ngIf="!subscription">
-    No subscription set yet. Please add one.
-  </div>
-
 </div>

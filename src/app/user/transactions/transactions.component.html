@@ -1,0 +1,41 @@
+<div class="container mt-4">
+  <h3 class="text-primary mb-3">Transaction History</h3>
+
+ 
+  <div *ngIf="transactions.length === 0" class="alert alert-warning">
+    No transactions found.
+  </div>
+
+  <div *ngIf="transactions.length > 0" class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tx of transactions; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <span class="badge"
+              [ngClass]="{
+                'bg-success': tx.type === 'CREDIT',
+                'bg-danger': tx.type === 'DEBIT',
+                'bg-info': tx.type === 'ACCOUNTCREATION'
+              }">
+              {{ tx.type }}
+            </span>
+          </td>
+          <td>₹{{ tx.amount }}</td>
+          <td>{{ tx.note }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <app-pagination class=" p-0 m-0" [items]="transactions"
+            [totalItems]='selectedButtonIndex ? transactionCount : totalTransactionRecords' [limit]="limit" [offset]="offset"
+            (pageChange)="changePage($event)" />
+  </div>
+</div>

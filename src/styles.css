@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.snackbar-error.mat-mdc-snack-bar-container {
+    .mdc-snackbar__surface {
+        background: #b44848;
+        border-radius: 16px;
+        animation: slideInRight 0.5s ease;
+    }
+}
+
+.snackbar-successs.mat-mdc-snack-bar-container {
+    .mdc-snackbar__surface {
+        background: #53a036;
+        border-radius: 16px;
+        animation: slideInRight 0.5s ease;
+    }
+}

@@ -1,15 +1,16 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand">BankingApp</a>
+    <a class="navbar-brand">url-shortner</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <!-- Navbar items -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto"> 
-        
+      <ul class="navbar-nav ms-auto">
+
         <!-- Admin-specific links -->
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="/admin/dashboard">Admin Dashboard</a>
@@ -20,13 +21,13 @@
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="/admin/adminRegister">Add Admin</a>
         </li>
-         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
+        <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="/admin/view-all-banks">Manage Banks</a>
         </li>
-         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
+        <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="/admin/addbank">Add Bank</a>
         </li>
-         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
+        <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="admin/bank/settlement">Settlements</a>
         </li>
 
@@ -34,9 +35,15 @@
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
           <a class="nav-link" routerLink="/user/dashboard">Dashboard</a>
         </li>
+        <!-- User-specific URL list link with userId -->
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="user/view-all-accounts">Accounts</a>
+          <a class="nav-link" [routerLink]="['/user/urls']">My URLs</a>
         </li>
+
+        <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
+          <a class="nav-link" routerLink="/user/profile">Profile</a>
+        </li>
+
         <li *ngIf="isAuthenticated" class="nav-item">
           <a class="nav-link" (click)="logout()">Logout</a>
         </li>

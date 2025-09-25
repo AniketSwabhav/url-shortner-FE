@@ -1,0 +1,73 @@
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title text-primary mb-4">User Profile</h3>
+
+            <!-- Profile Data -->
+            <div *ngIf="userProfile">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Full Name:</strong> {{ userProfile.firstName }} {{ userProfile.lastName }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Phone:</strong> {{ userProfile.phoneNo }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Email:</strong> {{ userProfile.credential?.email }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Wallet Balance:</strong> ₹{{ userProfile.wallet }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Account Status:</strong>
+                        <span class="badge" [ngClass]="userProfile.isActive ? 'bg-success' : 'bg-danger'">
+                            {{ userProfile.isActive ? 'Active' : 'Inactive' }}
+                        </span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Role:</strong>
+                        <span class="badge" [ngClass]="userProfile.isAdmin ? 'bg-primary' : 'bg-secondary'">
+                            {{ userProfile.isAdmin ? 'Admin' : 'User' }}
+                        </span>
+                    </div>
+                </div>
+
+                <hr />
+
+                <!-- Optional: URL Stats -->
+                <!-- <div class="mb-3">
+          <strong>Total URLs:</strong> {{ userProfile.url?.length || 0 }}
+        </div> -->
+
+                <!-- Optional: Transaction History -->
+                <!-- <div *ngIf="userProfile.transactions?.length > 0">
+          <h5 class="text-secondary mt-4">Recent Transactions</h5>
+          <ul class="list-group mt-2">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                *ngFor="let tx of userProfile.transactions">
+              <div>
+                <strong>{{ tx.type }}</strong> - {{ tx.note }}
+              </div>
+              <span class="badge bg-info text-dark">₹{{ tx.amount }}</span>
+            </li>
+          </ul>
+        </div> -->
+
+                <button class="btn btn-outline-primary mt-3" (click)="onTransactionClick(userId!)">
+                    View Transactions
+                </button>
+
+
+                <div *ngIf="userProfile.transactions?.length === 0" class="text-muted mt-3">
+                    No transactions yet.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

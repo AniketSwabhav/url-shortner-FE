@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SubscriptionService, Subscription } from 'src/app/service/subscription.service';
+import { SubscriptionService, Subscription } from 'src/app/service/subscription.service'; // ✅ use this interface
 import { NavbarComponent } from 'src/app/shared/navbar/navbar.component';
 
 @Component({
@@ -29,23 +29,29 @@ export class SubscriptionComponent implements OnInit {
     this.loadSubscription();
   }
 
-  // Load subscription
   loadSubscription(): void {
     this.subscriptionService.getSubscription(this.userId).subscribe({
       next: (res) => {
         this.subscription = res;
-        if (res) this.subscriptionForm.patchValue(res);
+        if (res) {
+          this.subscriptionForm.patchValue(res);
+        }
         console.log('Subscription loaded', res);
       },
       error: (err) => {
         console.error('Error loading subscription', err);
+        this.subscription = null;
         alert(err.error?.message || 'Failed to load subscription');
       }
     });
   }
 
-  // Set subscription
   setPrice(): void {
+    if (this.subscriptionForm.invalid) {
+      alert('Please fill valid values in the form.');
+      return;
+    }
+
     const payload = this.subscriptionForm.value;
     this.subscriptionService.setSubscription(this.userId, payload).subscribe({
       next: (res) => {
@@ -60,7 +66,6 @@ export class SubscriptionComponent implements OnInit {
     });
   }
 
-  // Update subscription
   updatePrice(): void {
     if (this.subscriptionForm.invalid) {
       alert('Please fill valid values in the form.');

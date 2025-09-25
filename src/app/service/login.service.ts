@@ -9,53 +9,64 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class LoginService {
 
-  private apiUrl = 'http://localhost:8001/api/v1/url-shortner/users';
+  private apiUrl='http://localhost:8001/api/v1/url-shortner/users';
   private roleKey = 'role';
-
-  // Tracks authentication status
-  private authStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
-  authStatus$ = this.authStatus.asObservable(); 
 
   constructor(
     private http: HttpClient, 
     private jwtHelper: JwtHelperService, 
     private router: Router,
-  ) {}
+    ) {}
 
-  // Login API call
-  login(data: any): Observable<any> {
+  login(data :any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, data);
   }
 
-  // Save token & update role
+  private authStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
+  authStatus$ = this.authStatus.asObservable(); 
+
+  updateAuthStatus() {
+    this.authStatus.next(this.isAuthenticated());
+  }
+
   setToken(token: string): void {
     localStorage.setItem('token', token);
     const decodedToken = this.jwtHelper.decodeToken(token);
     localStorage.setItem(this.roleKey, decodedToken?.IsAdmin ? 'admin' : 'user');
+
     this.authStatus.next(true);
   }
 
-  // Check if user is logged in
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
-    return token != null && !this.jwtHelper.isTokenExpired(token);
+    return !this.jwtHelper.isTokenExpired(token || '');
   }
 
-  // Check if user is admin
+  getRole(): 'admin' | 'user' | null {
+    return localStorage.getItem(this.roleKey) as 'admin' | 'user' | null;
+  }
+
   isAdmin(): boolean {
-    return localStorage.getItem(this.roleKey) === 'admin';
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken?.IsAdmin === true || decodedToken?.IsAdmin === '1';
+    }
+    return false;
   }
 
-  // Update auth status for components/guards
-  updateAuthStatus(): void {
-    this.authStatus.next(this.isAuthenticated());
+  getUserId(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    return decodedToken?.UserID || null;
   }
 
-  // Logout
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem(this.roleKey);
-    this.authStatus.next(false);
     this.router.navigate(['/login']);
+    this.authStatus.next(false);
   }
+
 }

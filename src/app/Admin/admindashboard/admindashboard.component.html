@@ -1,69 +1,53 @@
-<div class="container mt-4 pb-5">
-  <h2 class="fw-bold mb-3 d-flex align-items-center gap-2">
-    <span class="badge bg-primary-subtle text-primary rounded-pill">Admin</span>
-    Manage Users
-  </h2>
+<div class="container mt-3">
 
-  <!-- Flash message -->
-  <div *ngIf="flash.type" class="alert" [ngClass]="flash.type === 'success' ? 'alert-success' : 'alert-danger'">
+  <!-- Flash Messages -->
+  <div *ngIf="flash.message" class="alert" [ngClass]="{
+    'alert-success': flash.type === 'success',
+    'alert-danger': flash.type === 'danger'
+  }">
     {{ flash.message }}
   </div>
 
   <!-- Users Table -->
-  <div class="card shadow-sm rounded-4 overflow-hidden mb-5">
-    <div class="card-header bg-light">
-      <h5 class="mb-0">Users List</h5>
-    </div>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Admin</th>
+        <th>Active</th>
+        <th>Wallet</th>
+        <th>URL Count</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.credential.email }}</td>
+        <td>{{ user.phoneNo }}</td>
+        <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
+        <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
+        <td>{{ user.wallet }}</td>
+        <td>{{ user.urlCount }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" (click)="updateUser(user)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0 neo-table">
-        <thead class="table-dark">
-          <tr>
-            <th>#</th>
-            <!-- <th>User ID</th> -->
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Active</th>
-            <th>Role</th>
-            <th>Wallet</th>
-            <th>URL Count</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let u of users; let i = index">
-            <td>{{ i + 1 }}</td>
-            <!-- <td>{{ u.id }}</td> -->
-            <td><input [(ngModel)]="u.firstName" class="form-control form-control-sm smooth-input" /></td>
-            <td><input [(ngModel)]="u.lastName" class="form-control form-control-sm smooth-input" /></td>
-            <td>{{ u.credential.email }}</td>
-            <td>{{ u.phoneNo }}</td>
-            <td>
-              <select [(ngModel)]="u.isActive" class="form-select form-select-sm smooth-input">
-                <option [ngValue]="true">Active</option>
-                <option [ngValue]="false">Inactive</option>
-              </select>
-            </td>
-            <td>
-                {{ u.isAdmin }}
-            
-            </td>
-            <td>{{ u.wallet }}</td>
-            <td>{{ u.urlCount }}</td>
-            <td>
-              <div class="d-flex gap-2">
-                <button class="btn btn-primary btn-sm lift" (click)="updateUser(u)">Update</button>
-                <button class="btn btn-outline-danger btn-sm lift" (click)="deleteUser(u.id)">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr *ngIf="!users?.length">
-            <td colspan="11" class="text-center text-muted py-4">No users found</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <!-- Pagination -->
+  <app-pagination
+    [items]="users"
+    [totalItems]="totalUserRecords"
+    [limit]="limit"
+    [offset]="offset"
+    (pageChange)="changePage($event)">
+  </app-pagination>
+
 </div>

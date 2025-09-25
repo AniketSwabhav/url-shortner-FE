@@ -23,4 +23,12 @@ export class UrlService {
       { headers: this.getAuthHeaders(), params: params, observe: "response" });
   }
 
+  addUrl(longUrl: string): Observable<any> {
+    const payload = { longUrl };
+    return this.http.post<any>(`${this.URL}/register`,
+      payload,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
 }

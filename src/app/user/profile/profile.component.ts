@@ -5,11 +5,12 @@ import { LoginService } from 'src/app/service/login.service';
 import { SnackbarService } from 'src/app/service/snackbar.service';
 import { HttpParams } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -22,10 +23,10 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private loginService: LoginService,
     private snackbarService: SnackbarService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.userId = this.loginService.getUserId(); // assuming your LoginService has this
+    this.userId = this.loginService.getUserId();
     if (this.userId) {
       this.getProfile();
     } else {
@@ -46,5 +47,50 @@ export class ProfileComponent implements OnInit {
 
   onTransactionClick(userID: string) {
     this.router.navigate(['user', userID, 'transactions']);
+  }
+
+  amount: number = 0;
+  isProcessing: boolean = false;
+
+  addToWallet(): void {
+    if (!this.amount || this.amount <= 0) {
+      this.snackbarService.showErrorSnackbar("Please enter a valid amount.");
+      return;
+    }
+
+    this.isProcessing = true;
+    this.userService.addAmount(this.userId!, this.amount).subscribe({
+      next: () => {
+        this.snackbarService.showSuccessSnackbar("Amount added successfully!");
+        this.getProfile();
+        this.amount = 0;
+        this.isProcessing = false;
+      },
+      error: (err) => {
+        this.isProcessing = false;
+        this.snackbarService.showErrorSnackbar(err);
+      }
+    });
+  }
+
+  withdrawFromWallet(): void {
+    if (!this.amount || this.amount <= 0) {
+      this.snackbarService.showErrorSnackbar("Please enter a valid amount.");
+      return;
+    }
+
+    this.isProcessing = true;
+    this.userService.withdrawAmount(this.userId!, this.amount).subscribe({
+      next: () => {
+        this.snackbarService.showSuccessSnackbar("Amount withdrawn successfully!");
+        this.getProfile(); 
+        this.amount = 0;
+        this.isProcessing = false;
+      },
+      error: (err) => {
+        this.isProcessing = false;
+        this.snackbarService.showErrorSnackbar(err);
+      }
+    });
   }
 }

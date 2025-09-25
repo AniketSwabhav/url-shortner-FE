@@ -15,7 +15,7 @@ import { LoginService } from 'src/app/service/login.service';
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-userId: string | null = '';
+  userId: string | null = '';
   transactions: any[] = [];
   transactionCount: number = 0;
 
@@ -58,7 +58,7 @@ userId: string | null = '';
     });
     this.userService.getTransactions(this.userId!, params).subscribe({
       next: (data) => {
-        console.log("transaction data",data)
+        console.log("transaction data", data)
         this.transactions = data.body;
         this.totalTransactionRecords = parseInt(data.headers.get("X-Total-Count"));
       },
@@ -68,7 +68,7 @@ userId: string | null = '';
     });
   }
 
-    changePage(pageNumber: number): void {
+  changePage(pageNumber: number): void {
     console.log(pageNumber);
 
     this.currentPage = pageNumber - 1;

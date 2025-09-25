@@ -38,4 +38,40 @@ export class UtilityService {
     return `${start} - ${end}`
   }
 
+   getErrorString(err: any): string {
+    if (navigator.onLine) {
+      if (err?.statusText && err?.statusText.toLowerCase() === 'unknown error') {
+        return "Please Check your Internet Connection"
+      }
+
+      if (typeof err == 'object') {
+        if (typeof err.error == 'object') {
+          if (typeof err.error.message == 'string') {
+            return err.error.message
+          }
+
+          if (typeof err.error.error == 'string') {
+            return err.error.error
+          }
+
+          if (typeof err.error.message == undefined) {
+            return "Something wrong Please try later"
+          }
+        }
+
+        if (typeof err.error == 'string') {
+          return err.error
+        }
+
+        if (typeof err.message == 'string') {
+          return err.message
+        }
+      }
+
+      return err
+    }
+
+    return "Please Check your Internet Connection"
+  }
+
 }

@@ -14,14 +14,12 @@ export class NavbarComponent {
 
   isAuthenticated = false;
   isAdmin = false;
-  userId: string | null = null;
 
   constructor(private loginService: LoginService) { }
 
   ngOnInit() {
     this.isAuthenticated = this.loginService.isAuthenticated();
     this.isAdmin = this.loginService.isAdmin();
-    this.userId = this.loginService.getUserId();
 
     this.loginService.authStatus$.subscribe(status => {
       this.isAuthenticated = status;

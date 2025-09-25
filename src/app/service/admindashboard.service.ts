@@ -23,7 +23,7 @@ export interface User {
 })
 export class AdmindashboardService {
 
-  private baseUrl = 'http://localhost:8001/api/v1/url-shortner/user';
+  private baseUrl = 'http://localhost:8001/api/v1/url-shortner/users';
 
   constructor(private http: HttpClient) { }
 

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class UrlService {
 
-  private URL = 'http://localhost:8001/api/v1/url-shortner/user';
+  private URL = 'http://localhost:8001/api/v1/url-shortner/user/url';
 
   constructor(private http: HttpClient) { }
 
@@ -18,8 +18,8 @@ export class UrlService {
     });
   }
 
-  viewAllUrlsByUserId(userid: string, params?: HttpParams): Observable<any> {
-    return this.http.get<any[]>(`${this.URL}/${userid}/url`,
+  viewAllUrlsByUserId(params?: HttpParams): Observable<any> {
+    return this.http.get<any[]>(`${this.URL}/`,
       { headers: this.getAuthHeaders(), params: params, observe: "response" });
   }
 

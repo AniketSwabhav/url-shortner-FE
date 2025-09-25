@@ -1,31 +1,43 @@
-<div class="container mt-4">
-  <h2>Your URLs</h2>
+<div class="container mt-5">
+  <div class="card shadow-lg border-0">
+    <div class="card-body">
+      <h3 class="card-title mb-4 text-gradient">Your Shortened URLs</h3>
 
-  <div *ngIf="loading" class="alert alert-info">Loading URLs...</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <!-- Table with URLs -->
+      <div *ngIf="urls.length > 0" class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+          <thead class="text-white" style="background: linear-gradient(45deg, #007bff, #6610f2);">
+            <tr>
+              <th scope="col">Sr no</th>
+              <th scope="col">🔗 Short URL</th>
+              <th scope="col">Long URL</th>
+              <th scope="col">Visits</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let url of urls; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>
+                <a [href]="'http://localhost:8001/' + url.shortUrl" target="_blank"
+                  class="fw-bold text-decoration-none text-primary">
+                  {{ url.shortUrl }}
+                </a>
+              </td>
+              <td class="text-truncate" style="max-width: 400px;" title="{{ url.longUrl }}">
+                {{ url.longUrl }}
+              </td>
+              <td>
+                <span class="badge rounded-pill bg-success px-3 py-2">{{ url.visits }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-  <table *ngIf="urls.length > 0" class="table table-striped">
-    <thead>
-      <tr>
-        <th>Sr No</th>
-        <th>Short URL</th>
-        <th>Long URL</th>
-        <th>Visits</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let url of urls; let i = index">
-        <td>{{ i+1 }}</td>
-        <td>
-          <a [href]="url.longUrl" target="_blank">{{ url.shortUrl }}</a>
-        </td>
-        <td>{{ url.longUrl }}</td>
-        <td>{{ url.visits }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div *ngIf="!loading && urls.length === 0" class="alert alert-warning">
-    You have no URLs saved yet.
+      <!-- No URLs Message -->
+      <div *ngIf="urls.length === 0" class="alert alert-warning text-center mt-4">
+        You haven’t created any links yet. Start shortening now!
+      </div>
+    </div>
   </div>
 </div>

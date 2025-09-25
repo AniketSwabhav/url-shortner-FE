@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class LoginService {
 
-  private apiUrl='http://localhost:8001/api/v1/url-shortner/user';
+  private apiUrl='http://localhost:8001/api/v1/url-shortner/users';
   private roleKey = 'role';
 
   constructor(

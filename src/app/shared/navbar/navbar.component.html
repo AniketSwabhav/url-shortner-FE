@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand">BankingApp</a>
+    <a class="navbar-brand">url-shortner</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,8 +36,12 @@
           <a class="nav-link" routerLink="/user/dashboard">Dashboard</a>
         </li>
         <!-- User-specific URL list link with userId -->
-        <li *ngIf="isAuthenticated && !isAdmin && userId" class="nav-item">
-          <a class="nav-link" [routerLink]="['/user', userId, 'urls']">My URLs</a>
+        <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
+          <a class="nav-link" [routerLink]="['/user/urls']">My URLs</a>
+        </li>
+
+        <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
+          <a class="nav-link" routerLink="/user/profile">Profile</a>
         </li>
 
         <li *ngIf="isAuthenticated" class="nav-item">

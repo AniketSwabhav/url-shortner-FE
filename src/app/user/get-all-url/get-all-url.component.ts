@@ -4,6 +4,7 @@ import { UrlService } from 'src/app/service/url.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { LoginService } from 'src/app/service/login.service';
+import { SnackbarService } from 'src/app/service/snackbar.service';
 
 @Component({
   selector: 'app-get-all-url',
@@ -14,39 +15,25 @@ import { LoginService } from 'src/app/service/login.service';
 })
 export class GetAllUrlComponent implements OnInit {
   urls: any[] = [];
-  loading = false;
-  error: string | null = null;
-  userId: string | null = null;
+
 
   constructor(
-    private loginService: LoginService,
-    private urlService: UrlService
-  ) {}
+    private urlService: UrlService,
+    private snackbarService: SnackbarService
+  ) { }
 
   ngOnInit() {
-    this.userId = this.loginService.getUserId();
-
-    if (!this.userId) {
-      this.error = 'User not authenticated. Please login.';
-      return;
-    }
-
     this.fetchUrls();
   }
 
   fetchUrls() {
-    this.loading = true;
-    this.error = null;
     const params = new HttpParams();
-
-    this.urlService.viewAllUrlsByUserId(this.userId!, params).subscribe({
+    this.urlService.viewAllUrlsByUserId(params).subscribe({
       next: (response) => {
-        this.urls = response.body; 
-        this.loading = false;
+        this.urls = response.body;
       },
       error: (err) => {
-        this.error = 'Failed to load URLs. Please try again.';
-        this.loading = false;
+        this.snackbarService.showErrorSnackbar(err)
       }
     });
   }

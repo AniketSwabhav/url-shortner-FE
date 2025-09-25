@@ -28,7 +28,7 @@ export class UserService {
         return this.http.get<any>(url, { headers });
     }
 
-    getTransactions(userId: string,params?: HttpParams): Observable<any> {
+    getTransactions(userId: string, params?: HttpParams): Observable<any> {
         return this.http.get<any[]>(`${this.userURL}/${userId}/transactions`,
             { headers: this.getAuthHeaders(), params: params, observe: "response" });
     }
@@ -43,7 +43,7 @@ export class UserService {
     addAmount(userId: string, amount: number): Observable<any> {
         return this.http.post(
             `${this.userURL}/${userId}/wallet/add`,
-            { amount },
+            { wallet: amount },
             { headers: this.getAuthHeaders() }
         );
     }
@@ -51,8 +51,22 @@ export class UserService {
     withdrawAmount(userId: string, amount: number): Observable<any> {
         return this.http.post(
             `${this.userURL}/${userId}/wallet/withdraw`,
-            { amount },
+            { wallet: amount },
             { headers: this.getAuthHeaders() }
+        );
+    }
+
+    renewUrls(userId: string, count: number): Observable<any> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token || ''}`
+        });
+
+        const body = { urlCount: count };
+
+        return this.http.post<any>(`${this.userURL}/${userId}/renew-urls`,
+            body,
+            { headers }
         );
     }
 

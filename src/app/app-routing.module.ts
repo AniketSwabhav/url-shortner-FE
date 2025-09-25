@@ -7,11 +7,13 @@ import { AdmindashboardComponent } from './Admin/admindashboard/admindashboard.c
 import { adminGuard } from './auth/guards/admin.guard';
 import { userGuard } from './auth/guards/user.guard';
 import { SubscriptionComponent } from './Admin/subscription/subscription.component';
+import { RegisterAdminComponent } from './Admin/register-admin/register-admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'admin/adminRegister', component: RegisterAdminComponent },
   { path: 'admin/subscription', component: SubscriptionComponent },
 
   { path: 'admin/dashboard', component: AdmindashboardComponent , canActivate: [adminGuard]},

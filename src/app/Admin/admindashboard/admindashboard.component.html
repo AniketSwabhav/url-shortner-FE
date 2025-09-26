@@ -52,9 +52,16 @@
           <button class="btn btn-sm btn-primary me-2">
             Update
           </button>
-          <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
+          <button class="btn btn-sm btn-danger me-2" (click)="deleteUser(user.id)">
             Delete
           </button>
+          <button class="btn btn-sm btn-primary me-2" (click)="onTransactionClick(user.id)">
+          View Transactions
+          </button>
+           <button class="btn btn-sm btn-primary me-2" >
+          View Url
+          </button>
+
         </td>
       </tr>
       <tr *ngIf="users.length === 0">

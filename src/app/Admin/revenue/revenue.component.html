@@ -1,0 +1,30 @@
+<div class="revenue-container">
+  <h2>Monthly Revenue</h2>
+
+  <!-- Year Selector -->
+  <label for="year">Select Year: </label>
+  <select id="year" [(ngModel)]="year" (change)="onYearChange()">
+    <option *ngFor="let y of availableYears" [value]="y">{{ y }}</option>
+  </select>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Revenue (INR)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let month of monthNames">
+        <td>{{ month }}</td>
+        <td>{{ revenueData[month] || 0 | currency:'INR' }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td><strong>Total Revenue</strong></td>
+        <td><strong>{{ totalRevenue }}</strong></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

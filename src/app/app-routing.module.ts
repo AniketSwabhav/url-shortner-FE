@@ -11,6 +11,8 @@ import { GetAllUrlComponent } from './user/get-all-url/get-all-url.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { TransactionsComponent } from './user/transactions/transactions.component';
 import { RegisterAdminComponent } from './Admin/register-admin/register-admin.component';
+import { RevenueComponent } from './Admin/revenue/revenue.component';
+import { UserResearchComponent } from './Admin/user-research/user-research.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -18,13 +20,16 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'admin/adminRegister', component: RegisterAdminComponent },
   { path: 'admin/subscription', component: SubscriptionComponent },
+  { path: 'admin/revenue', component: RevenueComponent },
+  { path: 'admin/userResearch', component: UserResearchComponent },
+
 
   { path: 'admin/dashboard', component: AdmindashboardComponent, canActivate: [adminGuard] },
 
   { path: 'user/dashboard', component: UserdashboardComponent, canActivate: [userGuard] },
   { path: 'user/urls', component: GetAllUrlComponent, canActivate: [userGuard] },
   { path: 'user/profile', component: ProfileComponent, canActivate: [userGuard] },
-  { path: 'user/:userId/transactions', component: TransactionsComponent, canActivate: [userGuard] }
+  { path: 'user/:userId/transactions', component: TransactionsComponent}
 ];
 
 @NgModule({

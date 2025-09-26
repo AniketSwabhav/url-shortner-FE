@@ -1,0 +1,36 @@
+<div class="user-research-container">
+  <h2>User Research Stats</h2>
+
+  <div class="selectors">
+    <label for="valueType">Select Type:</label>
+    <select id="valueType" [(ngModel)]="valueType" (change)="onTypeChange()">
+      <option *ngFor="let type of valueTypes" [value]="type.value">{{ type.label }}</option>
+    </select>
+
+    <label for="year">Select Year:</label>
+    <select id="year" [(ngModel)]="year" (change)="onYearChange()">
+      <option *ngFor="let y of availableYears" [value]="y">{{ y }}</option>
+    </select>
+  </div>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let month of monthNames">
+        <td>{{ month }}</td>
+        <td>{{ statsData[month] || 0 }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td><strong>Total</strong></td>
+        <td><strong>{{ total }}</strong></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

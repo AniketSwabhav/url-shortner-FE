@@ -96,6 +96,10 @@ loadUsers(): void {
     this.searchUsers();
   }
 
+    onTransactionClick(userID: string) {
+    this.router.navigate(['user', userID, 'transactions']);
+  }
+
 
 
   deleteUser(userId: string): void {

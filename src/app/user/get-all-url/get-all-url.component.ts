@@ -25,6 +25,7 @@ export class GetAllUrlComponent implements OnInit {
   urls: any[] = [];
   urlsCount: number = 0;
   newLongUrl: string = '';
+  userProfile: any;
 
   limit: number = 5;
   offset: number = 0;
@@ -48,11 +49,23 @@ export class GetAllUrlComponent implements OnInit {
   ngOnInit() {
     this.userId = this.loginService.getUserId();
     this.fetchUrls();
+    this.getProfile();
 
     this.route.queryParams.subscribe(params => {
       this.offset = parseInt(params['offset'] || '0');
       this.limit = parseInt(params['limit'] || '5');
       this.fetchUrls();
+    });
+  }
+
+  getProfile(): void {
+    this.userService.viewUser(this.userId!).subscribe({
+      next: (response) => {
+        this.userProfile = response;
+      },
+      error: (err) => {
+        this.snackbarService.showErrorSnackbar(err);
+      }
     });
   }
 
@@ -111,7 +124,7 @@ export class GetAllUrlComponent implements OnInit {
   }
 
   redirectRenewUrls() {
-     this.router.navigate(['user/urls/renew']);
+    this.router.navigate(['user/urls/renew']);
   }
 
   changePage(pageNumber: number): void {

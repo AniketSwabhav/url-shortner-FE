@@ -11,8 +11,11 @@
     </div>
   </form>
 
-  <div class="card shadow-lg border-0">
+  <div class="col-md-6 mb-3">
+    <strong>Remaining Short URL Creation Limit:   {{ userProfile.urlCount }}</strong>
+  </div>
 
+  <div class="card shadow-lg border-0">
 
     <div class="card-body">
       <h3 class="card-title mb-4 text-gradient">Your Shortened URLs</h3>
@@ -64,7 +67,7 @@
 <!-- Modal for URL Renewal -->
 <ng-template #renewUrlModal let-modal>
 
- <div class="modal-header">
+  <div class="modal-header">
     <h5 class="modal-title">Renew URL Creation Limit</h5>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>

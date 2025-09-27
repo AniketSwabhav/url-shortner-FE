@@ -15,7 +15,7 @@ export interface Subscription {
 export class SubscriptionService {
 
   private token = localStorage.getItem('token') || '';
-  private baseUrl = 'http://localhost:8001/api/v1/url-shortner/url';
+  private baseUrl = 'http://localhost:8001/api/v1/url-shortner/urls';
 
   constructor(private http: HttpClient) {}
 

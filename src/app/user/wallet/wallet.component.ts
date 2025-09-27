@@ -20,12 +20,11 @@ export class WalletComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
-    private loginService: LoginService,
     private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
-    this.userId = this.loginService.getUserId();
+    this.userId = localStorage.getItem('userId');
     if (this.userId) {
       this.getProfile();
     } else {
@@ -82,7 +81,7 @@ export class WalletComponent implements OnInit {
     this.userService.withdrawAmount(this.userId!, this.amount).subscribe({
       next: () => {
         this.snackbarService.showSuccessSnackbar("Amount withdrawn successfully!");
-        this.getProfile(); 
+        this.getProfile();
         this.amount = 0;
         this.isProcessing = false;
       },

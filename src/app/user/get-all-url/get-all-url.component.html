@@ -16,6 +16,10 @@
 
     <div class="card-body">
       <h3 class="card-title mb-4 text-gradient">All Shortened URLs</h3>
+      <!-- Flash message for copy success/failure -->
+      <div *ngIf="flash.message" class="alert alert-{{ flash.type }} text-center py-2 small mb-3" role="alert">
+        {{ flash.message }}
+      </div>
 
       <div *ngIf="urls.length > 0" class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
@@ -25,34 +29,51 @@
               <th scope="col">🔗 Short URL</th>
               <th scope="col">Long URL</th>
               <th scope="col">Visits</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let url of urls; let i = index">
-              <td>{{ i + 1  }}</td>
-              <td>
+              <td class="text-center">{{ i + 1 }}</td>
+
+              <!-- Short URL Centered -->
+              <td class="text-center">
                 <a [href]="'http://localhost:8001/' + url.shortUrl" target="_blank"
                   class="fw-bold text-decoration-none text-primary">
                   {{ url.shortUrl }}
                 </a>
               </td>
-              <td class="text-truncate" style="max-width: 300px;" title="{{ url.longUrl }}">
+
+              <!-- Long URL Truncated -->
+              <td class="text-truncate text-center" style="max-width: 300px;" title="{{ url.longUrl }}">
                 {{ url.longUrl }}
               </td>
-              <td>
+
+              <!-- Visits Centered and Styled -->
+              <td class="text-start ps-4">
                 <span class="badge rounded-pill bg-success px-3 py-2">{{ url.visits }}</span>
+              </td>
+
+              <!-- Action Buttons with Spacing -->
+              <td class="text-center">
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                  <button class="btn btn-sm btn-outline-primary" (click)="renewUrlVisit(url.id)">
+                    🔁 Renew Visit
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary" (click)="copyShortUrl(url.shortUrl)">
+                    🔗 Copy short link
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
+
         </table>
 
-      <!-- Pagination -->
-        <app-pagination class="p-0 m-0"
-                        [items]="urls"
-                        [totalItems]="selectedButtonIndex ? urlsCount : totalTransactionRecords"
-                        [limit]="limit"
-                        [offset]="offset"
-                        (pageChange)="changePage($event)">
+        <!-- Pagination -->
+        <app-pagination class="p-0 m-0" [items]="urls"
+          [totalItems]="selectedButtonIndex ? urlsCount : totalTransactionRecords" [limit]="limit" [offset]="offset"
+          (pageChange)="changePage($event)">
         </app-pagination>
       </div>
 
@@ -64,12 +85,10 @@
   </div>
 </div>
 
-<button (click)="openRenewModal()">Hey</button>
-
 <!-- Modal for URL Renewal -->
 <ng-template #renewUrlModal let-modal>
 
- <div class="modal-header">
+  <div class="modal-header">
     <h5 class="modal-title">Renew URL Creation Limit</h5>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>

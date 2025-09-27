@@ -2,12 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalModule, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import { LoginService } from 'src/app/service/login.service';
 import { UserService } from 'src/app/service/user.service';
+import { UrlService } from 'src/app/service/url.service';
 import { SubscriptionService } from 'src/app/service/subscription.service';
 import { SnackbarService } from 'src/app/service/snackbar.service';
 import { FormsModule } from '@angular/forms';
-import { UrlService } from 'src/app/service/url.service';
 
 @Component({
   selector: 'app-renewurlvisit',
@@ -30,21 +29,23 @@ export class RenewurlvisitComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private loginService: LoginService,
     private userService: UserService,
     private urlService: UrlService,
     private subscriptionService: SubscriptionService,
     private snackbarService: SnackbarService,
     private ngbModal: NgbModal
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.userId = this.loginService.getUserId();
+    this.userId = localStorage.getItem('userId');
     this.urlId = this.route.snapshot.paramMap.get('urlId') || '';
 
     if (this.userId) {
       this.loadWallet();
       this.loadSubscription();
+    } else {
+      this.snackbarService.showErrorSnackbar('User not logged in.');
+      this.router.navigate(['/login']);
     }
   }
 
@@ -58,7 +59,10 @@ export class RenewurlvisitComponent implements OnInit {
   loadSubscription(): void {
     this.subscriptionService.getSubscription(this.userId!).subscribe({
       next: (res) => this.visitPrice = res.extraVisitPrice,
-      error: (err) => this.snackbarService.showErrorSnackbar(err?.error?.message || 'Failed to load subscription pricing')
+      error: (err) =>
+        this.snackbarService.showErrorSnackbar(
+          err?.error?.message || 'Failed to load subscription pricing'
+        )
     });
   }
 

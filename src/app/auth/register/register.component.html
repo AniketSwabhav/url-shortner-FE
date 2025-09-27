@@ -1,62 +1,86 @@
-<div class="register-container d-flex justify-content-center align-items-center min-vh-100 p-3">
-  <div class="card shadow-lg p-4 w-100" style="max-width: 400px;">
+<div class="register-container d-flex justify-content-center align-items-center min-vh-100 p-3 bg-light">
+  <div class="card shadow-lg p-4 w-100 border-0 rounded-4" style="max-width: 420px;">
     <div class="text-center mb-4">
-      <i class="bi bi-person-plus" style="font-size: 3rem; color: #0d6efd;"></i>
-      <h3 class="mt-2">Register User</h3>
+      <i class="bi bi-person-plus-fill" style="font-size: 3rem; color: #0d6efd;"></i>
+      <h1 class="mt-2 fw-bold text-primary">User Registration</h1>
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
 
-      <div class="mb-2.5">
-        <label for="firstName" class="form-label">First Name</label>
-        <input type="text" id="firstName" formControlName="firstName" class="form-control" />
+      <!-- First Name -->
+      <div class="mb-3">
+        <label for="firstName" class="form-label fw-semibold">First Name</label>
+        <input type="text" id="firstName" formControlName="firstName" class="form-control form-control-lg" placeholder="Enter first name" />
         <small class="text-danger" *ngIf="f['firstName'].touched && f['firstName'].invalid">
           First name is required (min 2 chars).
         </small>
       </div>
 
-      <div class="mb-2.5">
-        <label for="lastName" class="form-label">Last Name</label>
-        <input type="text" id="lastName" formControlName="lastName" class="form-control" />
+      <!-- Last Name -->
+      <div class="mb-3">
+        <label for="lastName" class="form-label fw-semibold">Last Name</label>
+        <input type="text" id="lastName" formControlName="lastName" class="form-control form-control-lg" placeholder="Enter last name" />
         <small class="text-danger" *ngIf="f['lastName'].touched && f['lastName'].invalid">
           Last name is required (min 2 chars).
         </small>
       </div>
 
-      <div class="mb-2.5">
-        <label for="phoneNo" class="form-label">Phone Number</label>
-        <input type="text" id="phoneNo" formControlName="phoneNo" class="form-control" />
+      <!-- Phone Number -->
+      <div class="mb-3">
+        <label for="phoneNo" class="form-label fw-semibold">Phone Number</label>
+        <input type="text" id="phoneNo" formControlName="phoneNo" class="form-control form-control-lg" placeholder="Enter 10-digit phone number" />
         <small class="text-danger" *ngIf="f['phoneNo'].touched && f['phoneNo'].invalid">
           Phone number must be 10 digits.
         </small>
       </div>
 
-      <div class="mb-2.5">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" id="email" formControlName="email" class="form-control" />
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold">Email</label>
+        <input type="email" id="email" formControlName="email" class="form-control form-control-lg" placeholder="Enter email address" />
         <small class="text-danger" *ngIf="f['email'].touched && f['email'].invalid">
           Please enter a valid email.
         </small>
       </div>
 
+      <!-- Password with toggle -->
       <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" id="password" formControlName="password" class="form-control" />
+        <label for="password" class="form-label fw-semibold">Password</label>
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-control form-control-lg"
+            placeholder="Enter password"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showPassword = !showPassword"
+          >
+            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+          </button>
+        </div>
         <small class="text-danger" *ngIf="f['password'].touched && f['password'].invalid">
           Password must be at least 6 characters.
         </small>
       </div>
 
+      <!-- Messages -->
       <div *ngIf="errorMessage" class="alert alert-danger p-2 text-center">{{ errorMessage }}</div>
       <div *ngIf="successMessage" class="alert alert-success p-2 text-center">{{ successMessage }}</div>
 
-      <div class="d-grid mb-3">
-        <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Register</button>
+      <!-- Register Button -->
+      <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-primary btn-lg fw-semibold" [disabled]="registerForm.invalid">
+          Register
+        </button>
       </div>
     </form>
 
-    <div class="text-center">
-      <p>Already have an account? <a routerLink="/login">Login here</a></p>
+    <div class="text-center mt-3">
+      <p class="mb-0">Already have an account? <a routerLink="/login">Login here</a></p>
     </div>
   </div>
 </div>

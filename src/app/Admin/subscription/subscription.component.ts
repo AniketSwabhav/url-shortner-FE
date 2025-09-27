@@ -24,10 +24,10 @@ export class SubscriptionComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscriptionForm = this.fb.group({
-      freeShortUrls: [0, [Validators.required, Validators.min(0)]],
-      freeVisits: [0, [Validators.required, Validators.min(0)]],
-      newUrlPrice: [0, [Validators.required, Validators.min(0)]],
-      extraVisitPrice: [0, [Validators.required, Validators.min(0)]],
+      freeShortUrls: [[Validators.required, Validators.min(0)]],
+      freeVisits: [[Validators.required, Validators.min(0)]],
+      newUrlPrice: [[Validators.required, Validators.min(0)]],
+      extraVisitPrice: [[Validators.required, Validators.min(0)]],
     });
 
     this.loadSubscription();

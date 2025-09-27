@@ -11,28 +11,17 @@ export class UrlService {
 
   constructor(private http: HttpClient) { }
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token || ''}`
-    });
-  }
-
   viewAllUrlsByUserId(userId: string, params?: HttpParams): Observable<any> {
-    return this.http.get<any[]>(`${this.URL}/user/${userId}`,
-      { headers: this.getAuthHeaders(), params: params, observe: "response" });
+    return this.http.get<any[]>(`${this.URL}/user/${userId}`,{ params: params, observe: "response" });
   }
 
   addUrl(longUrl: string): Observable<any> {
     const payload = { longUrl };
-    return this.http.post<any>(`${this.URL}/register`,
-      payload,
-      { headers: this.getAuthHeaders() }
-    );
+    return this.http.post<any>(`${this.URL}/register`, payload );
   }
 
   renewVisits(urlId: string, visits: number) {
-    return this.http.post(`${this.URL}/${urlId}/renew-visits`, { visits }, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.URL}/${urlId}/renew-visits`, { visits });
   }
 
 

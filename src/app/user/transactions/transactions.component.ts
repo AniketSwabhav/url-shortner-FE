@@ -30,14 +30,12 @@ export class TransactionsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private loginService: LoginService,
     private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      // this.userId = this.route.snapshot.params['id'];
-      this.userId = this.loginService.getUserId();
+      this.userId = localStorage.getItem('userId');
       this.offset = parseInt(params['offset'] || '0');
       this.limit = parseInt(params['limit'] || '5');
       this.fetchTransactions();
@@ -67,6 +65,11 @@ export class TransactionsComponent implements OnInit {
       }
     });
   }
+
+  goBack() {
+  this.router.navigate(['/user/wallet']);
+}
+
 
   changePage(pageNumber: number): void {
     console.log(pageNumber);

@@ -1,92 +1,87 @@
-<div
-  class="adminRegister-container d-flex justify-content-center align-items-center min-vh-100 p-3"
->
-  <div class="card shadow-lg p-4 w-100" style="max-width: 400px">
+<div class="adminRegister-container d-flex justify-content-center align-items-center min-vh-100 p-3 bg-light">
+  <div class="card shadow-lg p-4 w-100 border-0 rounded-4" style="max-width: 450px">
     <div class="text-center mb-4">
-      <h3 class="mt-2">Register-Admin</h3>
+      <h1 class="fw-bold text-primary">Admin Registration</h1>
     </div>
 
-    <form [formGroup]="adminRegisterForm" (ngSubmit)="onRegister()">
-      <div class="mb-2.2">
-        <label for="firstName" class="form-label">First Name</label>
+    <form [formGroup]="adminRegisterForm" (ngSubmit)="onRegister()" novalidate>
+
+      <!-- First Name -->
+      <div class="mb-3">
+        <label for="firstName" class="form-label fw-semibold">First Name</label>
         <input
           type="text"
           id="firstName"
           formControlName="firstName"
-          class="form-control"
+          class="form-control form-control-lg"
+          placeholder="Enter first name"
         />
-        <small
-          class="text-danger"
-          *ngIf="f['firstName'].touched && f['firstName'].invalid"
-        >
+        <small class="text-danger" *ngIf="f['firstName'].touched && f['firstName'].invalid">
           First name is required (min 2 chars).
         </small>
       </div>
 
-      <div class="mb-2.2">
-        <label for="lastName" class="form-label">Last Name</label>
+      <!-- Last Name -->
+      <div class="mb-3">
+        <label for="lastName" class="form-label fw-semibold">Last Name</label>
         <input
           type="text"
           id="lastName"
           formControlName="lastName"
-          class="form-control"
+          class="form-control form-control-lg"
+          placeholder="Enter last name"
         />
-        <small
-          class="text-danger"
-          *ngIf="f['lastName'].touched && f['lastName'].invalid"
-        >
+        <small class="text-danger" *ngIf="f['lastName'].touched && f['lastName'].invalid">
           Last name is required (min 2 chars).
         </small>
       </div>
 
-      <div class="mb-2.2">
-        <label for="phoneNo" class="form-label">Phone Number</label>
+      <!-- Phone Number -->
+      <div class="mb-3">
+        <label for="phoneNo" class="form-label fw-semibold">Phone Number</label>
         <input
           type="text"
           id="phoneNo"
           formControlName="phoneNo"
-          class="form-control"
+          class="form-control form-control-lg"
+          placeholder="Enter 10-digit phone number"
         />
-        <small
-          class="text-danger"
-          *ngIf="f['phoneNo'].touched && f['phoneNo'].invalid"
-        >
+        <small class="text-danger" *ngIf="f['phoneNo'].touched && f['phoneNo'].invalid">
           Phone number must be 10 digits.
         </small>
       </div>
 
-      <div class="mb-2">
-        <label for="email" class="form-label">Email</label>
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold">Email</label>
         <input
           type="email"
           id="email"
           formControlName="email"
-          class="form-control"
+          class="form-control form-control-lg"
+          placeholder="Enter email address"
         />
-        <small
-          class="text-danger"
-          *ngIf="f['email'].touched && f['email'].invalid"
-        >
+        <small class="text-danger" *ngIf="f['email'].touched && f['email'].invalid">
           Please enter a valid email.
         </small>
       </div>
 
+      <!-- Password -->
       <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
+        <label for="password" class="form-label fw-semibold">Password</label>
         <input
           type="password"
           id="password"
           formControlName="password"
-          class="form-control"
+          class="form-control form-control-lg"
+          placeholder="Enter password"
         />
-        <small
-          class="text-danger"
-          *ngIf="f['password'].touched && f['password'].invalid"
-        >
-          Password must be at least 6 characters.
+        <small class="text-danger" *ngIf="f['password'].touched && f['password'].invalid">
+          Password must be at least 8 characters.
         </small>
       </div>
 
+      <!-- Alert Messages -->
       <div *ngIf="errorMessage" class="alert alert-danger p-2 text-center">
         {{ errorMessage }}
       </div>
@@ -94,11 +89,12 @@
         {{ successMessage }}
       </div>
 
-     <div class="d-grid mb-2.2">
-  <button type="submit" class="btn btn-primary" [disabled]="adminRegisterForm.invalid">
-    Register
-  </button>
-</div>
+      <!-- Submit Button -->
+      <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-primary " [disabled]="adminRegisterForm.invalid">
+          Register
+        </button>
+      </div>
     </form>
   </div>
 </div>

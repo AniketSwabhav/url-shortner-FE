@@ -16,6 +16,8 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   errorMessage: string = '';
   successMessage: string = '';
+    showPassword: boolean = false; 
+
 
   constructor(
     private fb: FormBuilder,

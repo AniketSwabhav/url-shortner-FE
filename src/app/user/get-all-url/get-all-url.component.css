@@ -4,3 +4,16 @@
   -webkit-text-fill-color: transparent;
   font-weight: bold;
 }
+
+.table td, .table th {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.btn {
+  min-width: 120px;
+}
+
+.alert {
+  transition: opacity 0.5s ease-in-out;
+}

@@ -25,7 +25,6 @@ const routes: Routes = [
   { path: 'admin/revenue', component: RevenueComponent },
   { path: 'admin/userResearch', component: UserResearchComponent },
 
-
   { path: 'admin/dashboard', component: AdmindashboardComponent, canActivate: [adminGuard] },
 
   { path: 'user/dashboard', component: UserdashboardComponent, canActivate: [userGuard] },

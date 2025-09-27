@@ -3,15 +3,11 @@ import { CommonModule } from '@angular/common';
 import { UrlService } from 'src/app/service/url.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { LoginService } from 'src/app/service/login.service';
 import { SnackbarService } from 'src/app/service/snackbar.service';
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
 import { NgbModal, NgbModalModule, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-
-
-declare var bootstrap: any; // For Bootstrap modal usage
 
 @Component({
   selector: 'app-get-all-url',
@@ -32,8 +28,11 @@ export class GetAllUrlComponent implements OnInit {
   currentPage: number = 0;
   totalTransactionRecords: number = 0;
   selectedButtonIndex: number | null = null;
-   flash: { type?: string; message: string } = { message: "" };
+  flash: { type?: string; message: string } = { message: "" };
 
+
+  @ViewChild('renewUrlModal') renewUrlModal: any;
+  modelRef: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,17 +40,20 @@ export class GetAllUrlComponent implements OnInit {
     private urlService: UrlService,
     private userService: UserService,
     private snackbarService: SnackbarService,
-    private loginService: LoginService,
     private ngbModal: NgbModal
-  ) { }
-
-
-  @ViewChild('renewUrlModal') renewUrlModal: any
+  ) {
+    // ✅ Directly get userId from localStorage
+    this.userId = localStorage.getItem('userId');
+  }
 
   ngOnInit() {
-    this.userId = this.loginService.getUserId();
-    this.fetchUrls();
+    if (!this.userId) {
+      this.snackbarService.showErrorSnackbar('User ID not found.');
+      return;
+    }
+
     this.getProfile();
+    this.fetchUrls();
 
     this.route.queryParams.subscribe(params => {
       this.offset = parseInt(params['offset'] || '0');
@@ -71,7 +73,7 @@ export class GetAllUrlComponent implements OnInit {
     });
   }
 
-  fetchUrls() {
+  fetchUrls(): void {
     const params = new HttpParams()
       .set('limit', this.limit.toString())
       .set('offset', this.offset.toString());
@@ -93,16 +95,15 @@ export class GetAllUrlComponent implements OnInit {
     });
   }
 
-copyShortUrl(shortUrl: string): void {
-  const fullUrl = `http://localhost:8001/${shortUrl}`;
-  navigator.clipboard.writeText(fullUrl).then(() => {
-    this.flash = { type: "success", message: "Short URL copied to clipboard!" };
-    setTimeout(() => this.flash = { message: "" }, 2000);
-  }).catch(() => {
-    this.flash = { type: "danger", message: "Failed to copy URL!" };
-  });
-}
-
+  copyShortUrl(shortUrl: string): void {
+    const fullUrl = `http://localhost:8001/${shortUrl}`;
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      this.flash = { type: "success", message: "Short URL copied to clipboard!" };
+      setTimeout(() => this.flash = { message: "" }, 2000);
+    }).catch(() => {
+      this.flash = { type: "danger", message: "Failed to copy URL!" };
+    });
+  }
 
   addNewUrl(): void {
     if (!this.newLongUrl.trim()) {
@@ -118,7 +119,6 @@ copyShortUrl(shortUrl: string): void {
       },
       error: (err) => {
         const errorMsg = err?.error || 'An error occurred.';
-        console.log("err=> ", err)
         if (errorMsg.includes('maximum url creation limit')) {
           this.openRenewModal();
         } else {
@@ -128,15 +128,12 @@ copyShortUrl(shortUrl: string): void {
     });
   }
 
-  modelRef: any
   openRenewModal(): void {
-    let option: NgbModalOptions = {
-      size: 'md'
-    }
-    this.modelRef = this.ngbModal.open(this.renewUrlModal, option)
+    const options: NgbModalOptions = { size: 'md' };
+    this.modelRef = this.ngbModal.open(this.renewUrlModal, options);
   }
 
-  redirectRenewUrls() {
+  redirectRenewUrls(): void {
     this.router.navigate(['user/urls/renew']);
   }
 
@@ -146,7 +143,7 @@ copyShortUrl(shortUrl: string): void {
 
   changePage(pageNumber: number): void {
     this.currentPage = pageNumber - 1;
-    this.offset = (pageNumber - 1);
+    this.offset = this.currentPage;
     this.fetchUrls();
   }
 }

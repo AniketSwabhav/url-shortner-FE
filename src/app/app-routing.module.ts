@@ -7,22 +7,28 @@ import { AdmindashboardComponent } from './Admin/admindashboard/admindashboard.c
 import { adminGuard } from './auth/guards/admin.guard';
 import { userGuard } from './auth/guards/user.guard';
 import { SubscriptionComponent } from './Admin/subscription/subscription.component';
+import { RegisterAdminComponent } from './Admin/register-admin/register-admin.component';
 import { GetAllUrlComponent } from './user/get-all-url/get-all-url.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { TransactionsComponent } from './user/transactions/transactions.component';
+import { RenewurlComponent } from './user/renewurl/renewurl.component';
+import { WalletComponent } from './user/wallet/wallet.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'admin/adminRegister', component: RegisterAdminComponent },
   { path: 'admin/subscription', component: SubscriptionComponent },
 
   { path: 'admin/dashboard', component: AdmindashboardComponent, canActivate: [adminGuard] },
 
   { path: 'user/dashboard', component: UserdashboardComponent, canActivate: [userGuard] },
   { path: 'user/urls', component: GetAllUrlComponent, canActivate: [userGuard] },
-  { path: 'user/profile', component: ProfileComponent, canActivate: [userGuard] },
-  { path: 'user/:userId/transactions', component: TransactionsComponent, canActivate: [userGuard] }
+  { path: 'user/urls/renew', component: RenewurlComponent, canActivate: [userGuard] },
+  // { path: 'user/profile', component: ProfileComponent, canActivate: [userGuard] },
+  { path: 'user/:userId/transactions', component: TransactionsComponent, canActivate: [userGuard] },
+  { path: 'user/wallet', component: WalletComponent, canActivate: [userGuard]}
 ];
 
 @NgModule({

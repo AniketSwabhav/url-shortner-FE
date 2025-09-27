@@ -19,7 +19,7 @@
           <a class="nav-link" routerLink="/admin/subscription">Manage Subscription</a>
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/admin/adduser">Add User</a>
+          <a class="nav-link" routerLink="/admin/adminRegister">Add Admin</a>
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="/admin/view-all-banks">Manage Banks</a>
@@ -41,7 +41,7 @@
         </li>
 
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/user/profile">Profile</a>
+          <a class="nav-link" routerLink="/user/wallet">Wallet</a>
         </li>
 
         <li *ngIf="isAuthenticated" class="nav-item">

@@ -1,15 +1,15 @@
 <div class="container mt-5">
 
   <!-- Add New URL -->
-    <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
-      <div class="input-group">
-        <input type="url" name="longUrl" class="form-control" placeholder="Enter a long URL to shorten"
-          [(ngModel)]="newLongUrl" required />
-        <button type="submit" class="btn btn-primary" [disabled]="!urlForm.form.valid">
-          Shorten URL
-        </button>
-      </div>
-    </form>
+  <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
+    <div class="input-group">
+      <input type="url" name="longUrl" class="form-control" placeholder="Enter a long URL to shorten"
+        [(ngModel)]="newLongUrl" required />
+      <button type="submit" class="btn btn-primary" [disabled]="!urlForm.form.valid">
+        Shorten URL
+      </button>
+    </div>
+  </form>
 
   <div class="card shadow-lg border-0">
 
@@ -59,29 +59,23 @@
   </div>
 </div>
 
+<button (click)="openRenewModal()">Hey</button>
+
 <!-- Modal for URL Renewal -->
-<div class="modal fade" id="renewUrlModal" tabindex="-1" aria-labelledby="renewUrlModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<ng-template #renewUrlModal let-modal>
 
-      <div class="modal-header">
-        <h5 class="modal-title" id="renewUrlModalLabel">Renew URL Creation Limit</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body">
-        <p>Your URL creation limit has been reached.</p>
-        <div class="mb-3">
-          <label for="renewCount" class="form-label">How many URLs would you like to renew?</label>
-          <input type="number" class="form-control" id="renewCount" min="1" [(ngModel)]="renewUrlCount">
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" (click)="renewUrls()">Renew</button>
-      </div>
-
-    </div>
+ <div class="modal-header">
+    <h5 class="modal-title">Renew URL Creation Limit</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>
-</div>
+
+  <div class="modal-body">
+    <p>Your URL creation limit has been reached.</p>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-primary" (click)="redirectRenewUrls(); modal.close()">Renew</button>
+  </div>
+
+</ng-template>

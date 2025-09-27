@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SubscriptionService, Subscription } from 'src/app/service/subscription.service'; // ✅ use this interface
+import { SubscriptionService, Subscription } from 'src/app/service/subscription.service';
 import { NavbarComponent } from 'src/app/shared/navbar/navbar.component';
+import { SnackbarService } from 'src/app/service/snackbar.service';
 
 @Component({
   selector: 'app-subscription',
@@ -16,7 +17,10 @@ export class SubscriptionComponent implements OnInit {
   subscription: Subscription | null = null;
   private userId = localStorage.getItem('userId') || '';
 
-  constructor(private fb: FormBuilder, private subscriptionService: SubscriptionService) {}
+  constructor(private fb: FormBuilder,
+    private subscriptionService: SubscriptionService,
+    private snackbarService: SnackbarService
+  ) { }
 
   ngOnInit(): void {
     this.subscriptionForm = this.fb.group({
@@ -41,7 +45,7 @@ export class SubscriptionComponent implements OnInit {
       error: (err) => {
         console.error('Error loading subscription', err);
         this.subscription = null;
-        alert(err.error?.message || 'Failed to load subscription');
+        this.snackbarService.showErrorSnackbar(err.error?.message || 'Failed to load subscription');
       }
     });
   }

@@ -1,36 +1,55 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegisterService } from 'src/app/service/register.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
-  firstName: string = '';
-  lastName: string = '';
-  phoneNo: string = '';
-  email: string = '';
-  password: string = '';
+  registerForm!: FormGroup;
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private registerService: RegisterService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private registerService: RegisterService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.registerForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      phoneNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  get f() {
+    return this.registerForm.controls;
+  }
 
   onRegister() {
+    if (this.registerForm.invalid) {
+      this.errorMessage = 'Please fill out all fields correctly!';
+      return;
+    }
+
     const payload = {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      phoneNo: this.phoneNo,
+      firstName: this.f['firstName'].value,
+      lastName: this.f['lastName'].value,
+      phoneNo: this.f['phoneNo'].value,
       credential: {
-        email: this.email,
-        password: this.password
+        email: this.f['email'].value,
+        password: this.f['password'].value
       }
     };
 

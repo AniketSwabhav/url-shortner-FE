@@ -1,0 +1,40 @@
+<div class="container mt-5">
+    <h3 class="mb-4">🔄 Renew Your URL Creation Limit</h3>
+
+    <!-- Wallet Balance -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">💰 Current Wallet Balance</label>
+        <div class="form-control bg-light">₹ {{ walletBalance | number:'1.0-0' }}</div>
+    </div>
+
+    <!-- URL Price -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">📌 Price Per URL Renewal</label>
+        <div class="form-control bg-light">₹ {{ newUrlPrice | number:'1.2-2' }}</div>
+    </div>
+
+    <!-- Input: Number of URLs -->
+    <div class="mb-3">
+        <label for="renewCount" class="form-label fw-semibold">🔢 Number of URLs to Renew</label>
+        <input type="number" id="renewCount" class="form-control" [(ngModel)]="renewUrlCount" min="1"
+            placeholder="Enter number of URLs" />
+    </div>
+
+    <!-- Total Cost -->
+    <div *ngIf="renewUrlCount > 0" class="mb-3">
+        <label class="form-label fw-semibold">🧮 Total Cost</label>
+        <div class="form-control bg-light">
+            ₹ {{ renewUrlCount * newUrlPrice | number:'1.2-2' }}
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex gap-2">
+        <!-- <button class="btn btn-primary" (click)="renewUrls()">💾 Save</button> -->
+        <button class="btn btn-primary" [disabled]="renewUrlCount * newUrlPrice > walletBalance || renewUrlCount <= 0"
+            (click)="renewUrls()">
+            Buy
+        </button>
+        <button class="btn btn-outline-secondary" (click)="goBack()">Back</button>
+    </div>
+</div>

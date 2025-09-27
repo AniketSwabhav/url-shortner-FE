@@ -70,7 +70,7 @@
     </tbody>
   </table>
 
-  <!-- Pagination -->
+  <!-- Pagination
   <app-pagination
     [items]="users"
     [totalItems]="totalUserRecords"
@@ -78,7 +78,17 @@
     [offset]="offset"
     (pageChange)="changePage($event)"
   >
-  </app-pagination>
+  </app-pagination> -->
+
+
+        <!-- Pagination -->
+        <app-pagination class="p-0 m-0"
+                        [items]="users"
+                        [totalItems]="selectedButtonIndex ? usersCount : totalUserRecords"
+                        [limit]="limit"
+                        [offset]="offset"
+                        (pageChange)="changePage($event)">
+        </app-pagination>
 </div>
 
 

@@ -1,87 +1,66 @@
-<div class="container mt-5">
-
-  <!-- Add New URL -->
-    <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
-      <div class="input-group">
-        <input type="url" name="longUrl" class="form-control" placeholder="Enter a long URL to shorten"
-          [(ngModel)]="newLongUrl" required />
-        <button type="submit" class="btn btn-primary" [disabled]="!urlForm.form.valid">
-          Shorten URL
-        </button>
-      </div>
-    </form>
-
+<div class="container mt-3">
   <div class="card shadow-lg border-0">
-
-
     <div class="card-body">
-      <h3 class="card-title mb-4 text-gradient">Your Shortened URLs</h3>
+      <h3 class="card-title mb-4 text-gradient">All Shortened URLs</h3>
 
-      <!-- Table with URLs -->
+      <!-- Table with URLs (Admin Style) -->
       <div *ngIf="urls.length > 0" class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
-          <thead class="text-white" style="background: linear-gradient(45deg, #007bff, #6610f2);">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
             <tr>
-              <th scope="col">Sr no</th>
-              <th scope="col">🔗 Short URL</th>
-              <th scope="col">Long URL</th>
-              <th scope="col">Visits</th>
+              <th>Sr No</th>
+              <th>🔗 Short URL</th>
+              <th>Long URL</th>
+              <th>Visits</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let url of urls; let i = index">
-              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ i + 1 + offset }}</td>
               <td>
                 <a [href]="'http://localhost:8001/' + url.shortUrl" target="_blank"
                   class="fw-bold text-decoration-none text-primary">
                   {{ url.shortUrl }}
                 </a>
               </td>
-              <td class="text-truncate" style="max-width: 400px;" title="{{ url.longUrl }}">
+              <td class="text-truncate" style="max-width: 300px;" title="{{ url.longUrl }}">
                 {{ url.longUrl }}
               </td>
               <td>
                 <span class="badge rounded-pill bg-success px-3 py-2">{{ url.visits }}</span>
               </td>
+              <td>
+                <button class="btn btn-sm btn-primary me-3" >Edit</button>
+                <button class="btn btn-sm btn-danger  me-3">Delete</button>
+                <button class="btn btn-sm btn-outline-secondary me-3"(click)="copyShortUrl(url.shortUrl)">
+                  📋 Copy
+                </button>
+                <button class="btn btn-sm btn-outline-primary">
+                Renew
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="urls.length === 0">
+              <td colspan="7" class="text-center">No URLs found.</td>
             </tr>
           </tbody>
         </table>
-        <app-pagination class=" p-0 m-0" [items]="urls"
-          [totalItems]='selectedButtonIndex ? urlsCount : totalTransactionRecords' [limit]="limit" [offset]="offset"
-          (pageChange)="changePage($event)" />
+
+      <!-- Pagination -->
+        <app-pagination class="p-0 m-0"
+                        [items]="urls"
+                        [totalItems]="selectedButtonIndex ? urlsCount : totalTransactionRecords"
+                        [limit]="limit"
+                        [offset]="offset"
+                        (pageChange)="changePage($event)">
+        </app-pagination>
       </div>
 
       <!-- No URLs Message -->
       <div *ngIf="urls.length === 0" class="alert alert-warning text-center mt-4">
-        You haven’t created any links yet. Start shortening now!
+        No URLs have been created yet.
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal for URL Renewal -->
-<div class="modal fade" id="renewUrlModal" tabindex="-1" aria-labelledby="renewUrlModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title" id="renewUrlModalLabel">Renew URL Creation Limit</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body">
-        <p>Your URL creation limit has been reached.</p>
-        <div class="mb-3">
-          <label for="renewCount" class="form-label">How many URLs would you like to renew?</label>
-          <input type="number" class="form-control" id="renewCount" min="1" [(ngModel)]="renewUrlCount">
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" (click)="renewUrls()">Renew</button>
-      </div>
-
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { AdmindashboardService, User, UserResponse } from 'src/app/service/admindashboard.service';
+import { AdmindashboardService, User } from 'src/app/service/admindashboard.service';
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
@@ -15,12 +15,15 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AdmindashboardComponent implements OnInit {
   users: User[] = [];
+  totalUserRecords: number = 0; 
+  usersCount: number = 0; 
+  selectedButtonIndex: number = 0;
+
   flash: { type: string; message: string } = { type: '', message: '' };
 
   limit: number = 5;
   offset: number = 0;
   currentPage: number = 1;
-  totalUserRecords: number = 0;
 
   searchForm: FormGroup;
 
@@ -36,7 +39,7 @@ export class AdmindashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe((params) => {
+    this.activatedRoute.queryParams.subscribe(params => {
       if (params['search']) this.searchForm.get('searchTerm')?.setValue(params['search']);
       if (params['limit']) this.limit = +params['limit'];
       if (params['offset']) {
@@ -47,43 +50,41 @@ export class AdmindashboardComponent implements OnInit {
     });
   }
 
-
-  
   changePage(pageNumber: number): void {
     this.currentPage = pageNumber;
     this.offset = (pageNumber - 1) * this.limit;
     this.loadUsers();
   }
 
-loadUsers(): void {
-  let params = new HttpParams()
-    .set('limit', this.limit.toString())
-    .set('offset', this.offset.toString());
+  get startItem(): number {
+    return this.totalUserRecords === 0 ? 0 : this.offset + 1;
+  }
 
-  const searchTerm = this.searchForm.get('searchTerm')?.value;
-  if (searchTerm) params = params.set('search', searchTerm);
+  get endItem(): number {
+    const possibleEnd = this.offset + this.users.length;
+    return possibleEnd > this.totalUserRecords ? this.totalUserRecords : possibleEnd;
+  }
 
-  this.adminService.getAllUsers(params).subscribe({
-    next: (users: User[]) => {
-      this.users = users;
-      this.totalUserRecords = users.length; 
+  loadUsers(): void {
+    let params = new HttpParams()
+      .set('limit', this.limit.toString())
+      .set('offset', this.offset.toString());
 
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: {
-          limit: this.limit,
-          offset: this.offset,
-          search: searchTerm || null
-        },
-        queryParamsHandling: 'merge',
-      });
-    },
-    error: () => {
-      this.flash = { type: 'danger', message: 'Failed to load users' };
-    },
-  });
-}
+    const searchTerm = this.searchForm.get('searchTerm')?.value;
+    if (searchTerm) params = params.set('search', searchTerm);
 
+    this.adminService.getAllUsers(params).subscribe({
+      next: (response) => {
+        this.users = response.body || [];
+        this.usersCount = this.users.length;
+        this.totalUserRecords = parseInt(response.headers.get('X-Total-Count') || '0');
+      },
+      error: () => {
+        this.flash = { type: 'danger', message: 'Failed to load users' };
+        setTimeout(() => this.flash = { type: '', message: '' }, 3000);
+      }
+    });
+  }
 
   searchUsers(): void {
     this.offset = 0;
@@ -96,21 +97,21 @@ loadUsers(): void {
     this.searchUsers();
   }
 
-    onTransactionClick(userID: string) {
+  onTransactionClick(userID: string) {
     this.router.navigate(['user', userID, 'transactions']);
   }
-
-
 
   deleteUser(userId: string): void {
     this.adminService.deleteUser(userId).subscribe({
       next: () => {
         this.flash = { type: 'success', message: 'User deleted successfully' };
+        setTimeout(() => this.flash = { type: '', message: '' }, 3000);
         this.loadUsers();
       },
       error: () => {
         this.flash = { type: 'danger', message: 'Failed to delete user' };
-      },
+        setTimeout(() => this.flash = { type: '', message: '' }, 3000);
+      }
     });
   }
 }

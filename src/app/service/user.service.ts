@@ -33,12 +33,13 @@ export class UserService {
             { headers: this.getAuthHeaders(), params: params, observe: "response" });
     }
 
-    fetchWalletAmount(userId: string): Observable<{ amount: number }> {
-        return this.http.get<{ amount: number }>(
+    fetchWalletAmount(userId: string): Observable<number> {
+        return this.http.get<number>(
             `${this.userURL}/${userId}/amount`,
             { headers: this.getAuthHeaders() }
         );
     }
+
 
     addAmount(userId: string, amount: number): Observable<any> {
         return this.http.post(
@@ -61,9 +62,7 @@ export class UserService {
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token || ''}`
         });
-
         const body = { urlCount: count };
-
         return this.http.post<any>(`${this.userURL}/${userId}/renew-urls`,
             body,
             { headers }

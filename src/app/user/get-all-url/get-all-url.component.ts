@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UrlService } from 'src/app/service/url.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,38 +8,44 @@ import { SnackbarService } from 'src/app/service/snackbar.service';
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
+import { NgbModal, NgbModalModule, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+
 
 declare var bootstrap: any; // For Bootstrap modal usage
 
 @Component({
   selector: 'app-get-all-url',
   standalone: true,
-  imports: [CommonModule, PaginationComponent, FormsModule],
+  imports: [CommonModule, PaginationComponent, FormsModule, NgbModalModule],
   templateUrl: './get-all-url.component.html',
   styleUrls: ['./get-all-url.component.css']
 })
 export class GetAllUrlComponent implements OnInit {
+  userId: string | null = '';
   urls: any[] = [];
   urlsCount: number = 0;
   newLongUrl: string = '';
-  renewUrlCount: number = 1; // default
 
   limit: number = 5;
   offset: number = 0;
   currentPage: number = 0;
   totalTransactionRecords: number = 0;
   selectedButtonIndex: number | null = null;
+   flash: { type?: string; message: string } = { message: "" };
 
-  userId: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private urlService: UrlService,
-    private userService:UserService,
+    private userService: UserService,
     private snackbarService: SnackbarService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private ngbModal: NgbModal
   ) { }
+
+
+  @ViewChild('renewUrlModal') renewUrlModal: any
 
   ngOnInit() {
     this.userId = this.loginService.getUserId();
@@ -63,7 +69,7 @@ export class GetAllUrlComponent implements OnInit {
       queryParamsHandling: 'merge'
     });
 
-    this.urlService.viewAllUrlsByUserId(params).subscribe({
+    this.urlService.viewAllUrlsByUserId(this.userId!, params).subscribe({
       next: (response) => {
         this.urls = response.body;
         this.totalTransactionRecords = parseInt(response.headers.get("X-Total-Count"));
@@ -73,6 +79,17 @@ export class GetAllUrlComponent implements OnInit {
       }
     });
   }
+
+copyShortUrl(shortUrl: string): void {
+  const fullUrl = `http://localhost:8001/${shortUrl}`;
+  navigator.clipboard.writeText(fullUrl).then(() => {
+    this.flash = { type: "success", message: "Short URL copied to clipboard!" };
+    setTimeout(() => this.flash = { message: "" }, 2000);
+  }).catch(() => {
+    this.flash = { type: "danger", message: "Failed to copy URL!" };
+  });
+}
+
 
   addNewUrl(): void {
     if (!this.newLongUrl.trim()) {
@@ -87,7 +104,8 @@ export class GetAllUrlComponent implements OnInit {
         this.fetchUrls();
       },
       error: (err) => {
-        const errorMsg = err?.error?.message || 'An error occurred.';
+        const errorMsg = err?.error || 'An error occurred.';
+        console.log("err=> ", err)
         if (errorMsg.includes('maximum url creation limit')) {
           this.openRenewModal();
         } else {
@@ -97,31 +115,16 @@ export class GetAllUrlComponent implements OnInit {
     });
   }
 
+  modelRef: any
   openRenewModal(): void {
-    const modalEl = document.getElementById('renewUrlModal');
-    if (modalEl) {
-      const modal = new bootstrap.Modal(modalEl);
-      modal.show();
+    let option: NgbModalOptions = {
+      size: 'sm'
     }
+    this.modelRef = this.ngbModal.open(this.renewUrlModal, option)
   }
 
-  renewUrls(): void {
-    if (!this.userId || this.renewUrlCount <= 0) {
-      this.snackbarService.showErrorSnackbar('Invalid renewal request');
-      return;
-    }
-
-    this.userService.renewUrls(this.userId, this.renewUrlCount).subscribe({
-      next: () => {
-        this.snackbarService.showSuccessSnackbar('URLs renewed successfully!');
-        const modalEl = document.getElementById('renewUrlModal');
-        if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
-        this.fetchUrls();
-      },
-      error: (err) => {
-        this.snackbarService.showErrorSnackbar(err?.error?.message || 'Renewal failed');
-      }
-    });
+  redirectRenewUrls() {
+     this.router.navigate(['user/urls/renew']);
   }
 
   changePage(pageNumber: number): void {

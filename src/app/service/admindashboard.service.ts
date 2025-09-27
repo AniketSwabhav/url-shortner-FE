@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface User {
@@ -41,10 +41,11 @@ export class AdmindashboardService {
     };
   }
 
-  getAllUsers(params: HttpParams): Observable<User[]> {
+ getAllUsers(params: HttpParams): Observable<HttpResponse<User[]>> {
   return this.http.get<User[]>(`${this.baseUrl}/`, {
     ...this.getAuthHeaders(),
     params,
+    observe: 'response'  // ← important
   });
 }
 

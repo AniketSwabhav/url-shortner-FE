@@ -8,10 +8,11 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SnackbarComponent } from './shared/snackbar/snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [HttpClientModule ,BrowserModule,NavbarComponent, AppRoutingModule, BrowserAnimationsModule,MatSnackBarModule],
+  imports: [HttpClientModule ,BrowserModule,NavbarComponent, AppRoutingModule, BrowserAnimationsModule,MatSnackBarModule, NgbModule],
    providers: [ JwtHelperService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }],
   bootstrap: [AppComponent]

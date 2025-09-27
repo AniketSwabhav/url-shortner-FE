@@ -19,25 +19,15 @@ export class SubscriptionService {
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.token}`
-    });
-  }
-
-  // Load subscription
   getSubscription(userId: string): Observable<Subscription> {
-    return this.http.get<Subscription>(`${this.baseUrl}/subscription`, { headers: this.getHeaders() });
+    return this.http.get<Subscription>(`${this.baseUrl}/subscription`);
   }
-
-  // Set subscription (POST)
+ 
   setSubscription(userId: string, payload: Subscription): Observable<any> {
-    return this.http.post(`${this.baseUrl}/subscription`, payload, { headers: this.getHeaders() });
+    return this.http.post(`${this.baseUrl}/subscription`, payload);
   }
 
-  // Update subscription (PUT)
   updateSubscription(userId: string, payload: Subscription): Observable<any> {
-    return this.http.put(`${this.baseUrl}/subscription/update`, payload, { headers: this.getHeaders() });
+    return this.http.put(`${this.baseUrl}/subscription/update`, payload);
   }
 }

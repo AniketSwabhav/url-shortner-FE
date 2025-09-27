@@ -33,7 +33,7 @@ export class LoginService {
     localStorage.setItem('token', token);
     const decodedToken = this.jwtHelper.decodeToken(token);
     localStorage.setItem(this.roleKey, decodedToken?.IsAdmin ? 'admin' : 'user');
-
+    localStorage.setItem('userId', decodedToken?.UserID);
     this.authStatus.next(true);
   }
 

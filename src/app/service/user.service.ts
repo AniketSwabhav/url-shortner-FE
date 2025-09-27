@@ -10,66 +10,34 @@ export class UserService {
 
     constructor(private http: HttpClient) { }
 
-    private getAuthHeaders(): HttpHeaders {
-        const token = localStorage.getItem('token');
-        return new HttpHeaders({
-            'Authorization': `Bearer ${token || ''}`
-        });
-    }
-
     viewAllUsers(params?: HttpParams): Observable<any> {
-        return this.http.get<any[]>(`${this.userURL}/`,
-            { headers: this.getAuthHeaders(), params: params, observe: "response" });
+        return this.http.get<any[]>(`${this.userURL}/`,{ params: params, observe: "response" });
     }
 
     viewUser(id: string) {
-        const url = `${this.userURL}/${id}`;
-        const headers = this.getAuthHeaders();
-        return this.http.get<any>(url, { headers });
+        return this.http.get<any>(`${this.userURL}/${id}`);
     }
 
     getTransactions(userId: string, params?: HttpParams): Observable<any> {
-        return this.http.get<any[]>(`${this.userURL}/${userId}/transactions`,
-            { headers: this.getAuthHeaders(), params: params, observe: "response" });
+        return this.http.get<any[]>(`${this.userURL}/${userId}/transactions`,{params: params, observe: "response" });
     }
 
     fetchWalletAmount(userId: string): Observable<number> {
-        return this.http.get<number>(
-            `${this.userURL}/${userId}/amount`,
-            { headers: this.getAuthHeaders() }
-        );
+        return this.http.get<number>(`${this.userURL}/${userId}/amount`,);
     }
 
 
     addAmount(userId: string, amount: number): Observable<any> {
-        return this.http.post(
-            `${this.userURL}/${userId}/wallet/add`,
-            { wallet: amount },
-            { headers: this.getAuthHeaders() }
-        );
+        return this.http.post(`${this.userURL}/${userId}/wallet/add`,{ wallet: amount },);
     }
 
     withdrawAmount(userId: string, amount: number): Observable<any> {
-        return this.http.post(
-            `${this.userURL}/${userId}/wallet/withdraw`,
-            { wallet: amount },
-            { headers: this.getAuthHeaders() }
-        );
+        return this.http.post(`${this.userURL}/${userId}/wallet/withdraw`,{ wallet: amount },);
     }
 
     renewUrls(userId: string, count: number): Observable<any> {
-        const token = localStorage.getItem('token');
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${token || ''}`
-        });
         const body = { urlCount: count };
-        return this.http.post<any>(`${this.userURL}/${userId}/renew-urls`,
-            body,
-            { headers }
-        );
+        return this.http.post<any>(`${this.userURL}/${userId}/renew-urls`,body);
     }
-
-   
-
 
 }

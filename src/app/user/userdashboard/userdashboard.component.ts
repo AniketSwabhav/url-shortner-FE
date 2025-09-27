@@ -18,13 +18,12 @@ export class UserdashboardComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private loginService: LoginService,
     private snackbarService: SnackbarService,
-    private router: Router 
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.userId = this.loginService.getUserId();
+    this.userId = localStorage.getItem('userId');
     if (this.userId) {
       this.getProfile();
     } else {
@@ -45,9 +44,9 @@ export class UserdashboardComponent implements OnInit {
   }
 
   goToRenewPage(): void {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  this.router.navigate(['/user/urls/renew']);
-}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.router.navigate(['/user/urls/renew']);
+  }
 
 
 }

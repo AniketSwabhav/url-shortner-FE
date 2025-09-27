@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/service/user.service';
-import { LoginService } from 'src/app/service/login.service';
 import { SnackbarService } from 'src/app/service/snackbar.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SubscriptionService } from 'src/app/service/subscription.service';
-import { Subscription } from 'rxjs';
 import { NgbModal, NgbModalModule, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -23,24 +21,25 @@ export class RenewurlComponent implements OnInit {
   walletBalance: number = 0;
   newUrlPrice: number = 0;
 
+  @ViewChild('addMoneyModal') addMoneyModal: any;
+  modelRef: any;
 
   constructor(
-    // private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
     private snackbarService: SnackbarService,
-    private loginService: LoginService,
     private subscriptionService: SubscriptionService,
     private ngbModal: NgbModal
   ) { }
 
-  @ViewChild('addMoneyModal') addMoneyModal: any
-
   ngOnInit() {
-    this.userId = this.loginService.getUserId();
+    this.userId = localStorage.getItem('userId');
     if (this.userId) {
       this.loadUserWallet();
       this.loadSubscription();
+    } else {
+      this.snackbarService.showErrorSnackbar('User not logged in.');
+      this.router.navigate(['/login']);
     }
   }
 
@@ -49,7 +48,7 @@ export class RenewurlComponent implements OnInit {
       next: (amount: number) => {
         this.walletBalance = amount;
       },
-      error: (err) => {
+      error: () => {
         this.snackbarService.showErrorSnackbar('Failed to fetch wallet balance');
       }
     });
@@ -78,33 +77,30 @@ export class RenewurlComponent implements OnInit {
         this.router.navigate(['/user/urls']);
       },
       error: (err) => {
-      const apiMessage = err?.error?.message?.toLowerCase() || '';
+        const apiMessage = err?.error?.message?.toLowerCase() || '';
+        console.log("API Error =>", apiMessage);
 
-      console.log("API Error =>", apiMessage);  // For debugging
-
-      if (apiMessage.includes('insufficient balance')) {
-        this.openAddMoneyModal(); // ✅ Open modal if message matches
-      } else {
-        this.snackbarService.showErrorSnackbar(apiMessage || 'Renewal failed');
+        if (apiMessage.includes('insufficient balance')) {
+          this.openAddMoneyModal();
+        } else {
+          this.snackbarService.showErrorSnackbar(apiMessage || 'Renewal failed');
+        }
       }
-    }
     });
   }
 
-  modelRef: any
   openAddMoneyModal(): void {
-    let option: NgbModalOptions = {
+    const options: NgbModalOptions = {
       size: 'md'
-    }
-    this.modelRef = this.ngbModal.open(this.addMoneyModal, option)
+    };
+    this.modelRef = this.ngbModal.open(this.addMoneyModal, options);
   }
 
-  redirectRenewUrls() {
+  redirectRenewUrls(): void {
     this.router.navigate(['/user/wallet']);
   }
 
   goBack(): void {
     this.router.navigate(['/user/dashboard']);
   }
-
 }

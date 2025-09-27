@@ -15,68 +15,87 @@ import { LoginService } from 'src/app/service/login.service';
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-  userId: string | null = '';
+  userId: string | null = null;
   transactions: any[] = [];
   transactionCount: number = 0;
 
-  //Pagination
-  limit: number = 5
-  offset: number = 0
-  currentPage: number = 0
-  totalTransactionRecords: number = 0
+  // Pagination
+  limit: number = 5;
+  offset: number = 0;
+  currentPage: number = 1;
+  totalTransactionRecords: number = 0;
   selectedButtonIndex: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.userId = localStorage.getItem('userId');
-      this.offset = parseInt(params['offset'] || '0');
-      this.limit = parseInt(params['limit'] || '5');
-      this.fetchTransactions();
+    this.route.paramMap.subscribe(params => {
+      const paramUserId = params.get('userId');
+      if (paramUserId) {
+        this.userId = paramUserId;
+      } else {
+        this.userId = localStorage.getItem('userId');
+      }
+
+      if (!this.userId) {
+        this.snackbarService.showErrorSnackbar('User not identified.');
+        this.router.navigate(['/login']);
+        return;
+      }
+      this.route.queryParams.subscribe(q => {
+        this.offset = parseInt(q['offset'] || '0', 10);
+        this.limit = parseInt(q['limit'] || '5', 10);
+        this.currentPage = Math.floor(this.offset / this.limit) + 1;
+        this.fetchTransactions();
+      });
     });
   }
 
-  fetchTransactions() {
+  fetchTransactions(): void {
+    if (!this.userId) {
+      return;
+    }
+
     const params = new HttpParams()
       .set('limit', this.limit.toString())
       .set('offset', this.offset.toString());
+
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {
-        limit: this.limit,
-        offset: this.offset
-      },
-      queryParamsHandling: 'merge',
+      queryParams: { limit: this.limit, offset: this.offset },
+      queryParamsHandling: 'merge'
     });
-    this.userService.getTransactions(this.userId!, params).subscribe({
-      next: (data) => {
-        console.log("transaction data", data)
-        this.transactions = data.body;
-        this.totalTransactionRecords = parseInt(data.headers.get("X-Total-Count"));
-      },
-      error: (err) => {
-        this.snackbarService.showErrorSnackbar(err);
-      }
-    });
+
+    this.userService.getTransactions(this.userId, params)
+      .subscribe({
+        next: (data) => {
+          this.transactions = data.body || [];
+          const totalCountHeader = data.headers.get("X-Total-Count");
+          this.totalTransactionRecords = totalCountHeader ? parseInt(totalCountHeader, 10) : 0;
+        },
+        error: (err) => {
+          this.snackbarService.showErrorSnackbar(err);
+        }
+      });
   }
 
-  goBack() {
-  this.router.navigate(['/user/wallet']);
-}
-
+  goBack(): void {
+    const hasParam = this.route.snapshot.paramMap.has('userId');
+    if (hasParam) {
+      this.router.navigate(['/admin/dashboard']);
+    } else {
+      this.router.navigate(['/user/wallet']);
+    }
+  }
 
   changePage(pageNumber: number): void {
-    console.log(pageNumber);
-
-    this.currentPage = pageNumber - 1;
-    this.offset = (pageNumber - 1);
-    console.log(pageNumber, this.offset);
+    this.currentPage = pageNumber;
+    this.offset = (pageNumber - 1) * this.limit;
     this.fetchTransactions();
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterService } from 'src/app/service/register.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-admin',
@@ -18,6 +19,7 @@ export class RegisterAdminComponent {
   constructor(
     private fb: FormBuilder,
     private registerService: RegisterService,
+    private router: Router
   ) { }
 
 
@@ -27,8 +29,13 @@ export class RegisterAdminComponent {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       phoneNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
+  }
+
+  showPassword: boolean = false;
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
 
@@ -52,11 +59,14 @@ export class RegisterAdminComponent {
       }
     };
 
+
+
     this.registerService.registerAdmin(payload).subscribe({
       next: (response) => {
         console.log('Admin Registered:', response);
         this.successMessage = 'Admin Registered successfully! ';
         this.errorMessage = '';
+        this.router.navigate(['admin/dashboard']);
 
       },
       error: (error) => {
@@ -66,7 +76,6 @@ export class RegisterAdminComponent {
         setTimeout(() => {
           this.successMessage = '';
         }, 2000);
-
       }
     });
 

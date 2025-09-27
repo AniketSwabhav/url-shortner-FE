@@ -1,21 +1,19 @@
 <div class="adminRegister-container d-flex justify-content-center align-items-center min-vh-100 p-3 bg-light">
-  <div class="card shadow-lg p-4 w-100 border-0 rounded-4" style="max-width: 450px">
+  <div class="card shadow-lg p-4 w-100 border-0 rounded-4" style="max-width: 420px;">
+    
+    <!-- Header -->
     <div class="text-center mb-4">
-      <h1 class="fw-bold text-primary">Admin Registration</h1>
+      <i class="bi bi-person-plus-fill" style="font-size: 3rem; color: #0d6efd;"></i>
+      <h1 class="mt-2 fw-bold text-primary">Admin Registration</h1>
     </div>
 
-    <form [formGroup]="adminRegisterForm" (ngSubmit)="onRegister()" novalidate>
+    <!-- Form -->
+    <form [formGroup]="adminRegisterForm" (ngSubmit)="onRegister()">
 
       <!-- First Name -->
       <div class="mb-3">
         <label for="firstName" class="form-label fw-semibold">First Name</label>
-        <input
-          type="text"
-          id="firstName"
-          formControlName="firstName"
-          class="form-control form-control-lg"
-          placeholder="Enter first name"
-        />
+        <input type="text" id="firstName" formControlName="firstName" class="form-control form-control-lg" placeholder="Enter first name" />
         <small class="text-danger" *ngIf="f['firstName'].touched && f['firstName'].invalid">
           First name is required (min 2 chars).
         </small>
@@ -24,13 +22,7 @@
       <!-- Last Name -->
       <div class="mb-3">
         <label for="lastName" class="form-label fw-semibold">Last Name</label>
-        <input
-          type="text"
-          id="lastName"
-          formControlName="lastName"
-          class="form-control form-control-lg"
-          placeholder="Enter last name"
-        />
+        <input type="text" id="lastName" formControlName="lastName" class="form-control form-control-lg" placeholder="Enter last name" />
         <small class="text-danger" *ngIf="f['lastName'].touched && f['lastName'].invalid">
           Last name is required (min 2 chars).
         </small>
@@ -39,13 +31,7 @@
       <!-- Phone Number -->
       <div class="mb-3">
         <label for="phoneNo" class="form-label fw-semibold">Phone Number</label>
-        <input
-          type="text"
-          id="phoneNo"
-          formControlName="phoneNo"
-          class="form-control form-control-lg"
-          placeholder="Enter 10-digit phone number"
-        />
+        <input type="text" id="phoneNo" formControlName="phoneNo" class="form-control form-control-lg" placeholder="Enter 10-digit phone number" />
         <small class="text-danger" *ngIf="f['phoneNo'].touched && f['phoneNo'].invalid">
           Phone number must be 10 digits.
         </small>
@@ -54,47 +40,43 @@
       <!-- Email -->
       <div class="mb-3">
         <label for="email" class="form-label fw-semibold">Email</label>
-        <input
-          type="email"
-          id="email"
-          formControlName="email"
-          class="form-control form-control-lg"
-          placeholder="Enter email address"
-        />
+        <input type="email" id="email" formControlName="email" class="form-control form-control-lg" placeholder="Enter email address" />
         <small class="text-danger" *ngIf="f['email'].touched && f['email'].invalid">
           Please enter a valid email.
         </small>
       </div>
 
       <!-- Password -->
-      <div class="mb-3">
+      <div class="mb-3 position-relative">
         <label for="password" class="form-label fw-semibold">Password</label>
-        <input
-          type="password"
-          id="password"
-          formControlName="password"
-          class="form-control form-control-lg"
-          placeholder="Enter password"
-        />
+        <div class="input-group">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+            class="form-control form-control-lg" placeholder="Enter your password" />
+          <span class="input-group-text bg-white border-start-0" style="cursor: pointer;"
+            (click)="togglePasswordVisibility()">
+            <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </span>
+        </div>
         <small class="text-danger" *ngIf="f['password'].touched && f['password'].invalid">
           Password must be at least 8 characters.
         </small>
       </div>
 
-      <!-- Alert Messages -->
-      <div *ngIf="errorMessage" class="alert alert-danger p-2 text-center">
-        {{ errorMessage }}
-      </div>
-      <div *ngIf="successMessage" class="alert alert-success p-2 text-center">
-        {{ successMessage }}
-      </div>
+      <!-- Messages -->
+      <div *ngIf="errorMessage" class="alert alert-danger p-2 text-center">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="alert alert-success p-2 text-center">{{ successMessage }}</div>
 
-      <!-- Submit Button -->
+      <!-- Register Button -->
       <div class="d-grid mt-4">
-        <button type="submit" class="btn btn-primary " [disabled]="adminRegisterForm.invalid">
+        <button type="submit" class="btn btn-primary btn-lg fw-semibold" [disabled]="adminRegisterForm.invalid">
           Register
         </button>
       </div>
     </form>
+
+    <!-- Login Link -->
+    <div class="text-center mt-3">
+      <p class="mb-0">Already have an account? <a routerLink="/admin-login">Login here</a></p>
+    </div>
   </div>
 </div>

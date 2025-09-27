@@ -1,1 +1,53 @@
-<p>user-stats works!</p>
+<div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">📊 Monthly Statistics</h4>
+    </div>
+
+    <div class="card-body">
+      <form (ngSubmit)="fetchStats()" class="row g-3 align-items-end">
+
+        <!-- Year Dropdown -->
+        <div class="col-md-4">
+          <label for="year" class="form-label">📅 Year</label>
+          <select id="year" [(ngModel)]="selectedYear" name="year" required class="form-select">
+            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+          </select>
+        </div>
+
+        <!-- Month Dropdown -->
+        <div class="col-md-4">
+          <label for="month" class="form-label">🗓️ Month</label>
+          <select id="month" [(ngModel)]="selectedMonth" name="month" required class="form-select">
+            <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+          </select>
+        </div>
+
+        <!-- Value Type Dropdown -->
+        <div class="col-md-4">
+          <label for="valueType" class="form-label">📈 Value Type</label>
+          <select id="valueType" [(ngModel)]="selectedValueType" name="valueType" required class="form-select">
+            <option *ngFor="let type of valueTypes" [value]="type.value">{{ type.display }}</option>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-12 text-end">
+          <button type="submit" class="btn btn-success px-4">
+            🔍 Fetch Data
+          </button>
+        </div>
+      </form>
+
+      <!-- Result Section -->
+      <div *ngIf="result" class="mt-4">
+        <div class="alert alert-info" role="alert">
+          <h5 class="alert-heading">✅ Result</h5>
+          <hr>
+          <p><strong>Month:</strong> {{ result.month }}</p>
+          <p><strong>Value:</strong> {{ result.value }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

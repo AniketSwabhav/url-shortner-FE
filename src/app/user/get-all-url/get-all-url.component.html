@@ -1,19 +1,25 @@
 <div class="container mt-5">
 
+  <button *ngIf="isAdminMode" class="btn btn-secondary mb-3" (click)="goBack()">
+    ← Back
+  </button>
+
   <!-- Add New URL -->
-  <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
-    <div class="input-group">
-      <input type="url" name="longUrl" class="form-control" placeholder="Enter a long URL to shorten"
-        [(ngModel)]="newLongUrl" required />
-      <button type="submit" class="btn btn-primary" [disabled]="!urlForm.form.valid">
-        Shorten URL
-      </button>
-    </div>
-  </form>
+  <div *ngIf="!isAdminMode">
+    <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
+      <div class="input-group">
+        <input type="url" name="longUrl" class="form-control" placeholder="Enter a long URL to shorten"
+          [(ngModel)]="newLongUrl" required />
+        <button type="submit" class="btn btn-primary" [disabled]="!urlForm.form.valid">
+          Shorten URL
+        </button>
+      </div>
+    </form>
+  </div>
+
+
 
   <div class="card shadow-lg border-0">
-
-
     <div class="card-body">
       <h3 class="card-title mb-4 text-gradient">All Shortened URLs</h3>
       <!-- Flash message for copy success/failure -->
@@ -57,9 +63,10 @@
               <!-- Action Buttons with Spacing -->
               <td class="text-center">
                 <div class="d-flex justify-content-center gap-2 flex-wrap">
-                  <button class="btn btn-sm btn-outline-primary" (click)="renewUrlVisit(url.id)">
+                  <button *ngIf="!isAdminMode" class="btn btn-sm btn-outline-primary" (click)="renewUrlVisit(url.id)">
                     🔁 Renew Visit
                   </button>
+
                   <button class="btn btn-sm btn-outline-secondary" (click)="copyShortUrl(url.shortUrl)">
                     🔗 Copy short link
                   </button>
@@ -71,9 +78,8 @@
         </table>
 
         <!-- Pagination -->
-        <app-pagination class="p-0 m-0" [items]="urls"
-          [totalItems]="selectedButtonIndex ? urlsCount : totalTransactionRecords" [limit]="limit" [offset]="offset"
-          (pageChange)="changePage($event)">
+        <app-pagination class="p-0 m-0" [items]="urls" [totalItems]="selectedButtonIndex ? urlsCount : totalUrlRecords"
+          [limit]="limit" [offset]="offset" (pageChange)="changePage($event)">
         </app-pagination>
       </div>
 

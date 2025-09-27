@@ -21,12 +21,15 @@
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="/admin/adminRegister">Add Admin</a>
         </li>
-        <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
+        <!-- <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="admin/revenue">View Revenue</a>
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
           <a class="nav-link" routerLink="admin/userResearch">View New Use</a>
-        </li> -->
+        </li>  -->
+        <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
+          <a class="nav-link" routerLink="admin/user-stats">user-stats</a>
+        </li>
 
 
 

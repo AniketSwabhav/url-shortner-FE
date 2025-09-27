@@ -45,7 +45,7 @@ export class SubscriptionComponent implements OnInit {
       error: (err) => {
         console.error('Error loading subscription', err);
         this.subscription = null;
-        this.snackbarService.showErrorSnackbar(err.error?.message || 'Failed to load subscription');
+        // this.snackbarService.showErrorSnackbar(err.error?.message || 'Failed to load subscription');
       }
     });
   }

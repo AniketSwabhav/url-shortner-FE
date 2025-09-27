@@ -60,13 +60,13 @@
             <button class="btn btn-sm btn-info me-2" (click)="onTransactionClick(user.id)" >
               Transactions
             </button>
-            <button class="btn btn-sm btn-secondary me-2">
+            <button class="btn btn-sm btn-secondary me-2" (click)="onViewUrlClick(user.id)">
               View URLs
             </button>
           </ng-container>
-          <button class="btn btn-sm btn-primary me-2">
+          <!-- <button class="btn btn-sm btn-primary me-2">
             Update
-          </button>
+          </button> -->
       
 
           <ng-template #reviveTemplate>

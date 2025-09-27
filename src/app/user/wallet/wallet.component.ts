@@ -44,7 +44,7 @@ export class WalletComponent implements OnInit {
   }
 
   onTransactionClick(userID: string) {
-    this.router.navigate(['user', userID, 'transactions']);
+    this.router.navigate(['user','transactions']);
   }
 
   amount: number = 0;

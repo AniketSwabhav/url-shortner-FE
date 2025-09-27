@@ -31,8 +31,12 @@ export class RegisterComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       phoneNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   get f() {

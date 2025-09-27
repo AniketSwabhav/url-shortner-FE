@@ -22,14 +22,13 @@
           <a class="nav-link" routerLink="/admin/adminRegister">Add Admin</a>
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/admin/view-all-banks">Manage Banks</a>
+          <a class="nav-link" routerLink="admin/revenue">View Revenue</a>
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/admin/addbank">Add Bank</a>
-        </li>
-        <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="admin/bank/settlement">Settlements</a>
-        </li>
+          <a class="nav-link" routerLink="admin/userResearch">View New Use</a>
+        </li> -->
+
+
 
         <!-- User-specific links -->
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">

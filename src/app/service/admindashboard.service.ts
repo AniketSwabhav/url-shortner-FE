@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface User {
@@ -16,6 +16,11 @@ export interface User {
   };
   urlCount: number;
   wallet: number;
+}
+
+export interface UserResponse {
+  users: User[];
+  total: number;
 }
 
 @Injectable({
@@ -36,32 +41,19 @@ export class AdmindashboardService {
     };
   }
 
-  getAllUsers(params: HttpParams): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/`, {
-      ...this.getAuthHeaders(),
-      params,
-    });
-  }
+ getAllUsers(params: HttpParams): Observable<HttpResponse<User[]>> {
+  return this.http.get<User[]>(`${this.baseUrl}/`, {
+    ...this.getAuthHeaders(),
+    params,
+    observe: 'response'  // ← important
+  });
+}
 
-  getUserById(userId: string): Observable<User> {
-    return this.http.get<User>(
-      `${this.baseUrl}/${userId}`,
-      this.getAuthHeaders()
-    );
-  }
-
-  updateUser(userId: string, user: Partial<User>): Observable<User> {
-    return this.http.put<User>(
-      `${this.baseUrl}/${userId}`,
-      user,
-      this.getAuthHeaders()
-    );
-  }
+  // getUserById(userId: string): Observable<User> {
+  //   return this.http.get<User>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
+  // }
 
   deleteUser(userId: string): Observable<void> {
-    return this.http.delete<void>(
-      `${this.baseUrl}/${userId}`,
-      this.getAuthHeaders()
-    );
+    return this.http.delete<void>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
   }
 }

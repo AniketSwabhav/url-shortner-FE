@@ -13,6 +13,8 @@ import { TransactionsComponent } from './user/transactions/transactions.componen
 import { RenewurlComponent } from './user/renewurl/renewurl.component';
 import { WalletComponent } from './user/wallet/wallet.component';
 import { RenewurlvisitComponent } from './user/renewurlvisit/renewurlvisit.component';
+import { RevenueComponent } from './Admin/revenue/revenue.component';
+import { UserResearchComponent } from './Admin/user-research/user-research.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -20,6 +22,9 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'admin/adminRegister', component: RegisterAdminComponent },
   { path: 'admin/subscription', component: SubscriptionComponent },
+  { path: 'admin/revenue', component: RevenueComponent },
+  { path: 'admin/userResearch', component: UserResearchComponent },
+
 
   { path: 'admin/dashboard', component: AdmindashboardComponent, canActivate: [adminGuard] },
 

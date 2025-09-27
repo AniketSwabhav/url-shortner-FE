@@ -14,6 +14,18 @@ export class UserService {
         return this.http.get<any[]>(`${this.userURL}/`,{ params: params, observe: "response" });
     }
 
+    updateUser(userId: string, userData: any): Observable<any> {
+        const url = `${this.userURL}/${userId}`;
+        const headers = this.getAuthHeaders();
+        return this.http.put<any>(url, userData, { headers });
+    }
+
+    deleteUser(userId: string): Observable<any> {
+        const url = `${this.userURL}/${userId}`;
+        const headers = this.getAuthHeaders();
+        return this.http.delete<any>(url, { headers });
+    }
+
     viewUser(id: string) {
         return this.http.get<any>(`${this.userURL}/${id}`);
     }

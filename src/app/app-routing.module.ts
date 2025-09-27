@@ -12,6 +12,7 @@ import { GetAllUrlComponent } from './user/get-all-url/get-all-url.component';
 import { TransactionsComponent } from './user/transactions/transactions.component';
 import { RenewurlComponent } from './user/renewurl/renewurl.component';
 import { WalletComponent } from './user/wallet/wallet.component';
+import { RenewurlvisitComponent } from './user/renewurlvisit/renewurlvisit.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -26,7 +27,9 @@ const routes: Routes = [
   { path: 'user/urls', component: GetAllUrlComponent, canActivate: [userGuard] },
   { path: 'user/urls/renew', component: RenewurlComponent, canActivate: [userGuard] },
   { path: 'user/:userId/transactions', component: TransactionsComponent, canActivate: [userGuard] },
-  { path: 'user/wallet', component: WalletComponent, canActivate: [userGuard]}
+  { path: 'user/wallet', component: WalletComponent, canActivate: [userGuard] },
+  { path: 'user/url/:urlId/renew-visits',component: RenewurlvisitComponent }
+
 ];
 
 @NgModule({

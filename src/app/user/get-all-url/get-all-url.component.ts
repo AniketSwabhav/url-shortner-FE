@@ -118,13 +118,17 @@ export class GetAllUrlComponent implements OnInit {
   modelRef: any
   openRenewModal(): void {
     let option: NgbModalOptions = {
-      size: 'sm'
+      size: 'md'
     }
     this.modelRef = this.ngbModal.open(this.renewUrlModal, option)
   }
 
   redirectRenewUrls() {
     this.router.navigate(['user/urls/renew']);
+  }
+
+  renewUrlVisit(urlId: string): void {
+    this.router.navigate([`/user/url/${urlId}/renew-visits`]);
   }
 
   changePage(pageNumber: number): void {

@@ -94,7 +94,7 @@ export class RenewurlComponent implements OnInit {
   modelRef: any
   openAddMoneyModal(): void {
     let option: NgbModalOptions = {
-      size: 'sm'
+      size: 'md'
     }
     this.modelRef = this.ngbModal.open(this.addMoneyModal, option)
   }

@@ -29,6 +29,8 @@
               <th scope="col">🔗 Short URL</th>
               <th scope="col">Long URL</th>
               <th scope="col">Visits</th>
+              <th scope="col">Actions</th>
+
             </tr>
           </thead>
           <tbody>
@@ -46,6 +48,13 @@
               <td>
                 <span class="badge rounded-pill bg-success px-3 py-2">{{ url.visits }}</span>
               </td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary" (click)="renewUrlVisit(url.id)">
+                  🔁 Renew Visit
+                </button>
+              </td>
+
+
             </tr>
           </tbody>
         </table>

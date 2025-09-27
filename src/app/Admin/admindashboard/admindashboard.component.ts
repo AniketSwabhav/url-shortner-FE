@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { AdmindashboardService, User } from 'src/app/service/admindashboard.service';
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 
 @Component({
@@ -11,7 +11,7 @@ import { HttpParams } from '@angular/common/http';
   templateUrl: './admindashboard.component.html',
   styleUrls: ['./admindashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent,RouterModule],
 })
 export class AdmindashboardComponent implements OnInit {
   users: User[] = [];
@@ -65,6 +65,39 @@ export class AdmindashboardComponent implements OnInit {
     return possibleEnd > this.totalUserRecords ? this.totalUserRecords : possibleEnd;
   }
 
+  onDisableClick(userID: string) {
+    this.adminService.viewUser(userID).subscribe(user => {
+      user.isActive = false;
+
+      if (!user.firstName || !user.lastName || !user.phoneNo) {
+        this.flash = { type: 'danger', message: 'Missing required user data' };
+        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+        return;
+      }
+
+      this.adminService.updateUser(userID, user).subscribe(() => {
+        this.flash = { type: 'success', message: `User ${userID} has been disabled.` };
+        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+
+        const localUser = this.users.find(u => u.id === userID);
+        if (localUser) localUser.isActive = false;
+      });
+    });
+  }
+
+  onReviveClick(userID: string) {
+    this.adminService.viewUser(userID).subscribe(user => {
+      user.isActive = true;
+      this.adminService.updateUser(userID, user).subscribe(() => {
+        this.flash = { type: 'success', message: `User ${userID} has been revived.` };
+        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+
+        const localUser = this.users.find(u => u.id === userID);
+        if (localUser) localUser.isActive = true;
+      });
+    });
+  }
+
   loadUsers(): void {
     let params = new HttpParams()
       .set('limit', this.limit.toString())
@@ -81,7 +114,7 @@ export class AdmindashboardComponent implements OnInit {
       },
       error: () => {
         this.flash = { type: 'danger', message: 'Failed to load users' };
-        setTimeout(() => this.flash = { type: '', message: '' }, 3000);
+        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
       }
     });
   }
@@ -101,17 +134,20 @@ export class AdmindashboardComponent implements OnInit {
     this.router.navigate(['user', userID, 'transactions']);
   }
 
-  deleteUser(userId: string): void {
+deleteUser(userId: string): void {
+  if (confirm("Are you sure you want to permanently delete this user?")) {
     this.adminService.deleteUser(userId).subscribe({
       next: () => {
         this.flash = { type: 'success', message: 'User deleted successfully' };
-        setTimeout(() => this.flash = { type: '', message: '' }, 3000);
+        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
         this.loadUsers();
       },
       error: () => {
         this.flash = { type: 'danger', message: 'Failed to delete user' };
-        setTimeout(() => this.flash = { type: '', message: '' }, 3000);
+        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
       }
     });
   }
+}
+
 }

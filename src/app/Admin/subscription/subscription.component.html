@@ -1,8 +1,8 @@
 <div class="container mt-5">
+
   <!-- Current Subscription -->
   <div *ngIf="subscription">
     <h4 class="mb-3">Current Subscription</h4>
-
     <div class="card shadow-sm mb-4">
       <div class="card-body">
         <table class="table table-striped table-bordered mb-0">
@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <!-- No subscription case -->
+  <!-- No subscription -->
   <div *ngIf="!subscription" class="alert alert-info text-center mt-3">
     No subscription set yet. Please add one.
   </div>
@@ -59,9 +59,23 @@
         <input type="number" formControlName="extraVisitPrice" class="form-control" />
       </div>
 
-      <div class="col-12 mt-4 d-flex gap-2">
-        <button type="button" class="btn btn-success flex-fill" (click)="setPrice()">Set Price</button>
-        <button type="button" class="btn btn-primary flex-fill" (click)="updatePrice()">Update Price</button>
+      <!-- Show only one button based on subscription existence -->
+      <div class="col-12 mt-4 text-center">
+        <button *ngIf="!subscription"
+                type="button"
+                class="btn btn-success btn-lg  px-5 py-25"
+                (click)="setPrice()"
+                [disabled]="subscriptionForm.invalid">
+          Set Price
+        </button>
+
+        <button *ngIf="subscription"
+                type="button"
+                class="btn btn-primary   px-5 py-25"
+                (click)="updatePrice()"
+                [disabled]="subscriptionForm.invalid">
+          Update Price
+        </button>
       </div>
     </form>
   </div>

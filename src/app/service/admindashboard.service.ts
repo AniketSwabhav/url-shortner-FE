@@ -18,11 +18,6 @@ export interface User {
   wallet: number;
 }
 
-export interface UserResponse {
-  users: User[];
-  total: number;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -41,19 +36,21 @@ export class AdmindashboardService {
     };
   }
 
- getAllUsers(params: HttpParams): Observable<HttpResponse<User[]>> {
-  return this.http.get<User[]>(`${this.baseUrl}/`, {
-    ...this.getAuthHeaders(),
-    params,
-    observe: 'response'  // ← important
-  });
-}
+  getAllUsers(params: HttpParams): Observable<HttpResponse<User[]>> {
+    return this.http.get<User[]>(`${this.baseUrl}/`, {...this.getAuthHeaders(),params, observe: 'response',});
+  }
 
-  // getUserById(userId: string): Observable<User> {
-  //   return this.http.get<User>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
-  // }
+  viewUser(userId: string): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
+  }
+
+  updateUser(userId: string, user: User): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${userId}`, user, this.getAuthHeaders());
+  }
 
   deleteUser(userId: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
   }
+
+
 }

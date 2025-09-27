@@ -1,33 +1,64 @@
 <div class="container mt-4">
+  <!-- Flash Message -->
+  <div *ngIf="flash.message" class="alert alert-{{flash.type}} alert-dismissible fade show" role="alert">
+    {{flash.message}}
+    <button type="button" class="btn-close" (click)="flash.message = ''"></button>
+  </div>
+
   <div class="card shadow-sm border-0 rounded">
     <div class="card-body">
-      <h3 class="card-title text-primary mb-4">
-        👤 User Profile
-      </h3>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="card-title text-primary mb-0">
+          👤 User Profile
+        </h3>
+        <div class="btn-group">
+          <button class="btn btn-outline-primary btn-sm" (click)="openEditModal()">
+            ✏️ Edit Profile
+          </button>
+
+        </div>
+      </div>
 
       <!-- Profile Info -->
       <div *ngIf="userProfile">
         <div class="row mb-3">
           <div class="col-md-6 mb-2">
             <strong>Full Name:</strong>
-            <div>{{ userProfile.firstName }} {{ userProfile.lastName }}</div>
+            <div class="fs-5">{{ userProfile.firstName }} {{ userProfile.lastName }}</div>
           </div>
           <div class="col-md-6 mb-2">
             <strong>Phone:</strong>
-            <div>{{ userProfile.phoneNo }}</div>
+            <div class="fs-5">{{ userProfile.phoneNo || 'Not provided' }}</div>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6 mb-2">
             <strong>Email:</strong>
-            <div>{{ userProfile.credential?.email }}</div>
+            <div class="fs-5">{{ userProfile.credential?.email }}</div>
           </div>
           <div class="col-md-6 mb-2">
             <strong>Account Status:</strong>
-            <span class="badge px-3 py-2" [ngClass]="userProfile.isActive ? 'bg-success' : 'bg-danger'">
+            <span class="badge px-3 py-2 fs-6" [ngClass]="userProfile.isActive ? 'bg-success' : 'bg-danger'">
               {{ userProfile.isActive ? 'Active' : 'Inactive' }}
             </span>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6 mb-2">
+            <strong>Wallet Balance:</strong>
+            <div class="fs-5 text-success">
+              ₹{{ userProfile.wallet || 0 }}
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>Remaining URL Limit:</strong>
+            <div class="mt-1">
+              <span class="badge bg-info text-dark px-3 py-2 fs-6">
+                {{ userProfile.urlCount || 0 }}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -35,17 +66,13 @@
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <strong>Remaining URL Creation Limit:</strong>
-            <div class="mt-1">
-              <span class="badge bg-info text-dark px-3 py-2 fs-6">
-                {{ userProfile.urlCount }}
-              </span>
-            </div>
-          </div>
-
-          <div class="col-md-12 mt-3">
             <button class="btn btn-primary w-100" (click)="goToRenewPage()">
               ➕ Add More URL Limit
+            </button>
+          </div>
+          <div class="col-md-6 mb-3">
+            <button class="btn btn-success w-100" (click)="goToWalletPage()">
+              💰 Manage Wallet
             </button>
           </div>
         </div>
@@ -61,3 +88,41 @@
     </div>
   </div>
 </div>
+
+<!-- Edit Profile Modal -->
+<div *ngIf="showEditModal" class="modal show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5)">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Profile</h5>
+        <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <div class="mb-3">
+            <label class="form-label">First Name *</label>
+            <input type="text" class="form-control" [(ngModel)]="editData.firstName" name="firstName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Last Name *</label>
+            <input type="text" class="form-control" [(ngModel)]="editData.lastName" name="lastName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <input type="text" class="form-control" [(ngModel)]="editData.phoneNo" name="phoneNo">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [value]="editData.email" disabled>
+            <small class="text-muted">Email cannot be changed</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="updateProfile()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -28,7 +28,7 @@ export class GetAllUrlComponent implements OnInit {
   currentPage: number = 0;
   totalTransactionRecords: number = 0;
   selectedButtonIndex: number | null = null;
-   flash: { type?: string; message: string } = { message: "" };
+  flash: { type?: string; message: string } = { message: "" };
 
 
   @ViewChild('renewUrlModal') renewUrlModal: any;
@@ -95,16 +95,15 @@ export class GetAllUrlComponent implements OnInit {
     });
   }
 
-copyShortUrl(shortUrl: string): void {
-  const fullUrl = `http://localhost:8001/${shortUrl}`;
-  navigator.clipboard.writeText(fullUrl).then(() => {
-    this.flash = { type: "success", message: "Short URL copied to clipboard!" };
-    setTimeout(() => this.flash = { message: "" }, 2000);
-  }).catch(() => {
-    this.flash = { type: "danger", message: "Failed to copy URL!" };
-  });
-}
-
+  copyShortUrl(shortUrl: string): void {
+    const fullUrl = `http://localhost:8001/${shortUrl}`;
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      this.flash = { type: "success", message: "Short URL copied to clipboard!" };
+      setTimeout(() => this.flash = { message: "" }, 2000);
+    }).catch(() => {
+      this.flash = { type: "danger", message: "Failed to copy URL!" };
+    });
+  }
 
   addNewUrl(): void {
     if (!this.newLongUrl.trim()) {

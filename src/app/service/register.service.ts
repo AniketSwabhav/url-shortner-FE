@@ -11,13 +11,11 @@ export class RegisterService {
 
   constructor(private http: HttpClient) { }
 
-
-  
 registerUser(payload: any): Observable<any> {
   return this.http.post<any>(`${this.apiUrl}/register-user`, payload);
 }
 
-    registerAdmin(payload: any): Observable<any> {
+  registerAdmin(payload: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register-admin`, payload);
   }
 

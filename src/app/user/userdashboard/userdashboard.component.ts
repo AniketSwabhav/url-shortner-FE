@@ -44,7 +44,7 @@ export class UserdashboardComponent implements OnInit {
       next: (response) => {
         this.userProfile = response;
         console.log('User Profile:', response); // Check the structure
-        
+
         // Initialize edit data
         this.editData = {
           firstName: response.firstName,
@@ -85,7 +85,6 @@ export class UserdashboardComponent implements OnInit {
       firstName: this.editData.firstName,
       lastName: this.editData.lastName,
       phoneNo: this.editData.phoneNo
-      
     };
 
     this.userService.updateUser(this.userId!, updateData).subscribe({
@@ -119,7 +118,7 @@ export class UserdashboardComponent implements OnInit {
     this.userService.deleteUser(this.userId!).subscribe({
       next: () => {
         this.showFlash('success', 'Account deleted successfully');
-        this.loginService.logout();
+        // this.loginService.logout();
         this.router.navigate(['/login']);
       },
       error: (err) => {

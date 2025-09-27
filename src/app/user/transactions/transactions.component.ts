@@ -66,6 +66,11 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
+  goBack() {
+  this.router.navigate(['/user/wallet']);
+}
+
+
   changePage(pageNumber: number): void {
     console.log(pageNumber);
 

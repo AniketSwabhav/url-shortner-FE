@@ -1,4 +1,9 @@
 <div class="container mt-4">
+
+  <button class="btn btn-secondary mb-3" (click)="goBack()">
+    ← Back to Wallet
+  </button>
+  
   <h3 class="text-primary mb-3">Transaction History</h3>
 
  
@@ -22,9 +27,8 @@
           <td>
             <span class="badge"
               [ngClass]="{
-                'bg-success': tx.type === 'CREDIT',
-                'bg-danger': tx.type === 'DEBIT',
-                'bg-info': tx.type === 'ACCOUNTCREATION'
+                'bg-success': tx.type === 'URLRENEWAL',
+                'bg-info': tx.type === 'VISITSRENEWAL'
               }">
               {{ tx.type }}
             </span>

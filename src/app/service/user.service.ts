@@ -15,15 +15,11 @@ export class UserService {
     }
 
     updateUser(userId: string, userData: any): Observable<any> {
-        const url = `${this.userURL}/${userId}`;
-        const headers = this.getAuthHeaders();
-        return this.http.put<any>(url, userData, { headers });
+        return this.http.put<any>(`${this.userURL}/${userId}`, userData);
     }
 
     deleteUser(userId: string): Observable<any> {
-        const url = `${this.userURL}/${userId}`;
-        const headers = this.getAuthHeaders();
-        return this.http.delete<any>(url, { headers });
+       return this.http.delete<any>(`${this.userURL}/${userId}`);
     }
 
     viewUser(id: string) {

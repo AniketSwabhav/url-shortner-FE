@@ -15,34 +15,34 @@ export class RegisterAdminComponent {
   errorMessage: string = '';
   successMessage: string = '';
 
-constructor(
+  constructor(
     private fb: FormBuilder,
     private registerService: RegisterService,
-  ) {}
+  ) { }
 
 
-    ngOnInit(): void {
-      this.adminRegisterForm = this.fb.group({
-        firstName: ['', [Validators.required, Validators.minLength(2)]],
-        lastName: ['', [Validators.required, Validators.minLength(2)]],
-        phoneNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]]
-      });
-    }
+  ngOnInit(): void {
+    this.adminRegisterForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      phoneNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
 
-  
+
   get f() {
     return this.adminRegisterForm.controls;
   }
 
   onRegister() {
-  if (this.adminRegisterForm.invalid) {
+    if (this.adminRegisterForm.invalid) {
       this.errorMessage = 'Please fill out all fields correctly!';
       return;
     }
 
-     const payload = {
+    const payload = {
       firstName: this.f['firstName'].value,
       lastName: this.f['lastName'].value,
       phoneNo: this.f['phoneNo'].value,
@@ -52,8 +52,7 @@ constructor(
       }
     };
 
-
-        this.registerService.registerAdmin(payload).subscribe({
+    this.registerService.registerAdmin(payload).subscribe({
       next: (response) => {
         console.log('Admin Registered:', response);
         this.successMessage = 'Admin Registered successfully! ';

@@ -25,6 +25,7 @@ export class GetAllUrlComponent implements OnInit {
   urls: any[] = [];
   urlsCount: number = 0;
   newLongUrl: string = '';
+  userProfile: any;
 
   limit: number = 5;
   offset: number = 0;
@@ -50,11 +51,23 @@ export class GetAllUrlComponent implements OnInit {
   ngOnInit() {
     this.userId = this.loginService.getUserId();
     this.fetchUrls();
+    this.getProfile();
 
     this.route.queryParams.subscribe(params => {
       this.offset = parseInt(params['offset'] || '0');
       this.limit = parseInt(params['limit'] || '5');
       this.fetchUrls();
+    });
+  }
+
+  getProfile(): void {
+    this.userService.viewUser(this.userId!).subscribe({
+      next: (response) => {
+        this.userProfile = response;
+      },
+      error: (err) => {
+        this.snackbarService.showErrorSnackbar(err);
+      }
     });
   }
 
@@ -118,13 +131,17 @@ copyShortUrl(shortUrl: string): void {
   modelRef: any
   openRenewModal(): void {
     let option: NgbModalOptions = {
-      size: 'sm'
+      size: 'md'
     }
     this.modelRef = this.ngbModal.open(this.renewUrlModal, option)
   }
 
   redirectRenewUrls() {
-     this.router.navigate(['user/urls/renew']);
+    this.router.navigate(['user/urls/renew']);
+  }
+
+  renewUrlVisit(urlId: string): void {
+    this.router.navigate([`/user/url/${urlId}/renew-visits`]);
   }
 
   changePage(pageNumber: number): void {

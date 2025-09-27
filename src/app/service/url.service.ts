@@ -31,4 +31,9 @@ export class UrlService {
     );
   }
 
+  renewVisits(urlId: string, visits: number) {
+    return this.http.post(`${this.URL}/${urlId}/renew-visits`, { visits }, { headers: this.getAuthHeaders() });
+  }
+
+
 }

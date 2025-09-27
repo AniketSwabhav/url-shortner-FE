@@ -1,23 +1,35 @@
-<div class="container mt-3">
+<div class="container mt-5">
+
+  <!-- Add New URL -->
+  <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
+    <div class="input-group">
+      <input type="url" name="longUrl" class="form-control" placeholder="Enter a long URL to shorten"
+        [(ngModel)]="newLongUrl" required />
+      <button type="submit" class="btn btn-primary" [disabled]="!urlForm.form.valid">
+        Shorten URL
+      </button>
+    </div>
+  </form>
+
   <div class="card shadow-lg border-0">
+
+
     <div class="card-body">
       <h3 class="card-title mb-4 text-gradient">All Shortened URLs</h3>
 
-      <!-- Table with URLs (Admin Style) -->
       <div *ngIf="urls.length > 0" class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
           <thead class="table-dark">
             <tr>
-              <th>Sr No</th>
-              <th>🔗 Short URL</th>
-              <th>Long URL</th>
-              <th>Visits</th>
-              <th>Actions</th>
+              <th scope="col">Sr no</th>
+              <th scope="col">🔗 Short URL</th>
+              <th scope="col">Long URL</th>
+              <th scope="col">Visits</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let url of urls; let i = index">
-              <td>{{ i + 1 + offset }}</td>
+              <td>{{ i + 1  }}</td>
               <td>
                 <a [href]="'http://localhost:8001/' + url.shortUrl" target="_blank"
                   class="fw-bold text-decoration-none text-primary">
@@ -30,19 +42,6 @@
               <td>
                 <span class="badge rounded-pill bg-success px-3 py-2">{{ url.visits }}</span>
               </td>
-              <td>
-                <button class="btn btn-sm btn-primary me-3" >Edit</button>
-                <button class="btn btn-sm btn-danger  me-3">Delete</button>
-                <button class="btn btn-sm btn-outline-secondary me-3"(click)="copyShortUrl(url.shortUrl)">
-                  📋 Copy
-                </button>
-                <button class="btn btn-sm btn-outline-primary">
-                Renew
-                </button>
-              </td>
-            </tr>
-            <tr *ngIf="urls.length === 0">
-              <td colspan="7" class="text-center">No URLs found.</td>
             </tr>
           </tbody>
         </table>
@@ -64,3 +63,24 @@
     </div>
   </div>
 </div>
+
+<button (click)="openRenewModal()">Hey</button>
+
+<!-- Modal for URL Renewal -->
+<ng-template #renewUrlModal let-modal>
+
+ <div class="modal-header">
+    <h5 class="modal-title">Renew URL Creation Limit</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <p>Your URL creation limit has been reached.</p>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-primary" (click)="redirectRenewUrls(); modal.close()">Renew</button>
+  </div>
+
+</ng-template>

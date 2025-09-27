@@ -39,11 +39,18 @@
         </small>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3 position-relative">
         <label for="password" class="form-label">Password</label>
-        <input type="password" id="password" formControlName="password" class="form-control" />
+        <div class="input-group">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+            class="form-control" placeholder="Enter your password" />
+          <span class="input-group-text bg-white border-start-0" style="cursor: pointer;"
+            (click)="togglePasswordVisibility()">
+            <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </span>
+        </div>
         <small class="text-danger" *ngIf="f['password'].touched && f['password'].invalid">
-          Password must be at least 6 characters.
+          Password must be at least 8 characters.
         </small>
       </div>
 

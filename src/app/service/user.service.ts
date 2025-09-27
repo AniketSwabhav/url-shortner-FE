@@ -48,4 +48,16 @@ export class UserService {
         return this.http.post<any>(`${this.userURL}/${userId}/renew-urls`,body);
     }
 
+    getMonthwiseRecords(value: string, year: number, month: number): Observable<{ month: string, value: number }> {
+        const params = new HttpParams()
+            .set('value', value)
+            .set('year', year.toString())
+            .set('month', month.toString());
+
+        return this.http.get<{ month: string, value: number }>(
+            `${this.userURL}/monthwise-records`,
+            { params }
+        );
+    }
+
 }

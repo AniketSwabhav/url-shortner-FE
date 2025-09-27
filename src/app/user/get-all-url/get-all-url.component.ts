@@ -17,19 +17,20 @@ import { NgbModal, NgbModalModule, NgbModalOptions } from '@ng-bootstrap/ng-boot
   styleUrls: ['./get-all-url.component.css']
 })
 export class GetAllUrlComponent implements OnInit {
-  userId: string | null = '';
+  userId: string | null = null;   // will be set from route or storage
   urls: any[] = [];
   urlsCount: number = 0;
   newLongUrl: string = '';
   userProfile: any;
+  isAdminMode: boolean = false;
 
   limit: number = 5;
   offset: number = 0;
   currentPage: number = 0;
-  totalTransactionRecords: number = 0;
+  totalUrlRecords: number = 0;
+  // totalTransactionRecords: number = 0;
   selectedButtonIndex: number | null = null;
   flash: { type?: string; message: string } = { message: "" };
-
 
   @ViewChild('renewUrlModal') renewUrlModal: any;
   modelRef: any;
@@ -41,29 +42,41 @@ export class GetAllUrlComponent implements OnInit {
     private userService: UserService,
     private snackbarService: SnackbarService,
     private ngbModal: NgbModal
-  ) {
-    // ✅ Directly get userId from localStorage
-    this.userId = localStorage.getItem('userId');
-  }
+  ) {}
 
   ngOnInit() {
-    if (!this.userId) {
-      this.snackbarService.showErrorSnackbar('User ID not found.');
-      return;
-    }
+    // Determine userId: from route param if present, else fallback to localStorage
+    this.route.paramMap.subscribe(params => {
+      const paramUserId = params.get('userId');
+      if (paramUserId) {
+        // Admin context
+        this.isAdminMode = true;
+        this.userId = paramUserId;
+      } else {
+        // User context
+        this.isAdminMode = false;
+        this.userId = localStorage.getItem('userId');
+      }
 
-    this.getProfile();
-    this.fetchUrls();
+      if (!this.userId) {
+        this.snackbarService.showErrorSnackbar('User ID not found.');
+        // You may redirect to login or another page
+        return;
+      }
 
-    this.route.queryParams.subscribe(params => {
-      this.offset = parseInt(params['offset'] || '0');
-      this.limit = parseInt(params['limit'] || '5');
-      this.fetchUrls();
+      // Once userId is known, fetch profile and URLs
+      this.getProfile();
+      this.route.queryParams.subscribe(q => {
+        this.offset = parseInt(q['offset'] || '0', 10);
+        this.limit = parseInt(q['limit'] || '5', 10);
+        this.fetchUrls();
+      });
     });
   }
 
   getProfile(): void {
-    this.userService.viewUser(this.userId!).subscribe({
+    if (!this.userId) return;
+    this.userService.viewUser(this.userId).subscribe({
       next: (response) => {
         this.userProfile = response;
       },
@@ -74,6 +87,8 @@ export class GetAllUrlComponent implements OnInit {
   }
 
   fetchUrls(): void {
+    if (!this.userId) return;
+
     const params = new HttpParams()
       .set('limit', this.limit.toString())
       .set('offset', this.offset.toString());
@@ -84,10 +99,11 @@ export class GetAllUrlComponent implements OnInit {
       queryParamsHandling: 'merge'
     });
 
-    this.urlService.viewAllUrlsByUserId(this.userId!, params).subscribe({
+    this.urlService.viewAllUrlsByUserId(this.userId, params).subscribe({
       next: (response) => {
-        this.urls = response.body;
-        this.totalTransactionRecords = parseInt(response.headers.get("X-Total-Count"));
+        this.urls = response.body || [];
+        const totalCountHeader = response.headers.get("X-Total-Count");
+        this.totalUrlRecords = totalCountHeader ? parseInt(totalCountHeader, 10) : 0;
       },
       error: (err) => {
         this.snackbarService.showErrorSnackbar(err);
@@ -141,9 +157,20 @@ export class GetAllUrlComponent implements OnInit {
     this.router.navigate([`/user/url/${urlId}/renew-visits`]);
   }
 
+  goBack(): void {
+  if (this.isAdminMode) {
+    // e.g. return to admin user list
+    this.router.navigate(['/admin/dashboard']);
+  } else {
+    // no back button or a fallback
+    // this.router.navigate(['/user/urls']);
+  }
+}
+
+
   changePage(pageNumber: number): void {
     this.currentPage = pageNumber - 1;
-    this.offset = this.currentPage;
+    this.offset = this.currentPage * this.limit;
     this.fetchUrls();
   }
 }

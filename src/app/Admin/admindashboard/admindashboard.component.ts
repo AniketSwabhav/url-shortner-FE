@@ -15,8 +15,8 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AdmindashboardComponent implements OnInit {
   users: User[] = [];
-  totalUserRecords: number = 0; 
-  usersCount: number = 0; 
+  totalUserRecords: number = 0;
+  usersCount: number = 0;
   selectedButtonIndex: number = 0;
 
   flash: { type: string; message: string } = { type: '', message: '' };
@@ -98,7 +98,11 @@ export class AdmindashboardComponent implements OnInit {
   }
 
   onTransactionClick(userID: string) {
-    this.router.navigate(['user', userID, 'transactions']);
+    this.router.navigate(['admin', 'transactions', userID,]);
+  }
+
+  onViewUrlClick(userID: string) {
+    this.router.navigate(['admin', 'urls', userID]);
   }
 
   deleteUser(userId: string): void {

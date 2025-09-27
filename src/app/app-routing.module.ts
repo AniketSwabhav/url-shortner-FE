@@ -15,24 +15,30 @@ import { WalletComponent } from './user/wallet/wallet.component';
 import { RenewurlvisitComponent } from './user/renewurlvisit/renewurlvisit.component';
 import { RevenueComponent } from './Admin/revenue/revenue.component';
 import { UserResearchComponent } from './Admin/user-research/user-research.component';
+import { UserStatsComponent } from './Admin/user-stats/user-stats.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  
   { path: 'admin/adminRegister', component: RegisterAdminComponent },
   { path: 'admin/subscription', component: SubscriptionComponent },
   { path: 'admin/revenue', component: RevenueComponent },
   { path: 'admin/userResearch', component: UserResearchComponent },
+  { path: 'admin/user-stats', component: UserStatsComponent },
+  { path: 'admin/transactions/:userId', component: TransactionsComponent },
+  { path: 'admin/urls/:userId', component: GetAllUrlComponent },
 
   { path: 'admin/dashboard', component: AdmindashboardComponent, canActivate: [adminGuard] },
 
   { path: 'user/dashboard', component: UserdashboardComponent, canActivate: [userGuard] },
   { path: 'user/urls', component: GetAllUrlComponent, canActivate: [userGuard] },
+
   { path: 'user/urls/renew', component: RenewurlComponent, canActivate: [userGuard] },
-  { path: 'user/:userId/transactions', component: TransactionsComponent, canActivate: [userGuard] },
+  { path: 'user/transactions', component: TransactionsComponent },
   { path: 'user/wallet', component: WalletComponent, canActivate: [userGuard] },
-  { path: 'user/url/:urlId/renew-visits',component: RenewurlvisitComponent }
+  { path: 'user/url/:urlId/renew-visits', component: RenewurlvisitComponent }
 
 ];
 

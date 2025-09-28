@@ -1,55 +1,30 @@
 <div class="container mt-5">
+
   <button *ngIf="isAdminMode" class="btn btn-secondary mb-3" (click)="goBack()">
     ← Back
   </button>
 
-  <!-- Search -->
-  <div class="input-group w-50 mb-3" [formGroup]="searchForm">
-    <input
-      type="text"
-      formControlName="searchTerm"
-      placeholder="Search by Short-Url or long-Url..."
-      class="form-control"
-    />
-    <button class="btn btn-primary" (click)="searchUrls()">Search</button>
-    <button class="btn btn-outline-secondary" (click)="clearSearch()">
-      Clear
-    </button>
-  </div>
+  <!-- Add New URL -->
+  <!-- <div *ngIf="!isAdminMode">
+    <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
+      <div class="input-group">
+        <input type="url" name="longUrl" class="form-control" placeholder="Enter a long URL to shorten"
+          [(ngModel)]="newLongUrl" required />
+        <button type="submit" class="btn btn-primary" [disabled]="!urlForm.form.valid">
+          Shorten URL
+        </button>
+      </div>
+    </form>
+  </div> -->
+
+
 
   <div class="card shadow-lg border-0">
     <div class="card-body">
       <h3 class="card-title mb-4 text-gradient">All Shortened URLs</h3>
       <!-- Flash message for copy success/failure -->
-      <div
-        *ngIf="flash.message"
-        class="alert alert-{{ flash.type }} text-center py-2 small mb-3"
-        role="alert"
-      >
+      <div *ngIf="flash.message" class="alert alert-{{ flash.type }} text-center py-2 small mb-3" role="alert">
         {{ flash.message }}
-      </div>
-
-      <!-- Add New URL -->
-      <div *ngIf="!isAdminMode">
-        <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
-          <div class="input-group">
-            <input
-              type="url"
-              name="longUrl"
-              class="form-control"
-              placeholder="Enter a long URL to shorten"
-              [(ngModel)]="newLongUrl"
-              required
-            />
-            <button
-              type="submit"
-              class="btn btn-primary"
-              [disabled]="!urlForm.form.valid"
-            >
-              Shorten URL
-            </button>
-          </div>
-        </form>
       </div>
 
       <div *ngIf="urls.length > 0" class="table-responsive">
@@ -69,82 +44,48 @@
 
               <!-- Short URL Centered -->
               <td class="text-center">
-                <a
-                  [href]="'http://localhost:8001/' + url.shortUrl"
-                  target="_blank"
-                  class="fw-bold text-decoration-none text-primary"
-                >
+                <a [href]="'http://localhost:8001/' + url.shortUrl" target="_blank"
+                  class="fw-bold text-decoration-none text-primary">
                   {{ url.shortUrl }}
                 </a>
               </td>
 
               <!-- Long URL Truncated -->
-              <td
-                class="text-truncate text-center"
-                style="max-width: 300px"
-                title="{{ url.longUrl }}"
-              >
+              <td class="text-truncate text-center" style="max-width: 300px;" title="{{ url.longUrl }}">
                 {{ url.longUrl }}
               </td>
 
               <!-- Visits Centered and Styled -->
               <td class="text-start ps-4">
-                <span class="badge rounded-pill bg-success px-3 py-2">{{
-                  url.visits
-                }}</span>
+                <span class="badge rounded-pill bg-success px-3 py-2">{{ url.visits }}</span>
               </td>
 
               <!-- Action Buttons with Spacing -->
               <td class="text-center">
                 <div class="d-flex justify-content-center gap-2 flex-wrap">
-
-                  <button
-                    *ngIf="!isAdminMode"
-                    class="btn btn-sm btn-outline-primary"
-                    (click)="renewUrlVisit(url.id)">
+                  <button *ngIf="!isAdminMode" class="btn btn-sm btn-outline-primary" (click)="renewUrlVisit(url.id)">
                     🔁 Renew Visit
                   </button>
 
-                  <button
-                    class="btn btn-sm btn-outline-secondary"
-                    (click)="copyShortUrl(url.shortUrl)">
+                  <button class="btn btn-sm btn-outline-secondary" (click)="copyShortUrl(url.shortUrl)">
                     🔗 Copy short link
-                  </button>
-
-                  <button
-                    class="btn btn-sm btn-outline-warning"
-                    (click)="editUrl(url)">
-                    ✏️ Edit
-                  </button>
-
-                  <button
-                    class="btn-sm btn-danger me-2"
-                    (click)="deleteUrl(url.id)" >
-                    <i class="fas fa-trash-alt"></i>
                   </button>
                 </div>
               </td>
             </tr>
           </tbody>
+
         </table>
 
         <!-- Pagination -->
-        <app-pagination
-          class="p-0 m-0"
-          [items]="urls"
-          [totalItems]="totalUrlRecords"
-          [limit]="limit"
-          [offset]="offset"
-          (pageChange)="changePage($event)"
-        >
+        <app-pagination class="p-0 m-0" [items]="urls" [totalItems]="totalUrlRecords" [limit]="limit" [offset]="offset"
+          (pageChange)="changePage($event)">
         </app-pagination>
+
       </div>
 
       <!-- No URLs Message -->
-      <div
-        *ngIf="urls.length === 0"
-        class="alert alert-warning text-center mt-4"
-      >
+      <div *ngIf="urls.length === 0" class="alert alert-warning text-center mt-4">
         No URLs have been created yet.
       </div>
     </div>
@@ -153,14 +94,10 @@
 
 <!-- Modal for URL Renewal -->
 <ng-template #renewUrlModal let-modal>
+
   <div class="modal-header">
     <h5 class="modal-title">Renew URL Creation Limit</h5>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss()"
-    ></button>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>
 
   <div class="modal-body">
@@ -169,11 +106,7 @@
 
   <div class="modal-footer">
     <button class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
-    <button
-      class="btn btn-primary"
-      (click)="redirectRenewUrls(); modal.close()"
-    >
-      Renew
-    </button>
+    <button class="btn btn-primary" (click)="redirectRenewUrls(); modal.close()">Renew</button>
   </div>
+
 </ng-template>

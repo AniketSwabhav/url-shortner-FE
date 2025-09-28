@@ -5,32 +5,30 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { SnackbarService } from 'src/app/service/snackbar.service';
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
 import { NgbModal, NgbModalModule, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-get-all-url',
   standalone: true,
-  imports: [CommonModule, PaginationComponent, FormsModule, NgbModalModule, ReactiveFormsModule],
+  imports: [CommonModule, PaginationComponent, FormsModule, NgbModalModule],
   templateUrl: './get-all-url.component.html',
   styleUrls: ['./get-all-url.component.css']
 })
 export class GetAllUrlComponent implements OnInit {
-  userId: string | null = null;
+ userId: string | null = null;
   urls: any[] = [];
   newLongUrl: string = '';
   userProfile: any;
   isAdminMode: boolean = false;
-
-  // Search
-  searchForm: FormGroup;
 
   // Pagination
   limit: number = 5;
   offset: number = 0;
   totalUrlRecords: number = 0;
   currentPage: number = 0;
+  // selectedButtonIndex: number | null = null;
 
   flash: { type?: string; message: string } = { message: "" };
 
@@ -43,22 +41,14 @@ export class GetAllUrlComponent implements OnInit {
     private urlService: UrlService,
     private userService: UserService,
     private snackbarService: SnackbarService,
-    private ngbModal: NgbModal,
-    private fb: FormBuilder,
-  ) {
-    this.searchForm = this.fb.group({
-      searchTerm: ['']
-    });
-  }
+    private ngbModal: NgbModal
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.limit = +params['limit'] || 5;
       this.offset = +params['offset'] || 0;
       this.currentPage = this.offset + 1;
-
-      const searchParam = params['search'] || '';
-      this.searchForm.get('searchTerm')?.setValue(searchParam);
 
       this.route.paramMap.subscribe(pm => {
         const paramUserId = pm.get('userId');
@@ -70,7 +60,6 @@ export class GetAllUrlComponent implements OnInit {
           this.userId = localStorage.getItem('userId');
         }
       });
-
       this.getProfile();
       this.loadUrls();
     });
@@ -85,21 +74,15 @@ export class GetAllUrlComponent implements OnInit {
   }
 
   loadUrls(): void {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('limit', this.limit.toString())
       .set('offset', this.offset.toString());
-
-    const searchTerm = this.searchForm.get('searchTerm')?.value;
-    if (searchTerm) {
-      params = params.set('search', searchTerm);
-    }
 
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         limit: this.limit,
-        offset: this.offset,
-        search: searchTerm || null
+        offset: this.offset
       },
       queryParamsHandling: 'merge',
     });
@@ -117,6 +100,7 @@ export class GetAllUrlComponent implements OnInit {
   }
 
   changePage(pageNumber: number): void {
+    // In the example you showed, offset is just pageNumber - 1 
     this.currentPage = pageNumber - 1;
     this.offset = pageNumber - 1;
     this.loadUrls();
@@ -132,22 +116,11 @@ export class GetAllUrlComponent implements OnInit {
     });
   }
 
-  searchUrls(): void {
-    this.offset = 0;
-    this.currentPage = 1;
-    this.loadUrls();
-  }
-
-  clearSearch(): void {
-    this.searchForm.get('searchTerm')?.setValue('');
-    this.searchUrls();
-  }
-
-  addNewUrl(): void {
-    if (!this.newLongUrl.trim()) {
-      this.snackbarService.showErrorSnackbar('Please enter a valid URL.');
-      return;
-    }
+  // addNewUrl(): void {
+  //   if (!this.newLongUrl.trim()) {
+  //     this.snackbarService.showErrorSnackbar('Please enter a valid URL.');
+  //     return;
+  //   }
 
   //   this.urlService.addUrl(this.newLongUrl).subscribe({
   //     next: () => {
@@ -180,41 +153,13 @@ export class GetAllUrlComponent implements OnInit {
   }
 
   goBack(): void {
-    if (this.isAdminMode) {
-      this.router.navigate(['/admin/dashboard']);
-    } else {
-      // fallback for user
-    }
+  if (this.isAdminMode) {
+    // e.g. return to admin user list
+    this.router.navigate(['/admin/dashboard']);
+  } else {
+    // no back button or a fallback
+    // this.router.navigate(['/user/urls']);
   }
-
-    editUrl(url: any): void {
-    const updatedUrl = prompt("Enter new long URL:", url.longUrl);
-    if (!updatedUrl || updatedUrl.trim() === '') return;
-
-    const payload = { longUrl: updatedUrl };
-    this.urlService.updateUserById(url.id, payload).subscribe({
-      next: () => {
-        this.snackbarService.showSuccessSnackbar("URL updated successfully!");
-        this.loadUrls();
-      },
-      error: err => {
-        this.snackbarService.showErrorSnackbar(err);
-      }
-    });
-  }
-
-  deleteUrl(urlId: string): void {
-    if (!confirm("Are you sure you want to delete this URL?")) return;
-
-    this.urlService.deleteUrl(urlId).subscribe({
-      next: () => {
-        this.snackbarService.showSuccessSnackbar("URL deleted successfully!");
-        this.loadUrls();
-      },
-      error: err => {
-        this.snackbarService.showErrorSnackbar(err);
-      }
-    });
-  }
-
+}
+  
 }

@@ -28,13 +28,5 @@ export class UrlService {
     return this.http.post(`${this.URL}/${urlId}/renew-visits`, { visits });
   }
 
-  updateUserById(urlId : string ,urlData:any): Observable<any> {
-    return this.http.put<any>(`${this.URL}/${urlId}`,urlData)
-  }
-  
-  deleteUrl(urlId:string ):Observable<any>{
-    return this.http.delete(`${this.URL}/${urlId}`)
-  }
-
 
 }

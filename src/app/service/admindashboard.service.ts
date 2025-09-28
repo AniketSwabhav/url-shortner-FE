@@ -36,20 +36,19 @@ export class AdmindashboardService {
     };
   }
 
-  getAllUsers(params?: HttpParams): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}`, { params: params, observe: 'response' as 'body' });
+  getAllUsers(params?: HttpParams): Observable<HttpResponse<User[]>> {
+    return this.http.get<User[]>(`${this.baseUrl}/`, {...this.getAuthHeaders(), params, observe: 'response',});
   }
 
-  viewUser(userId: string): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/${userId}`);
+  viewUser(userId: string): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
   }
 
-  // Update user by ID
-  updateUser(userId: string, userData: any): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/${userId}`, userData);
+  updateUser(userId: string, user: User): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${userId}`, user, this.getAuthHeaders());
   }
 
-  deleteUser(userId: string): Observable<any> {
+  deleteUser(userId: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
   }
 

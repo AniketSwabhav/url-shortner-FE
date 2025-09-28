@@ -7,6 +7,7 @@ import { LoginService } from 'src/app/service/login.service';
 import { SnackbarService } from 'src/app/service/snackbar.service';
 import { SnackbarComponent } from 'src/app/shared/snackbar/snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,13 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private authService: LoginService, private router: Router, private fb: FormBuilder,  private snackbarService: SnackbarService) {
+  constructor(
+    private authService: LoginService, 
+    private router: Router, 
+    private fb: FormBuilder,  
+    private snackbarService: SnackbarService,
+    private jwtHelper: JwtHelperService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -35,26 +42,30 @@ export class LoginComponent {
 
   onSubmit(): void {
     this.authService.login(this.loginForm.value).subscribe({
-      next: (response:any) => {
+      next: (response: any) => {
         if (response.token) {
+          const decodedToken = this.jwtHelper.decodeToken(response.token);
+
+          if (decodedToken?.IsActive === false || decodedToken?.IsActive === 'false') {
+            this.snackbarService.showErrorSnackbar("Your account is inactive. Please contact admin.");
+            return; // stop here, don’t set token or navigate
+          }
+
           this.authService.setToken(response.token);
-          const userId = response.id;
-          console.log(response);
 
           if (this.authService.isAdmin()) {
             this.router.navigate(['admin/dashboard']);
-            // alert("logged in successful")
             this.snackbarService.showSuccessSnackbar("Admin logged in successfully");
           } else {
             this.router.navigate(['user/dashboard']);
-             this.snackbarService.showSuccessSnackbar("User logged in successfully");
+            this.snackbarService.showSuccessSnackbar("User logged in successfully");
           }
-        } 
+        }
       },
-      error : (err: any) => {
+      error: (err: any) => {
         console.error(err);
-        this.snackbarService.showErrorSnackbar(err)
+        this.snackbarService.showErrorSnackbar(err);
       }
-  });
+    });
   }
 }

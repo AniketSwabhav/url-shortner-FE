@@ -74,8 +74,7 @@ export class AdmindashboardComponent implements OnInit {
       }
 
       this.adminService.updateUser(userID, user).subscribe(() => {
-        this.flash = { type: 'success', message: `User ${userID} has been disabled.` };
-        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+       this.snackbarService.showSuccessSnackbar("User has been disabled.")
 
         const localUser = this.users.find(u => u.id === userID);
         if (localUser) localUser.isActive = false;
@@ -87,9 +86,7 @@ export class AdmindashboardComponent implements OnInit {
     this.adminService.viewUser(userID).subscribe(user => {
       user.isActive = true;
       this.adminService.updateUser(userID, user).subscribe(() => {
-        this.flash = { type: 'success', message: `User ${userID} has been revived.` };
-        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
-
+        this.snackbarService.showSuccessSnackbar("User has been revived.")
         const localUser = this.users.find(u => u.id === userID);
         if (localUser) localUser.isActive = true;
       });
@@ -159,13 +156,11 @@ export class AdmindashboardComponent implements OnInit {
     if (confirm("Are you sure you want to permanently delete this user?")) {
       this.adminService.deleteUser(userId).subscribe({
         next: () => {
-          this.flash = { type: 'success', message: 'User deleted successfully' };
-          setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+          this.snackbarService.showSuccessSnackbar("User deleted sucessfully")
           this.loadUsers();
         },
         error: () => {
-          this.flash = { type: 'danger', message: 'Failed to delete user' };
-          setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+           this.snackbarService.showErrorSnackbar("failed to deleted user")
         }
       });
     }

@@ -125,7 +125,7 @@ export class GetAllUrlComponent implements OnInit {
   copyShortUrl(shortUrl: string): void {
     const fullUrl = `http://localhost:8001/${shortUrl}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
-      this.flash = { type: "success", message: "Short URL copied to clipboard!" };
+       this.snackbarService.showSuccessSnackbar("Short URL copied to clipboard!")
       setTimeout(() => this.flash = { message: "" }, 2000);
     }).catch(() => {
       this.flash = { type: "danger", message: "Failed to copy URL!" };
@@ -187,7 +187,7 @@ export class GetAllUrlComponent implements OnInit {
     }
   }
 
-    editUrl(url: any): void {
+  editUrl(url: any): void {
     const updatedUrl = prompt("Enter new long URL:", url.longUrl);
     if (!updatedUrl || updatedUrl.trim() === '') return;
 

@@ -112,12 +112,14 @@
                   </button>
 
                   <button
+                  *ngIf="!isAdminMode"
                     class="btn btn-sm btn-outline-warning"
                     (click)="editUrl(url)">
                     ✏️ Edit
                   </button>
 
                   <button
+                  *ngIf="!isAdminMode"
                     class="btn-sm btn-danger me-2"
                     (click)="deleteUrl(url.id)" >
                     <i class="fas fa-trash-alt"></i>

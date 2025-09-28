@@ -1,0 +1,69 @@
+<div class="container my-5">
+  <div class="card mx-auto shadow-sm" style="max-width: 460px;">
+    <div class="card-body">
+      <h5 class="card-title text-center mb-4">Shorten Your URL</h5>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- Long URL -->
+        <div class="mb-3">
+          <label for="longUrl" class="form-label">Long URL</label>
+          <div class="input-group">
+            <input
+              id="longUrl"
+              type="url"
+              formControlName="longUrl"
+              class="form-control"
+              [class.is-invalid]="form.get('longUrl')?.touched && form.get('longUrl')?.invalid"
+              placeholder="https://example.com/..."
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="clearLongUrl()"
+              title="Clear"
+            >
+              ✕
+            </button>
+          </div>
+          <div *ngIf="form.get('longUrl')?.touched && form.get('longUrl')?.invalid" class="invalid-feedback d-block">
+            <div *ngIf="form.get('longUrl')?.errors?.['required']">Long URL is required.</div>
+            <div *ngIf="form.get('longUrl')?.errors?.['pattern']">Must start with http:// or https://</div>
+          </div>
+        </div>
+
+        <!-- Short URL -->
+        <div class="mb-3">
+          <label for="shortUrl" class="form-label">Short URL (5 characters)</label>
+          <div class="input-group">
+            <input
+              id="shortUrl"
+              type="text"
+              formControlName="shortUrl"
+              class="form-control"
+              [class.is-invalid]="form.get('shortUrl')?.touched && form.get('shortUrl')?.invalid"
+              placeholder="abc12"
+            />
+            <button type="button" class="btn btn-outline-secondary" (click)="onGenerateAgainClick()">↻</button>
+          </div>
+          <div *ngIf="form.get('shortUrl')?.touched && form.get('shortUrl')?.invalid" class="invalid-feedback d-block mt-1">
+            <div *ngIf="form.get('shortUrl')?.errors?.['required']">Short URL is required.</div>
+            <div *ngIf="form.get('shortUrl')?.errors?.['minlength'] || form.get('shortUrl')?.errors?.['maxlength']">
+              Must be exactly 5 characters.
+            </div>
+            <div *ngIf="form.get('shortUrl')?.errors?.['pattern']">
+              Only alphanumeric characters allowed.
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">
+           Create Short URL
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

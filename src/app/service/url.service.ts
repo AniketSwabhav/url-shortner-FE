@@ -20,6 +20,10 @@ export class UrlService {
     return this.http.post<any>(`${this.URL}/register`, payload );
   }
 
+  createShortUrl(payload: { longUrl: string, shortUrl: string }) {
+    return this.http.post<any>(`${this.URL}/register`, payload);
+  }
+
   renewVisits(urlId: string, visits: number) {
     return this.http.post(`${this.URL}/${urlId}/renew-visits`, { visits });
   }

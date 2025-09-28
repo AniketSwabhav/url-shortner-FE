@@ -16,6 +16,7 @@ import { RenewurlvisitComponent } from './user/renewurlvisit/renewurlvisit.compo
 import { RevenueComponent } from './Admin/revenue/revenue.component';
 import { UserResearchComponent } from './Admin/user-research/user-research.component';
 import { UserStatsComponent } from './Admin/user-stats/user-stats.component';
+import { AddUrlComponent } from './user/add-url/add-url.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -38,7 +39,8 @@ const routes: Routes = [
   { path: 'user/urls/renew', component: RenewurlComponent, canActivate: [userGuard] },
   { path: 'user/transactions', component: TransactionsComponent },
   { path: 'user/wallet', component: WalletComponent, canActivate: [userGuard] },
-  { path: 'user/url/:urlId/renew-visits', component: RenewurlvisitComponent }
+  { path: 'user/url/:urlId/renew-visits', component: RenewurlvisitComponent },
+  { path: 'user/add-url', component: AddUrlComponent}
 
 ];
 

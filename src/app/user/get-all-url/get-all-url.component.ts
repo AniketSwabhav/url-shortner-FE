@@ -116,28 +116,28 @@ export class GetAllUrlComponent implements OnInit {
     });
   }
 
-  addNewUrl(): void {
-    if (!this.newLongUrl.trim()) {
-      this.snackbarService.showErrorSnackbar('Please enter a valid URL.');
-      return;
-    }
+  // addNewUrl(): void {
+  //   if (!this.newLongUrl.trim()) {
+  //     this.snackbarService.showErrorSnackbar('Please enter a valid URL.');
+  //     return;
+  //   }
 
-    this.urlService.addUrl(this.newLongUrl).subscribe({
-      next: () => {
-        this.snackbarService.showSuccessSnackbar('URL shortened successfully!');
-        this.newLongUrl = '';
-        this.loadUrls();
-      },
-      error: (err) => {
-        const errorMsg = err?.error || 'An error occurred.';
-        if (errorMsg.includes('maximum url creation limit')) {
-          this.openRenewModal();
-        } else {
-          this.snackbarService.showErrorSnackbar(errorMsg);
-        }
-      }
-    });
-  }
+  //   this.urlService.addUrl(this.newLongUrl).subscribe({
+  //     next: () => {
+  //       this.snackbarService.showSuccessSnackbar('URL shortened successfully!');
+  //       this.newLongUrl = '';
+  //       this.loadUrls();
+  //     },
+  //     error: (err) => {
+  //       const errorMsg = err?.error || 'An error occurred.';
+  //       if (errorMsg.includes('maximum url creation limit')) {
+  //         this.openRenewModal();
+  //       } else {
+  //         this.snackbarService.showErrorSnackbar(errorMsg);
+  //       }
+  //     }
+  //   });
+  // }
 
   openRenewModal(): void {
     const options: NgbModalOptions = { size: 'md' };

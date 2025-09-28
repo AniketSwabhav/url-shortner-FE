@@ -37,7 +37,7 @@ export class AdmindashboardService {
   }
 
   getAllUsers(params?: HttpParams): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}`, { params: params, observe: 'response' as 'body' });
+    return this.http.get<any>(`${this.baseUrl}/`, { params: params, observe: 'response' as 'body' });
   }
 
   viewUser(userId: string): Observable<any> {

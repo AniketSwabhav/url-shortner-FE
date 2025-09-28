@@ -89,7 +89,7 @@
   <app-pagination
     class="p-0 m-0"
     [items]="users"
-    [totalItems]="selectedButtonIndex ? usersCount : totalUserRecords"
+    [totalItems]="totalUserRecords"
     [limit]="limit"
     [offset]="offset"
     (pageChange)="changePage($event)">

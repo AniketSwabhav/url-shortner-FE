@@ -5,13 +5,14 @@ import { AdmindashboardService, User } from 'src/app/service/admindashboard.serv
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { SnackbarService } from 'src/app/service/snackbar.service';
 
 @Component({
   selector: 'app-admindashboard',
   templateUrl: './admindashboard.component.html',
   styleUrls: ['./admindashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent,RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent, RouterModule],
 })
 export class AdmindashboardComponent implements OnInit {
   users: User[] = [];
@@ -31,7 +32,8 @@ export class AdmindashboardComponent implements OnInit {
     private adminService: AdmindashboardService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private snackbarService: SnackbarService
   ) {
     this.searchForm = this.fb.group({
       searchTerm: ['']
@@ -41,19 +43,11 @@ export class AdmindashboardComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['search']) this.searchForm.get('searchTerm')?.setValue(params['search']);
-      if (params['limit']) this.limit = +params['limit'];
-      if (params['offset']) {
-        this.offset = +params['offset'];
-        this.currentPage = Math.floor(this.offset / this.limit) + 1;
-      }
+      this.limit = +params['limit'] || 5;
+      this.offset = +params['offset'] || 0;
+      this.currentPage = this.offset + 1;
       this.loadUsers();
     });
-  }
-
-  changePage(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.offset = (pageNumber - 1) * this.limit;
-    this.loadUsers();
   }
 
   get startItem(): number {
@@ -103,20 +97,36 @@ export class AdmindashboardComponent implements OnInit {
       .set('limit', this.limit.toString())
       .set('offset', this.offset.toString());
 
+      this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        limit: this.limit,
+        offset: this.offset
+      },
+      queryParamsHandling: 'merge',
+    });
+
+
     const searchTerm = this.searchForm.get('searchTerm')?.value;
     if (searchTerm) params = params.set('search', searchTerm);
 
     this.adminService.getAllUsers(params).subscribe({
       next: (response) => {
         this.users = response.body || [];
-        this.usersCount = this.users.length;
-        this.totalUserRecords = parseInt(response.headers.get('X-Total-Count') || '0');
-      },
-      error: () => {
-        this.flash = { type: 'danger', message: 'Failed to load users' };
-        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+         const totalCountHeader = response.headers.get('X-Total-Count');
+        // this.totalUserRecords = parseInt(response.headers.get('X-Total-Count') || '0');
+        this.totalUserRecords = totalCountHeader ? + totalCountHeader :0;
+      }, 
+      error: err => {
+       this.snackbarService.showErrorSnackbar(err);
       }
     });
+  }
+
+  changePage(pageNumber: number): void {
+    this.currentPage = pageNumber - 1;
+    this.offset = pageNumber - 1;
+    this.loadUsers();
   }
 
   searchUsers(): void {
@@ -138,20 +148,20 @@ export class AdmindashboardComponent implements OnInit {
     this.router.navigate(['admin', 'urls', userID]);
   }
 
-deleteUser(userId: string): void {
-  if (confirm("Are you sure you want to permanently delete this user?")) {
-    this.adminService.deleteUser(userId).subscribe({
-      next: () => {
-        this.flash = { type: 'success', message: 'User deleted successfully' };
-        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
-        this.loadUsers();
-      },
-      error: () => {
-        this.flash = { type: 'danger', message: 'Failed to delete user' };
-        setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
-      }
-    });
+  deleteUser(userId: string): void {
+    if (confirm("Are you sure you want to permanently delete this user?")) {
+      this.adminService.deleteUser(userId).subscribe({
+        next: () => {
+          this.flash = { type: 'success', message: 'User deleted successfully' };
+          setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+          this.loadUsers();
+        },
+        error: () => {
+          this.flash = { type: 'danger', message: 'Failed to delete user' };
+          setTimeout(() => (this.flash = { type: '', message: '' }), 3000);
+        }
+      });
+    }
   }
-}
 
 }

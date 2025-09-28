@@ -47,7 +47,7 @@ export class SnackbarService {
       },
       horizontalPosition: 'end',
       verticalPosition: 'top',
-      duration: 5000,
+      duration: 3000,
       panelClass: 'snackbar-error',
     });
   }
@@ -60,7 +60,7 @@ export class SnackbarService {
       },
       horizontalPosition: 'end',
       verticalPosition: 'top',
-      duration: 5000,
+      duration: 3000,
       panelClass: 'snackbar-error',
     });
   }

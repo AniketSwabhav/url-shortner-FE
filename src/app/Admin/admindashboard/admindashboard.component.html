@@ -64,17 +64,17 @@
               View URLs
             </button>
           </ng-container>
-          <!-- <button class="btn btn-sm btn-primary me-2">
-            Update
-          </button> -->
       
 
           <ng-template #reviveTemplate>
-            <button class="btn btn-sm btn-success" (click)="onReviveClick(user.id)">
+            <button class="btn btn-sm btn-success me-2" (click)="onReviveClick(user.id)">
               Revive
             </button>
-            <button class="btn btn-sm btn-secondary" disabled>
-              Edit (Disabled)
+            <button class="btn btn-sm btn-info me-2" (click)="onTransactionClick(user.id)" >
+              Transactions
+            </button>
+            <button class="btn btn-sm btn-secondary me-2" (click)="onViewUrlClick(user.id)">
+              View URLs
             </button>
           </ng-template>
         </td>

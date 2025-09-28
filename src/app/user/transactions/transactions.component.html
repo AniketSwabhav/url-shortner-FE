@@ -1,12 +1,8 @@
 <div class="container mt-4">
+  <button class="btn btn-secondary mb-3" (click)="goBack()">← Back</button>
 
-  <button class="btn btn-secondary mb-3" (click)="goBack()">
-    ← Back
-  </button>
-  
   <h3 class="text-primary mb-3">Transaction History</h3>
 
- 
   <div *ngIf="transactions.length === 0" class="alert alert-warning">
     No transactions found.
   </div>
@@ -23,7 +19,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let tx of transactions; let i = index">
-          <td>{{ i + 1 }}</td>
+          <td>{{ (offset + i + 1) }}</td>
           <td>
             <span class="badge"
               [ngClass]="{
@@ -38,8 +34,14 @@
         </tr>
       </tbody>
     </table>
-    <app-pagination class=" p-0 m-0" [items]="transactions"
-            [totalItems]='selectedButtonIndex ? transactionCount : totalTransactionRecords' [limit]="limit" [offset]="offset"
-            (pageChange)="changePage($event)" />
+
+    <app-pagination
+      class="p-0 m-0"
+      [items]="transactions"
+      [totalItems]="totalTransactionRecords"
+      [limit]="limit"
+      [offset]="offset"
+      (pageChange)="changePage($event)"
+    ></app-pagination>
   </div>
 </div>

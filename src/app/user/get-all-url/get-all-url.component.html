@@ -78,9 +78,10 @@
         </table>
 
         <!-- Pagination -->
-        <app-pagination class="p-0 m-0" [items]="urls" [totalItems]="selectedButtonIndex ? urlsCount : totalUrlRecords"
-          [limit]="limit" [offset]="offset" (pageChange)="changePage($event)">
+        <app-pagination class="p-0 m-0" [items]="urls" [totalItems]="totalUrlRecords" [limit]="limit" [offset]="offset"
+          (pageChange)="changePage($event)">
         </app-pagination>
+
       </div>
 
       <!-- No URLs Message -->

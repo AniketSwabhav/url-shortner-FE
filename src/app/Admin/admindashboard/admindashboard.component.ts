@@ -47,6 +47,10 @@ export class AdmindashboardComponent implements OnInit {
       this.offset = +params['offset'] || 0;
       this.currentPage = this.offset + 1;
       this.loadUsers();
+ const searchParam = params['search'] || '';
+      this.searchForm.get('searchTerm')?.setValue(searchParam);
+
+
     });
   }
 
@@ -97,18 +101,21 @@ export class AdmindashboardComponent implements OnInit {
       .set('limit', this.limit.toString())
       .set('offset', this.offset.toString());
 
+    const searchTerm = this.searchForm.get('searchTerm')?.value;
+    if (searchTerm) params = params.set('search', searchTerm);
+
       this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: {
         limit: this.limit,
-        offset: this.offset
+        offset: this.offset,
+        search: searchTerm || null
+
       },
       queryParamsHandling: 'merge',
     });
 
 
-    const searchTerm = this.searchForm.get('searchTerm')?.value;
-    if (searchTerm) params = params.set('search', searchTerm);
 
     this.adminService.getAllUsers(params).subscribe({
       next: (response) => {

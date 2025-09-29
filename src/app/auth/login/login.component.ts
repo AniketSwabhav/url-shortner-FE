@@ -48,7 +48,7 @@ export class LoginComponent {
 
           if (decodedToken?.IsActive === false || decodedToken?.IsActive === 'false') {
             this.snackbarService.showErrorSnackbar("Your account is inactive. Please contact admin.");
-            return; // stop here, don’t set token or navigate
+            return;
           }
 
           this.authService.setToken(response.token);

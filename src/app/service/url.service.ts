@@ -36,5 +36,9 @@ export class UrlService {
     return this.http.delete(`${this.URL}/${urlId}`)
   }
 
+  getUrlFromAlias(alias: string, params?: HttpParams): Observable<any> {
+    return this.http.get(`http://localhost:8001/api/v1/url-shortner/redirect/${alias}`,
+      { params: params, observe: "response" })
+  }
 
 }

@@ -30,7 +30,7 @@
       </div>
 
       <!-- Add New URL -->
-      <div *ngIf="!isAdminMode">
+      <!-- <div *ngIf="!isAdminMode">
         <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
           <div class="input-group">
             <input
@@ -50,7 +50,7 @@
             </button>
           </div>
         </form>
-      </div>
+      </div> -->
 
       <div *ngIf="urls.length > 0" class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
@@ -70,7 +70,7 @@
               <!-- Short URL Centered -->
               <td class="text-center">
                 <a
-                  [href]="'http://localhost:8001/' + url.shortUrl"
+                  [href]="'http://localhost:4200/redirect/' + url.shortUrl"
                   target="_blank"
                   class="fw-bold text-decoration-none text-primary"
                 >

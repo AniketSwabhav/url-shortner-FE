@@ -123,12 +123,12 @@ export class GetAllUrlComponent implements OnInit {
   }
 
   copyShortUrl(shortUrl: string): void {
-    const fullUrl = `http://localhost:8001/${shortUrl}`;
+    const fullUrl = `http://localhost:4200/redirect/${shortUrl}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
        this.snackbarService.showSuccessSnackbar("Short URL copied to clipboard!")
-      setTimeout(() => this.flash = { message: "" }, 2000);
+      // setTimeout(() => this.flash = { message: "" }, 2000);
     }).catch(() => {
-      this.flash = { type: "danger", message: "Failed to copy URL!" };
+     this.snackbarService.showErrorSnackbar("Failed to copy url")
     });
   }
 

@@ -39,25 +39,44 @@
     <h4 class="mb-4">Manage Subscription</h4>
     <form [formGroup]="subscriptionForm" class="row g-3">
 
-      <div class="col-md-6">
-        <label class="form-label">Free Short URLs</label>
-        <input type="number" formControlName="freeShortUrls" class="form-control" />
-      </div>
+<div class="col-md-6">
+  <label class="form-label">Free Short URLs</label>
+  <input type="number" formControlName="freeShortUrls" class="form-control"
+         min="1" max="100000" step="1" />
+  <div *ngIf="subscriptionForm.get('freeShortUrls')?.touched && subscriptionForm.get('freeShortUrls')?.invalid" class="text-danger mt-1">
+    Value must be an integer between 1 and 100,000
+  </div>
+</div>
 
-      <div class="col-md-6">
-        <label class="form-label">Free Visits</label>
-        <input type="number" formControlName="freeVisits" class="form-control" />
-      </div>
+<div class="col-md-6">
+  <label class="form-label">Free Visits</label>
+  <input type="number" formControlName="freeVisits" class="form-control"
+         min="1" max="100000" step="1" />
+  <div *ngIf="subscriptionForm.get('freeVisits')?.touched && subscriptionForm.get('freeVisits')?.invalid" class="text-danger mt-1">
+    Value must be an integer between 1 and 100,000
+  </div>
+</div>
 
-      <div class="col-md-6">
-        <label class="form-label">New URL Price</label>
-        <input type="number" formControlName="newUrlPrice" class="form-control" />
-      </div>
 
-      <div class="col-md-6">
-        <label class="form-label">Extra Visit Price</label>
-        <input type="number" formControlName="extraVisitPrice" class="form-control" />
-      </div>
+<div class="col-md-6">
+  <label class="form-label">New URL Price</label>
+  <input type="number" formControlName="newUrlPrice" class="form-control"
+         min="1" max="100000" />
+  <div *ngIf="subscriptionForm.get('newUrlPrice')?.touched && subscriptionForm.get('newUrlPrice')?.invalid" class="text-danger mt-1">
+    Value must be between 1 and 1,00,000
+  </div>
+</div>
+
+<div class="col-md-6">
+  <label class="form-label">Extra Visit Price</label>
+  <input type="number" formControlName="extraVisitPrice" class="form-control"
+         min="1" max="100000" />
+  <div *ngIf="subscriptionForm.get('extraVisitPrice')?.touched && subscriptionForm.get('extraVisitPrice')?.invalid" class="text-danger mt-1">
+    Value must be between 1 and 1,00,000
+  </div>
+</div>
+
+
 
       <!-- Show only one button based on subscription existence -->
       <div class="col-12 mt-4 text-center">

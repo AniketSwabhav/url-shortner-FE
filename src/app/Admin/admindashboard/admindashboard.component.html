@@ -15,7 +15,8 @@
     <input type="text"
            formControlName="searchTerm"
            placeholder="Search by Email or Username..."
-           class="form-control" />
+           class="form-control" 
+          (keydown.enter)="searchUsers()" /> 
     <button class="btn btn-primary" (click)="searchUsers()">Search</button>
     <button class="btn btn-outline-secondary" (click)="clearSearch()">Clear</button>
   </div>
@@ -69,6 +70,9 @@
           <ng-template #reviveTemplate>
             <button class="btn btn-sm btn-success me-2" (click)="onReviveClick(user.id)">
               Revive
+            </button>
+             <button class="btn btn-sm btn-danger me-2" (click)="deleteUser(user.id)">
+              <i class="fas fa-trash-alt"></i>
             </button>
             <button class="btn btn-sm btn-info me-2" (click)="onTransactionClick(user.id)" >
               Transactions

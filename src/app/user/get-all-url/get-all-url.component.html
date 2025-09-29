@@ -10,6 +10,7 @@
       formControlName="searchTerm"
       placeholder="Search by Short-Url or long-Url..."
       class="form-control"
+      (keydown.enter)="searchUrls()"
     />
     <button class="btn btn-primary" (click)="searchUrls()">Search</button>
     <button class="btn btn-outline-secondary" (click)="clearSearch()">

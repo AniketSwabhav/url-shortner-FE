@@ -44,7 +44,6 @@ export class AdmindashboardService {
     return this.http.get<any>(`${this.baseUrl}/${userId}`);
   }
 
-  // Update user by ID
   updateUser(userId: string, userData: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/${userId}`, userData);
   }

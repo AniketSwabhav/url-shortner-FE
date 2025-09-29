@@ -51,10 +51,13 @@ export class WalletComponent implements OnInit {
   isProcessing: boolean = false;
 
   addToWallet(): void {
-    if (!this.amount || this.amount <= 0) {
+    if (!this.amount || this.amount <= 0 ) {
       this.snackbarService.showErrorSnackbar("Please enter a valid amount.");
       return;
-    }
+    }else if (this.amount > 1000000) {  
+    this.snackbarService.showErrorSnackbar("Amount cannot exceed ₹1,000,000.");
+    return;
+  }
 
     this.isProcessing = true;
     this.userService.addAmount(this.userId!, this.amount).subscribe({

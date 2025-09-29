@@ -1,10 +1,7 @@
-
 <div class="container mt-5">
   <div class="card shadow-lg border-0">
     <div class="card-body p-4">
-      <h4 class="card-title text-primary mb-4">
-         Wallet Management
-      </h4>
+      <h4 class="card-title text-primary mb-4">Wallet Management</h4>
 
       <div class="mb-4">
         <label class="form-label fw-bold">Current Wallet Balance</label>
@@ -17,54 +14,50 @@
       <div class="row align-items-end">
         <!-- Amount Input -->
         <div class="col-md-4 mb-3">
-          <label for="amountInput" class="form-label fw-bold">Enter Amount</label>
+          <label for="amountInput" class="form-label fw-bold">Enter Amount</label >
+
           <input
-            type="number"
-            id="amountInput"
-            class="form-control"
-            [(ngModel)]="amount"
-            [disabled]="isProcessing"
-            min="1"
+            type="number" id="amountInput"class="form-control"[(ngModel)]="amount"
+            name="amountInput" #amountInput="ngModel" [disabled]="isProcessing"
+            min="1" max="1000000"
             placeholder="e.g. ₹100"
           />
+
+          <small class="text-danger" *ngIf="amountInput.invalid && amountInput.touched">
+            Amount must be between ₹1 and ₹1,000,000.
+          </small>
         </div>
 
         <!-- Action Buttons -->
         <div class="col-md-8 d-flex gap-3 mb-3">
-          <button
-            class="btn btn-success w-100"
-            (click)="addToWallet()"
-            [disabled]="isProcessing || !amount"
-          >
-            Add to Wallet
-          </button>
+        <button
+          class="btn btn-success w-100"
+          (click)="addToWallet()"
+          [disabled]="isProcessing || !amount || amount  <= 0 || amount  > 1000000"
+          [ngClass]="{'blurred': amount  <= 0 || amount  > 1000000}">
+          Add to Wallet
+       </button>
 
-          <button
-            class="btn btn-danger w-100"
-            (click)="withdrawFromWallet()"
-            [disabled]="isProcessing || !amount"
-          >
-            Withdraw
-          </button>
+       <button
+        class="btn btn-danger w-100"
+        (click)="withdrawFromWallet()"
+        [disabled]="isProcessing || !amount || amount  <= 0 || amount  > 1000000"
+        [ngClass]="{'blurred': amount  <= 0 || amount  > 1000000}">
+         Withdraw
+      </button>
+
         </div>
-
-        
       </div>
-
-      
-
     </div>
-
-   
   </div>
 
-   <div class="text-start mt-4">
-        <button
-          class="btn btn-outline-primary"
-          (click)="onTransactionClick(userProfile?.id)"
-          [disabled]="!userProfile?.id"
-        >
-          View Transactions
-        </button>
-      </div>
+  <div class="text-start mt-4">
+    <button
+      class="btn btn-outline-primary"
+      (click)="onTransactionClick(userProfile?.id)"
+      [disabled]="!userProfile?.id"
+    >
+      View Transactions
+    </button>
+  </div>
 </div>

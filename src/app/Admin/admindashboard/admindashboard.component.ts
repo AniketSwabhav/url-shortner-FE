@@ -47,7 +47,7 @@ export class AdmindashboardComponent implements OnInit {
       this.offset = +params['offset'] || 0;
       this.currentPage = this.offset + 1;
       this.loadUsers();
- const searchParam = params['search'] || '';
+      const searchParam = params['search'] || '';
       this.searchForm.get('searchTerm')?.setValue(searchParam);
 
 

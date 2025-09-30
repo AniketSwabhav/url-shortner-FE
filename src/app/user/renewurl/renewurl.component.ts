@@ -103,4 +103,10 @@ export class RenewurlComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/user/dashboard']);
   }
+
+  preventDecimal(event: KeyboardEvent): void {
+  if (event.key === '.' || event.key === ',' || event.key === 'e') {
+    event.preventDefault();
+  }
+}
 }

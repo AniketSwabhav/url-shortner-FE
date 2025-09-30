@@ -25,11 +25,11 @@ export class RegisterAdminComponent {
 
   ngOnInit(): void {
     this.adminRegisterForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       phoneNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(30)]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]]
     });
   }
 
@@ -59,8 +59,6 @@ export class RegisterAdminComponent {
       }
     };
 
-
-
     this.registerService.registerAdmin(payload).subscribe({
       next: (response) => {
         console.log('Admin Registered:', response);
@@ -78,6 +76,11 @@ export class RegisterAdminComponent {
         }, 2000);
       }
     });
+  }
 
+  preventDecimal(event: KeyboardEvent): void {
+    if (event.key === '.' || event.key === ',' || event.key === 'e') {
+      event.preventDefault();
+    }
   }
 }

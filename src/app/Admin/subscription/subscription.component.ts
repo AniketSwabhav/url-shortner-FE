@@ -24,11 +24,12 @@ export class SubscriptionComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscriptionForm = this.fb.group({
-      freeShortUrls: [[Validators.required, Validators.min(0)]],
-      freeVisits: [[Validators.required, Validators.min(0)]],
-      newUrlPrice: [[Validators.required, Validators.min(0)]],
-      extraVisitPrice: [[Validators.required, Validators.min(0)]],
-    });
+  freeShortUrls: ['', [Validators.required, Validators.min(1), Validators.max(1000000)]],
+  freeVisits: ['', [Validators.required, Validators.min(1), Validators.max(1000000)]],
+  newUrlPrice: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
+  extraVisitPrice: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
+});
+
 
     this.loadSubscription();
   }
@@ -88,5 +89,11 @@ export class SubscriptionComponent implements OnInit {
         alert(err.error?.message || 'Failed to update subscription');
       }
     });
+  }
+
+  preventDecimal(event: KeyboardEvent): void {
+    if (event.key === '.' || event.key === ',' || event.key === 'e') {
+      event.preventDefault();
+    }
   }
 }

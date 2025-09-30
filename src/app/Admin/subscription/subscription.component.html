@@ -39,60 +39,80 @@
     <h4 class="mb-4">Manage Subscription</h4>
     <form [formGroup]="subscriptionForm" class="row g-3">
 
-<div class="col-md-6">
-  <label class="form-label">Free Short URLs</label>
-  <input type="number" formControlName="freeShortUrls" class="form-control"
-         min="1" max="100000" step="1" />
-  <div *ngIf="subscriptionForm.get('freeShortUrls')?.touched && subscriptionForm.get('freeShortUrls')?.invalid" class="text-danger mt-1">
-    Value must be an integer between 1 and 100,000
-  </div>
-</div>
+      <div class="col-md-6">
+        <label class="form-label">Free Short URLs</label>
+        <input type="number" formControlName="freeShortUrls" class="form-control" step="1"
+          (keydown)="preventDecimal($event)" />
+        <div *ngIf="subscriptionForm.get('freeShortUrls')?.touched && subscriptionForm.get('freeShortUrls')?.invalid"
+          class="text-danger mt-1">
+          <span *ngIf="subscriptionForm.get('freeShortUrls')?.errors?.['required']">This field is required.</span>
+          <span *ngIf="subscriptionForm.get('freeShortUrls')?.errors?.['min']">Minimum free short url must be greater
+            than 1.</span>
+          <span *ngIf="subscriptionForm.get('freeShortUrls')?.errors?.['max']">Maximum free short allowed is
+            1,000,000.</span>
+          <span *ngIf="subscriptionForm.get('freeShortUrls')?.errors?.['notInteger']">Must be an integer.</span>
+        </div>
+      </div>
 
-<div class="col-md-6">
-  <label class="form-label">Free Visits</label>
-  <input type="number" formControlName="freeVisits" class="form-control"
-         min="1" max="100000" step="1" />
-  <div *ngIf="subscriptionForm.get('freeVisits')?.touched && subscriptionForm.get('freeVisits')?.invalid" class="text-danger mt-1">
-    Value must be an integer between 1 and 100,000
-  </div>
-</div>
+      <div class="col-md-6">
+        <label class="form-label">Free Visits</label>
+        <input type="number" formControlName="freeVisits" class="form-control" step="1"
+          (keydown)="preventDecimal($event)" />
+        <div *ngIf="subscriptionForm.get('freeVisits')?.touched && subscriptionForm.get('freeVisits')?.invalid"
+          class="text-danger mt-1">
+          <span *ngIf="subscriptionForm.get('freeVisits')?.errors?.['required']">This field is required.</span>
+          <span *ngIf="subscriptionForm.get('freeVisits')?.errors?.['min']">Minimum free visits must be greater than
+            1.</span>
+          <span *ngIf="subscriptionForm.get('freeVisits')?.errors?.['max']">Maximum free visits allowed is
+            1,000,000.</span>
+          <span *ngIf="subscriptionForm.get('freeVisits')?.errors?.['notInteger']">Must be an integer.</span>
+
+        </div>
+      </div>
 
 
-<div class="col-md-6">
-  <label class="form-label">New URL Price</label>
-  <input type="number" formControlName="newUrlPrice" class="form-control"
-         min="1" max="100000" />
-  <div *ngIf="subscriptionForm.get('newUrlPrice')?.touched && subscriptionForm.get('newUrlPrice')?.invalid" class="text-danger mt-1">
-    Value must be between 1 and 1,00,000
-  </div>
-</div>
+      <div class="col-md-6">
+        <label class="form-label">New URL Price</label>
+        <input type="number" formControlName="newUrlPrice" class="form-control" />
+        <div *ngIf="subscriptionForm.get('newUrlPrice')?.touched && subscriptionForm.get('newUrlPrice')?.invalid"
+          class="text-danger mt-1">
+          <span *ngIf="subscriptionForm.get('newUrlPrice')?.errors?.['required']">This field is required.</span>
+          <span *ngIf="subscriptionForm.get('newUrlPrice')?.errors?.['min']">Minimum new URL price must be greater than
+            1.</span>
+          <span *ngIf="subscriptionForm.get('newUrlPrice')?.errors?.['max']">Maximum new URL price allowed is
+            1,000.</span>
+          <span *ngIf="subscriptionForm.get('newUrlPrice')?.errors?.['notInteger']">Must be an integer.</span>
 
-<div class="col-md-6">
-  <label class="form-label">Extra Visit Price</label>
-  <input type="number" formControlName="extraVisitPrice" class="form-control"
-         min="1" max="100000" />
-  <div *ngIf="subscriptionForm.get('extraVisitPrice')?.touched && subscriptionForm.get('extraVisitPrice')?.invalid" class="text-danger mt-1">
-    Value must be between 1 and 1,00,000
-  </div>
-</div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Extra Visit Price</label>
+        <input type="number" formControlName="extraVisitPrice" class="form-control" />
+        <div
+          *ngIf="subscriptionForm.get('extraVisitPrice')?.touched && subscriptionForm.get('extraVisitPrice')?.invalid"
+          class="text-danger mt-1">
+          <span *ngIf="subscriptionForm.get('extraVisitPrice')?.errors?.['required']">This field is required.</span>
+          <span *ngIf="subscriptionForm.get('extraVisitPrice')?.errors?.['min']">Minimum extra visit price must be
+            greater than 1.</span>
+          <span *ngIf="subscriptionForm.get('extraVisitPrice')?.errors?.['max']">Maximum extra visit price allowed is
+            1,000.</span>
+          <span *ngIf="subscriptionForm.get('extraVisitPrice')?.errors?.['notInteger']">Must be an integer.</span>
+
+        </div>
+      </div>
 
 
 
       <!-- Show only one button based on subscription existence -->
       <div class="col-12 mt-4 text-center">
-        <button *ngIf="!subscription"
-                type="button"
-                class="btn btn-success btn-lg  px-5 py-25"
-                (click)="setPrice()"
-                [disabled]="subscriptionForm.invalid">
+        <button *ngIf="!subscription" type="button" class="btn btn-success btn-lg  px-5 py-25" (click)="setPrice()"
+          [disabled]="subscriptionForm.invalid">
           Set Price
         </button>
 
-        <button *ngIf="subscription"
-                type="button"
-                class="btn btn-primary   px-5 py-25"
-                (click)="updatePrice()"
-                [disabled]="subscriptionForm.invalid">
+        <button *ngIf="subscription" type="button" class="btn btn-primary   px-5 py-25" (click)="updatePrice()"
+          [disabled]="subscriptionForm.invalid">
           Update Price
         </button>
       </div>

@@ -16,12 +16,31 @@
   <!-- Input: Visit Count -->
   <div class="mb-3">
     <label for="visitCount" class="form-label fw-semibold">🔢 Number of Visits to Renew</label>
-    <input type="number" id="visitCount" class="form-control" [(ngModel)]="renewVisitCount" min="1"
-      placeholder="Enter number of visits" />
+
+    <input
+      type="number"
+      id="visitCount"
+      class="form-control"
+      [(ngModel)]="renewVisitCount"
+      name="renewVisitCount"
+      #visitCountCtrl="ngModel"
+      required
+      min="1"
+      max="1000000"
+      (keydown)="preventDecimal($event)"
+      placeholder="Enter number of visits"
+    />
+
+    <!-- Real-time Validation Messages -->
+    <small class="text-danger" *ngIf="visitCountCtrl.invalid && (visitCountCtrl.touched || visitCountCtrl.dirty)">
+      <span *ngIf="visitCountCtrl.errors?.['required']">This field is required.</span>
+      <span *ngIf="visitCountCtrl.errors?.['min']">Minimum is 1 visit.</span>
+      <span *ngIf="visitCountCtrl.errors?.['max']">Cannot exceed 1000,000 visits.</span>
+    </small>
   </div>
 
   <!-- Total Cost -->
-  <div *ngIf="renewVisitCount > 0" class="mb-3">
+  <div *ngIf="visitCountCtrl.valid" class="mb-3">
     <label class="form-label fw-semibold">🧮 Total Cost</label>
     <div class="form-control bg-light">
       ₹ {{ renewVisitCount * visitPrice | number:'1.2-2' }}
@@ -30,7 +49,15 @@
 
   <!-- Buttons -->
   <div class="d-flex gap-2">
-    <button class="btn btn-primary" (click)="renewVisits()">Renew</button>
+    <button
+      class="btn btn-primary"
+      (click)="renewVisits()"
+      [disabled]="visitCountCtrl.invalid"
+      [ngClass]="{ 'blurred': visitCountCtrl.invalid }"
+    >
+      Renew
+    </button>
+
     <button class="btn btn-outline-secondary" (click)="goBack()">Cancel</button>
   </div>
 </div>

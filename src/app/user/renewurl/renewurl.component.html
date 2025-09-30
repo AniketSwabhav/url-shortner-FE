@@ -1,67 +1,72 @@
 <div class="container mt-5">
-    <h3 class="mb-4">🔄 Renew Your URL Creation Limit</h3>
+  <h3 class="mb-4">🔄 Renew Your URL Creation Limit</h3>
 
-    <!-- Wallet Balance -->
-    <div class="mb-3">
-        <label class="form-label fw-semibold">💰 Current Wallet Balance</label>
-        <div class="form-control bg-light">₹ {{ walletBalance | number:'1.0-0' }}</div>
+  <!-- Wallet Balance -->
+  <div class="mb-3">
+    <label class="form-label fw-semibold">💰 Current Wallet Balance</label>
+    <div class="form-control bg-light">₹ {{ walletBalance | number:'1.0-0' }}</div>
+  </div>
+
+  <!-- URL Price -->
+  <div class="mb-3">
+    <label class="form-label fw-semibold">📌 Price Per URL Renewal</label>
+    <div class="form-control bg-light">₹ {{ newUrlPrice | number:'1.2-2' }}</div>
+  </div>
+
+
+  <!-- Input: Number of URLs -->
+  <div class="mb-3">
+    <label for="renewCount" class="form-label fw-semibold">🔢 Number of URLs to Renew</label>
+
+    <input type="number" id="renewCount" class="form-control" [(ngModel)]="renewUrlCount" name="renewCount"
+      #renewCountCtrl="ngModel" required min="1" max="1000000" step="1" (keydown)="preventDecimal($event)" placeholder="Enter number of URLs" />
+
+    <!-- Real-time Validation Messages -->
+    <small class="text-danger" *ngIf="renewCountCtrl.invalid && (renewCountCtrl.dirty || renewCountCtrl.touched)">
+      <span *ngIf="renewCountCtrl.errors?.['required']">Number of URLs is required.</span>
+      <span *ngIf="renewCountCtrl.errors?.['min']">Minimum is 1 URL.</span>
+      <span *ngIf="renewCountCtrl.errors?.['max']">Cannot exceed 1000,000 URLs.</span>
+      <span *ngIf="renewCountCtrl.errors?.['notInteger']">Only integers are allowed.</span>
+    </small>
+  </div>
+
+
+  <!-- Total Cost -->
+  <div *ngIf="renewUrlCount > 0" class="mb-3">
+    <label class="form-label fw-semibold">🧮 Total Cost</label>
+    <div class="form-control bg-light">
+      ₹ {{ renewUrlCount * newUrlPrice | number:'1.2-2' }}
     </div>
+  </div>
 
-    <!-- URL Price -->
-    <div class="mb-3">
-        <label class="form-label fw-semibold">📌 Price Per URL Renewal</label>
-        <div class="form-control bg-light">₹ {{ newUrlPrice | number:'1.2-2' }}</div>
-    </div>
-
-    <!-- Input: Number of URLs -->
-    <div class="mb-3">
-      <label for="renewCount" class="form-label fw-semibold">🔢 Number of URLs to Renew</label>
-       <input  type="number"  id="renewCount"  class="form-control" [(ngModel)]="renewUrlCount"  name="renewCount"
-        #renewCountCtrl="ngModel" min="1"   max="1000000"  placeholder="Enter number of URLs"  required/>
-
-      <small class="text-danger" *ngIf="renewCountCtrl.touched && renewCountCtrl.invalid">
-       Number of URLs must be between 1 and 10,00,000.
-      </small>
-</div>
-
-
-    <!-- Total Cost -->
-    <div *ngIf="renewUrlCount > 0" class="mb-3">
-        <label class="form-label fw-semibold">🧮 Total Cost</label>
-        <div class="form-control bg-light">
-            ₹ {{ renewUrlCount * newUrlPrice | number:'1.2-2' }}
-        </div>
-    </div>
-
+  <!-- Buttons -->
+  <div class="d-flex gap-2">
     <!-- Buttons -->
-<div class="d-flex gap-2">
-  <button 
-    class="btn btn-primary"
-    (click)="renewUrls()"
-    [disabled]="renewUrlCount <= 0 || renewUrlCount > 1000000"
-    [ngClass]="{'blurred': renewUrlCount <= 0 || renewUrlCount > 1000000}">
-    Buy
-  </button>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" (click)="renewUrls()" [disabled]="renewCountCtrl.invalid"
+        [ngClass]="{ 'blurred': renewCountCtrl.invalid }">
+        Buy
+      </button>
 
-  <button class="btn btn-outline-secondary" (click)="goBack()">Back</button>
-</div>
-</div>
-
-<!-- Modal for adding money -->
-<ng-template #addMoneyModal let-modal>
-
-  <div class="modal-header">
-    <h5 class="modal-title">Add Money to Account</h5>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+      <button class="btn btn-outline-secondary" (click)="goBack()">Back</button>
+    </div>
   </div>
 
-  <div class="modal-body">
-    <p>You don't have sufficient balance to renew.</p>
-  </div>
+  <!-- Modal for adding money -->
+  <ng-template #addMoneyModal let-modal>
 
-  <div class="modal-footer">
-    <button class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
-    <button class="btn btn-primary" (click)="redirectRenewUrls(); modal.close()">add money</button>
-  </div>
+    <div class="modal-header">
+      <h5 class="modal-title">Add Money to Account</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
 
-</ng-template>
+    <div class="modal-body">
+      <p>You don't have sufficient balance to renew.</p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+      <button class="btn btn-primary" (click)="redirectRenewUrls(); modal.close()">add money</button>
+    </div>
+
+  </ng-template>

@@ -38,7 +38,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of users; let i = index" [class.inactive-user]="!user.isActive">
-        <td>{{ i + 1 + offset }}</td>
+        <td>{{ i + 1 + (offset) * limit }}</td>
         <td>
           <a [routerLink]="['/admin/view-user', user.id]" class="text-decoration-none">
             {{ user.firstName }} {{ user.lastName }}

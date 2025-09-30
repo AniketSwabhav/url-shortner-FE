@@ -1,6 +1,6 @@
 <div class="adminRegister-container d-flex justify-content-center align-items-center min-vh-100 p-3 bg-light">
   <div class="card shadow-lg p-4 w-100 border-0 rounded-4" style="max-width: 420px;">
-    
+
     <!-- Header -->
     <div class="text-center mb-4">
       <i class="bi bi-person-plus-fill" style="font-size: 3rem; color: #0d6efd;"></i>
@@ -13,37 +13,52 @@
       <!-- First Name -->
       <div class="mb-3">
         <label for="firstName" class="form-label fw-semibold">First Name</label>
-        <input type="text" id="firstName" formControlName="firstName" class="form-control form-control-lg" placeholder="Enter first name" />
-        <small class="text-danger" *ngIf="f['firstName'].touched && f['firstName'].invalid">
-          First name is required (min 2 chars).
+        <input type="text" id="firstName" formControlName="firstName" class="form-control form-control-lg"
+          placeholder="Enter first name" />
+        <small class="text-danger" *ngIf="f['firstName'].touched && f['firstName'].errors">
+          <ng-container *ngIf="f['firstName'].errors['required']">First name is required.</ng-container>
+          <ng-container *ngIf="f['firstName'].errors['minlength']">Minimum 2 characters required.</ng-container>
+          <ng-container *ngIf="f['firstName'].errors['maxlength']">Maximum 50 characters allowed.</ng-container>
         </small>
+
       </div>
 
       <!-- Last Name -->
       <div class="mb-3">
         <label for="lastName" class="form-label fw-semibold">Last Name</label>
-        <input type="text" id="lastName" formControlName="lastName" class="form-control form-control-lg" placeholder="Enter last name" />
-        <small class="text-danger" *ngIf="f['lastName'].touched && f['lastName'].invalid">
-          Last name is required (min 2 chars).
+        <input type="text" id="lastName" formControlName="lastName" class="form-control form-control-lg"
+          placeholder="Enter last name" />
+        <small class="text-danger" *ngIf="f['lastName'].touched && f['lastName'].errors">
+          <ng-container *ngIf="f['lastName'].errors['required']">Last name is required.</ng-container>
+          <ng-container *ngIf="f['lastName'].errors['minlength']">Minimum 2 characters required.</ng-container>
+          <ng-container *ngIf="f['lastName'].errors['maxlength']">Maximum 50 characters allowed.</ng-container>
         </small>
+
       </div>
 
       <!-- Phone Number -->
       <div class="mb-3">
         <label for="phoneNo" class="form-label fw-semibold">Phone Number</label>
-        <input type="text" id="phoneNo" formControlName="phoneNo" class="form-control form-control-lg" placeholder="Enter 10-digit phone number" />
-        <small class="text-danger" *ngIf="f['phoneNo'].touched && f['phoneNo'].invalid">
-          Phone number must be 10 digits.
+        <input type="text" id="phoneNo" formControlName="phoneNo" class="form-control form-control-lg" (keydown)="preventDecimal($event)"
+          placeholder="Enter 10-digit phone number" />
+        <small class="text-danger" *ngIf="f['phoneNo'].touched && f['phoneNo'].errors">
+          <ng-container *ngIf="f['phoneNo'].errors['required']">Phone number is required.</ng-container>
+          <ng-container *ngIf="f['phoneNo'].errors['pattern']">Phone number must be exactly 10 digits.</ng-container>
         </small>
+
       </div>
 
       <!-- Email -->
       <div class="mb-3">
         <label for="email" class="form-label fw-semibold">Email</label>
-        <input type="email" id="email" formControlName="email" class="form-control form-control-lg" placeholder="Enter email address" />
-        <small class="text-danger" *ngIf="f['email'].touched && f['email'].invalid">
-          Please enter a valid email.
+        <input type="email" id="email" formControlName="email" class="form-control form-control-lg"
+          placeholder="Enter email address" />
+        <small class="text-danger" *ngIf="f['password'].touched && f['password'].errors">
+          <ng-container *ngIf="f['password'].errors['required']">Password is required.</ng-container>
+          <ng-container *ngIf="f['password'].errors['minlength']">Minimum 8 characters required.</ng-container>
+          <ng-container *ngIf="f['password'].errors['maxlength']">Maximum 50 characters allowed.</ng-container>
         </small>
+
       </div>
 
       <!-- Password -->
@@ -57,9 +72,12 @@
             <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
           </span>
         </div>
-        <small class="text-danger" *ngIf="f['password'].touched && f['password'].invalid">
-          Password must be at least 8 characters.
+        <small class="text-danger" *ngIf="f['password'].touched && f['password'].errors">
+          <ng-container *ngIf="f['password'].errors['required']">Password is required.</ng-container>
+          <ng-container *ngIf="f['password'].errors['minlength']">Minimum 8 characters required.</ng-container>
+          <ng-container *ngIf="f['password'].errors['maxlength']">Maximum 50 characters allowed.</ng-container>
         </small>
+
       </div>
 
       <!-- Messages -->

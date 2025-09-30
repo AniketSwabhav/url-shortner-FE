@@ -66,8 +66,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let url of urls; let i = index">
-              <td class="text-center">{{ i + 1 }}</td>
-
+             <td>{{ i + 1 + (offset) * limit }}</td>
               <!-- Short URL Centered -->
               <td class="text-center">
                 <a

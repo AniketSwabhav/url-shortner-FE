@@ -100,4 +100,12 @@ export class RenewurlvisitComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/user/urls']);
   }
+
+  
+  
+   preventDecimal(event: KeyboardEvent): void {
+  if (event.key === '.' || event.key === ',' || event.key === 'e') {
+    event.preventDefault();
+  }
+}
 }

@@ -130,6 +130,7 @@ export class AdmindashboardComponent implements OnInit {
   changePage(pageNumber: number): void {
     this.currentPage = pageNumber - 1;
     this.offset = pageNumber - 1;
+    // this.offset = (pageNumber - 1) * this.limit;
     this.loadUsers();
   }
 

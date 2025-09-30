@@ -11,8 +11,10 @@
       <div class="mb-3">
         <label for="firstName" class="form-label fw-semibold">First Name</label>
         <input type="text" id="firstName" formControlName="firstName" class="form-control form-control-lg" placeholder="Enter first name" />
-        <small class="text-danger" *ngIf="f['firstName'].touched && f['firstName'].invalid">
-          First name is required (min 2 chars).
+         <small class="text-danger" *ngIf="f['firstName'].touched && f['firstName'].invalid">
+          <span *ngIf="f['firstName'].errors?.['required']">First name is required.</span>
+          <span *ngIf="f['firstName'].errors?.['minlength']">Minimum 2 characters required.</span>
+          <span *ngIf="f['firstName'].errors?.['maxlength']">Maximum 50 characters allowed.</span>
         </small>
       </div>
 
@@ -21,7 +23,9 @@
         <label for="lastName" class="form-label fw-semibold">Last Name</label>
         <input type="text" id="lastName" formControlName="lastName" class="form-control form-control-lg" placeholder="Enter last name" />
         <small class="text-danger" *ngIf="f['lastName'].touched && f['lastName'].invalid">
-          Last name is required (min 2 chars).
+          <span *ngIf="f['lastName'].errors?.['required']">Last name is required.</span>
+          <span *ngIf="f['lastName'].errors?.['minlength']">Minimum 2 characters required.</span>
+          <span *ngIf="f['lastName'].errors?.['maxlength']">Maximum 50 characters allowed.</span>
         </small>
       </div>
 
@@ -29,8 +33,9 @@
       <div class="mb-3">
         <label for="phoneNo" class="form-label fw-semibold">Phone Number</label>
         <input type="text" id="phoneNo" formControlName="phoneNo" class="form-control form-control-lg" placeholder="Enter 10-digit phone number" />
-        <small class="text-danger" *ngIf="f['phoneNo'].touched && f['phoneNo'].invalid">
-          Phone number must be 10 digits.
+         <small class="text-danger" *ngIf="f['phoneNo'].touched && f['phoneNo'].invalid">
+          <span *ngIf="f['phoneNo'].errors?.['required']">Phone number is required.</span>
+          <span *ngIf="f['phoneNo'].errors?.['pattern']">Phone number must be exactly 10 digits.</span>
         </small>
       </div>
 
@@ -38,8 +43,10 @@
       <div class="mb-3">
         <label for="email" class="form-label fw-semibold">Email</label>
         <input type="email" id="email" formControlName="email" class="form-control form-control-lg" placeholder="Enter email address" />
-        <small class="text-danger" *ngIf="f['email'].touched && f['email'].invalid">
-          Please enter a valid email.
+       <small class="text-danger" *ngIf="f['email'].touched && f['email'].invalid">
+          <span *ngIf="f['email'].errors?.['required']">Email is required.</span>
+          <span *ngIf="f['email'].errors?.['email']">Please enter a valid email address.</span>
+          <span *ngIf="f['email'].errors?.['maxlength']">Maximum 30 characters allowed.</span>
         </small>
       </div>
 
@@ -53,8 +60,10 @@
             <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
           </span>
         </div>
-        <small class="text-danger" *ngIf="f['password'].touched && f['password'].invalid">
-          Password must be at least 8 characters.
+       <small class="text-danger" *ngIf="f['password'].touched && f['password'].invalid">
+          <span *ngIf="f['password'].errors?.['required']">Password is required.</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 8 characters.</span>
+          <span *ngIf="f['password'].errors?.['maxlength']">Maximum 50 characters allowed.</span>
         </small>
       </div>
 

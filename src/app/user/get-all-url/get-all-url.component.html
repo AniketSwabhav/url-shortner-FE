@@ -60,7 +60,8 @@
               <th scope="col">Sr no</th>
               <th scope="col">🔗 Short URL</th>
               <th scope="col">Long URL</th>
-              <th scope="col">Visits</th>
+              <th scope="col">Visits Reamaining</th>
+              <th scope="col">No. of visits</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -87,11 +88,18 @@
                 {{ url.longUrl }}
               </td>
 
-              <!-- Visits Centered and Styled -->
+              <!-- Visits reamainig -->
               <td class="text-start ps-4">
                 <span class="badge rounded-pill bg-success px-3 py-2">{{
-                  url.visits
+                  url.remainingVisits
                 }}</span>
+              </td>
+
+              <!-- Visits Centered and Styled -->
+              <td class="text-start ps-4">
+                <span class="badge rounded-pill bg-success px-3 py-2">
+                  {{url.visitCount}}
+                </span>
               </td>
 
               <!-- Action Buttons with Spacing -->

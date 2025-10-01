@@ -53,6 +53,7 @@ export class RegisterAdminComponent {
       firstName: this.f['firstName'].value,
       lastName: this.f['lastName'].value,
       phoneNo: this.f['phoneNo'].value,
+      email: this.f['email'].value,
       credential: {
         email: this.f['email'].value,
         password: this.f['password'].value

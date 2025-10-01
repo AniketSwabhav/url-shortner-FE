@@ -58,6 +58,9 @@ export class RedirectUrlComponent implements OnInit{
     })
   }
 
+  // www.google.com
+  // http://www.google.com
+
    redirectToURL(url: any) {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       window.location.href = 'http://' + url;

@@ -24,8 +24,8 @@ export class UrlService {
     return this.http.post<any>(`${this.URL}/register`, payload);
   }
 
-  renewVisits(urlId: string, visits: number) {
-    return this.http.post(`${this.URL}/${urlId}/renew-visits`, { visits });
+  renewVisits(urlId: string, remainingVisits: number) {
+    return this.http.post(`${this.URL}/${urlId}/renew-visits`, { remainingVisits });
   }
 
   updateUserById(urlId : string ,urlData:any): Observable<any> {

@@ -13,41 +13,55 @@
 
         <!-- Admin-specific links -->
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/admin/dashboard">Admin Dashboard</a>
+          <a class="nav-link" routerLink="/admin/dashboard" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">Admin Dashboard</a>
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/admin/subscription">Manage Subscription</a>
+          <a class="nav-link" 
+             routerLink="/admin/subscription" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">Manage Subscription</a>
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/admin/adminRegister">Add Admin</a>
-        </li>
-        <!-- <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="admin/revenue">View Revenue</a>
+          <a class="nav-link" 
+             routerLink="/admin/adminRegister" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">Add Admin</a>
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="admin/userResearch">View New Use</a>
-        </li>  -->
-        <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="admin/user-stats">user-stats</a>
+          <a class="nav-link" 
+             routerLink="/admin/user-stats" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">user-stats</a>
         </li>
-
-
 
         <!-- User-specific links -->
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/user/dashboard">Dashboard</a>
+          <a class="nav-link" 
+             routerLink="/user/dashboard" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
         </li>
-         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/user/add-url">add-URL</a>
+        <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
+          <a class="nav-link" 
+             routerLink="/user/add-url" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">add-URL</a>
         </li>
         <!-- User-specific URL list link with userId -->
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" [routerLink]="['/user/urls']">My URLs</a>
+          <a class="nav-link" 
+             [routerLink]="['/user/urls']" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">My URLs</a>
         </li>
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/user/wallet">Wallet</a>
+          <a class="nav-link" 
+             routerLink="/user/wallet" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">Wallet</a>
         </li>
-  
 
         <li *ngIf="isAuthenticated" class="nav-item">
           <a class="nav-link" (click)="logout()">Logout</a>

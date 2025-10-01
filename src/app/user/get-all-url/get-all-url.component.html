@@ -1,73 +1,68 @@
-<div class="container mt-5">
-  <button *ngIf="isAdminMode" class="btn btn-secondary mb-3" (click)="goBack()">
-    ← Back
-  </button>
-
-  <!-- Search -->
-  <div class="input-group w-50 mb-3" [formGroup]="searchForm">
-    <input
-      type="text"
-      formControlName="searchTerm"
-      placeholder="Search by Short-Url or long-Url..."
-      class="form-control"
-      (keydown.enter)="searchUrls()"
-    />
-    <button class="btn btn-primary" (click)="searchUrls()">Search</button>
-    <button class="btn btn-outline-secondary" (click)="clearSearch()">
-      Clear
-    </button>
+<div class="container py-5">
+  <!-- Flash Message -->
+  <div
+    *ngIf="flash.message"
+    class="alert alert-{{ flash.type }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ flash.message }}
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="flash.message = ''"
+    ></button>
   </div>
 
-  <div class="card shadow-lg border-0">
-    <div class="card-body">
-      <h3 class="card-title mb-4 text-gradient">All Shortened URLs</h3>
-      <!-- Flash message for copy success/failure -->
-      <div
-        *ngIf="flash.message"
-        class="alert alert-{{ flash.type }} text-center py-2 small mb-3"
-        role="alert"
-      >
-        {{ flash.message }}
-      </div>
+  <button *ngIf="isAdminMode" class="btn btn-secondary mb-3" (click)="goBack()">
+    ← Back to Dashboard
+  </button>
 
-      <!-- Add New URL -->
-      <!-- <div *ngIf="!isAdminMode">
-        <form (ngSubmit)="addNewUrl()" #urlForm="ngForm" class="mb-4">
+  <div class="card shadow-lg border-0">
+    <div class="card-header bg-white border-bottom">
+      <h3 class="mb-0 text-primary">All Shortened URLs</h3>
+    </div>
+
+    <div class="card-body bg-light">
+      <!-- Search -->
+      <div class="row mb-4">
+        <div class="col-md-8">
           <div class="input-group">
             <input
-              type="url"
-              name="longUrl"
+              type="text"
               class="form-control"
-              placeholder="Enter a long URL to shorten"
-              [(ngModel)]="newLongUrl"
-              required
+              placeholder="Search by Short URL or Long URL..."
+              [(ngModel)]="searchTerm"
+              (keydown.enter)="searchUrls()"
             />
-            <button
-              type="submit"
-              class="btn btn-primary"
-              [disabled]="!urlForm.form.valid"
-            >
-              Shorten URL
+            <button class="btn btn-primary" (click)="searchUrls()">
+              Search
+            </button>
+            <button class="btn btn-outline-secondary" (click)="clearSearch()">
+              Clear
             </button>
           </div>
-        </form>
-      </div> -->
+        </div>
+      </div>
 
+      <!-- URLs Table -->
       <div *ngIf="urls.length > 0" class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
           <thead class="table-dark">
             <tr>
-              <th scope="col">Sr no</th>
+              <th scope="col">#</th>
               <th scope="col">🔗 Short URL</th>
               <th scope="col">Long URL</th>
-              <th scope="col">Visits</th>
-              <th scope="col">Action</th>
+              <th scope="col">Visits Remaining</th>
+              <th scope="col">Total Visits</th>
+              <th scope="col" *ngIf="!isAdminMode">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let url of urls; let i = index">
-             <td>{{ i + 1 + (offset) * limit }}</td>
-              <!-- Short URL Centered -->
+              <td>{{ i + 1 + offset }}</td>
+
+              <!-- Short URL -->
               <td class="text-center">
                 <a
                   [href]="'http://localhost:4200/redirect/' + url.shortUrl"
@@ -76,53 +71,63 @@
                 >
                   {{ url.shortUrl }}
                 </a>
+                <br />
+                <small class="text-muted">Click to test</small>
               </td>
 
-              <!-- Long URL Truncated -->
+              <!-- Long URL -->
               <td
-                class="text-truncate text-center"
+                class="text-truncate"
                 style="max-width: 300px"
-                title="{{ url.longUrl }}"
+                [title]="url.longUrl"
               >
                 {{ url.longUrl }}
               </td>
 
-              <!-- Visits Centered and Styled -->
-              <td class="text-start ps-4">
-                <span class="badge rounded-pill bg-success px-3 py-2">{{
-                  url.visits
-                }}</span>
+              <!-- Visits Remaining -->
+              <td class="text-center">
+                <span class="badge rounded-pill bg-warning text-dark px-3 py-2">
+                  {{ url.remainingVisits }}
+                </span>
               </td>
 
-              <!-- Action Buttons with Spacing -->
+              <!-- Total Visits -->
               <td class="text-center">
-                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                <span class="badge rounded-pill bg-success px-3 py-2">
+                  {{ url.visitCount }}
+                </span>
+              </td>
 
+              <!-- Actions -->
+              <td *ngIf="!isAdminMode" class="text-center">
+                <div class="btn-group btn-group-sm" role="group">
+                  <button
+                    class="btn btn-outline-primary"
+                    (click)="copyShortUrl(url.shortUrl)"
+                    title="Copy Short URL"
+                  >
+                    📋 Copy
+                  </button>
+                  <button
+                    class="btn btn-outline-warning"
+                    (click)="openEditModal(url)"
+                    title="Edit URL"
+                  >
+                    ✏️ Edit
+                  </button>
                   <button
                     *ngIf="!isAdminMode"
                     class="btn btn-sm btn-outline-primary"
-                    (click)="renewUrlVisit(url.id)">
+                    (click)="renewUrlVisit(url.id)"
+                  >
                     🔁 Renew Visit
                   </button>
-
                   <button
-                    class="btn btn-sm btn-outline-secondary"
-                    (click)="copyShortUrl(url.shortUrl)">
-                    🔗 Copy short link
-                  </button>
-
-                  <button
-                  *ngIf="!isAdminMode"
-                    class="btn btn-sm btn-outline-warning"
-                    (click)="editUrl(url)">
-                    ✏️ Edit
-                  </button>
-
-                  <button
-                  *ngIf="!isAdminMode"
-                    class="btn-sm btn-danger me-2"
-                    (click)="deleteUrl(url.id)" >
-                    <i class="fas fa-trash-alt"></i>
+                    class="btn btn-outline-danger"
+                    (click)="deleteUrl(url.id)"
+                    title="Delete URL"
+                  >
+                    🗑️ Delete
                   </button>
                 </div>
               </td>
@@ -132,50 +137,104 @@
 
         <!-- Pagination -->
         <app-pagination
-          class="p-0 m-0"
           [items]="urls"
           [totalItems]="totalUrlRecords"
           [limit]="limit"
           [offset]="offset"
           (pageChange)="changePage($event)"
-        >
-        </app-pagination>
+        ></app-pagination>
       </div>
 
       <!-- No URLs Message -->
-      <div
-        *ngIf="urls.length === 0"
-        class="alert alert-warning text-center mt-4"
-      >
-        No URLs have been created yet.
+      <div *ngIf="urls.length === 0" class="text-center py-4 text-muted">
+        <i class="bi bi-link-45deg" style="font-size: 3rem"></i>
+        <h4 class="mt-3">No URLs Found</h4>
+        <p>No shortened URLs have been created yet.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal for URL Renewal -->
-<ng-template #renewUrlModal let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title">Renew URL Creation Limit</h5>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss()"
-    ></button>
+<!-- Edit URL Modal -->
+<div
+  *ngIf="showEditModal"
+  class="modal show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit URL</h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeEditModal()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <div class="mb-3">
+            <label class="form-label">Long URL *</label>
+            <input
+              type="url"
+              class="form-control"
+              [(ngModel)]="editData.longUrl"
+              name="longUrl"
+              required
+              placeholder="https://example.com"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Short URL *</label>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="editData.shortUrl"
+                name="shortUrl"
+                required
+                placeholder="Enter 2-5 character alias"
+                minlength="2"
+                maxlength="5"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="generateShortUrl()"
+                title="Generate random short URL"
+              >
+                🔄 Generate
+              </button>
+            </div>
+            <small class="text-muted"
+              >2-5 characters, letters and numbers only</small
+            >
+          </div>
+          <div class="alert alert-info" *ngIf="editData.shortUrl">
+            <small>
+              <strong>Preview:</strong><br />
+              http://localhost:4200/redirect/{{ editData.shortUrl }}
+            </small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" (click)="closeEditModal()">
+          Cancel
+        </button>
+        <button
+          class="btn btn-primary"
+          (click)="updateUrl()"
+          [disabled]="isUpdating || !editData.longUrl || !editData.shortUrl"
+        >
+          <span
+            *ngIf="isUpdating"
+            class="spinner-border spinner-border-sm me-2"
+          ></span>
+          {{ isUpdating ? "Updating..." : "Update URL" }}
+        </button>
+      </div>
+    </div>
   </div>
-
-  <div class="modal-body">
-    <p>Your URL creation limit has been reached.</p>
-  </div>
-
-  <div class="modal-footer">
-    <button class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
-    <button
-      class="btn btn-primary"
-      (click)="redirectRenewUrls(); modal.close()"
-    >
-      Renew
-    </button>
-  </div>
-</ng-template>
+</div>

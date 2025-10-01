@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -57,6 +58,9 @@ export class RedirectUrlComponent implements OnInit{
       }
     })
   }
+
+  // www.google.com
+  // http://www.google.com
 
    redirectToURL(url: any) {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {

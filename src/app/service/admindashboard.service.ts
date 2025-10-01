@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,14 +7,10 @@ export interface User {
   id: string;
   firstName: string;
   lastName: string;
+  email: string;
   phoneNo: string;
   isAdmin: boolean;
   isActive: boolean;
-  credential: {
-    id: string;
-    email: string;
-    userId: string;
-  };
   urlCount: number;
   wallet: number;
 }
@@ -24,7 +21,7 @@ export interface User {
 export class AdmindashboardService {
   private baseUrl = 'http://localhost:8001/api/v1/url-shortner/users';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private getAuthHeaders() {
     const token = localStorage.getItem('token');

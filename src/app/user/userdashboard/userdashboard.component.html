@@ -135,15 +135,14 @@
               name="phoneNo"
             />
           </div>
-          <div class="mb-3">
+         <div class="mb-3">
             <label class="form-label">Email</label>
             <input
-              type="email"
-              class="form-control-plaintext"
-              [value]="editData.email"
-              disabled
+              type="text"
+              class="form-control"
+              [(ngModel)]="editData.email"
+              name="email"
             />
-            <small class="text-muted">Email cannot be changed</small>
           </div>
         </form>
       </div>

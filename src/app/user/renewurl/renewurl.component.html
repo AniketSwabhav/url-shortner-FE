@@ -4,7 +4,7 @@
   <!-- Wallet Balance -->
   <div class="mb-3">
     <label class="form-label fw-semibold">💰 Current Wallet Balance</label>
-    <div class="form-control bg-light">₹ {{ walletBalance | number:'1.0-0' }}</div>
+    <div class="form-control bg-light">₹ {{ walletBalance }}</div>
   </div>
 
   <!-- URL Price -->
@@ -12,7 +12,6 @@
     <label class="form-label fw-semibold">📌 Price Per URL Renewal</label>
     <div class="form-control bg-light">₹ {{ newUrlPrice | number:'1.2-2' }}</div>
   </div>
-
 
   <!-- Input: Number of URLs -->
   <div class="mb-3">

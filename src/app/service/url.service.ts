@@ -1,3 +1,4 @@
+
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -28,7 +29,7 @@ export class UrlService {
     return this.http.post(`${this.URL}/${urlId}/renew-visits`, { remainingVisits });
   }
 
-  updateUserById(urlId : string ,urlData:any): Observable<any> {
+  updateUrl(urlId : string ,urlData:any): Observable<any> {
     return this.http.put<any>(`${this.URL}/${urlId}`,urlData)
   }
   

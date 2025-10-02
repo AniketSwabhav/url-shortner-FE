@@ -90,12 +90,14 @@ export class UserdashboardComponent implements OnInit {
 
     this.userService.updateUser(this.userId!, updateData).subscribe({
       next: () => {
-        this.showFlash('success', 'Profile updated successfully');
-        this.getProfile(); // Refresh profile data
+        // this.showFlash('success', 'Profile updated successfully');
+        this.snackbarService.showSuccessSnackbar("Profile updated successfully")
+        this.getProfile();
         this.closeEditModal();
       },
       error: (err) => {
-        this.showFlash('danger', 'Failed to update profile');
+         this.closeEditModal();
+        this.snackbarService.showErrorSnackbar(err?.error?.message || "failed to update profile");
         console.error('Update error:', err);
       }
     });

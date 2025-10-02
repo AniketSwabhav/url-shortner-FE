@@ -70,7 +70,7 @@ export class GetAllUrlComponent implements OnInit {
 
   getProfile(): void {
     if (!this.userId) return;
-    
+
     this.userService.viewUser(this.userId).subscribe({
       next: (response) => {
         this.userProfile = response;
@@ -141,6 +141,8 @@ export class GetAllUrlComponent implements OnInit {
   }
 
   openEditModal(url: any): void {
+    this.modalErrorMessage = '';
+    this.showEditModal = true;
     this.editData = {
       id: url.id,
       longUrl: url.longUrl,
@@ -157,7 +159,41 @@ export class GetAllUrlComponent implements OnInit {
     this.isUpdating = false;
   }
 
+  modalErrorMessage: string = '';
+
+  // updateUrl(): void {
+  //   if (!this.editData.longUrl || !this.editData.shortUrl) {
+  //     this.showFlash('warning', 'Please fill all required fields');
+  //     return;
+  //   }
+
+  //   this.isUpdating = true;
+
+  //   const payload = {
+  //     longUrl: this.editData.longUrl,
+  //     shortUrl: this.editData.shortUrl
+  //   };
+
+  //   this.urlService.updateUrl(this.editData.id, payload).subscribe({
+  //     next: (response) => {
+  //       this.snackbarService.showSuccessSnackbar("URL updated successfully!")
+  //       this.closeEditModal();
+  //       this.loadUrls();
+  //     },
+  //     error: (err) => {
+  //       this.snackbarService.showErrorSnackbar(err)
+  //       this.closeEditModal();
+  //       this.isUpdating = false;
+  //     },
+  //     complete: () => {
+  //       this.isUpdating = false;
+  //     }
+  //   });
+  // }
+
   updateUrl(): void {
+    this.modalErrorMessage = '';
+
     if (!this.editData.longUrl || !this.editData.shortUrl) {
       this.showFlash('warning', 'Please fill all required fields');
       return;
@@ -171,21 +207,13 @@ export class GetAllUrlComponent implements OnInit {
     };
 
     this.urlService.updateUrl(this.editData.id, payload).subscribe({
-      next: (response) => {
-        this.showFlash('success', 'URL updated successfully!');
+      next: () => {
+        this.snackbarService.showSuccessSnackbar("URL updated successfully!");
         this.closeEditModal();
         this.loadUrls();
       },
       error: (err) => {
-        let errorMsg = 'Failed to update URL';
-        
-        if (err.status === 500) {
-          errorMsg = 'Server error: Please check that both URL fields are valid.';
-        } else if (err.error?.message) {
-          errorMsg = err.error.message;
-        }
-        
-        this.showFlash('danger', errorMsg);
+        this.modalErrorMessage = err?.error?.message || 'An error occurred while updating the URL.';
         this.isUpdating = false;
       },
       complete: () => {
@@ -194,13 +222,14 @@ export class GetAllUrlComponent implements OnInit {
     });
   }
 
+
   generateShortUrl(): void {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const length = 5;
-    const candidate = Array.from({ length }, () => 
+    const candidate = Array.from({ length }, () =>
       chars.charAt(Math.floor(Math.random() * chars.length))
     ).join('');
-    
+
     this.editData.shortUrl = candidate;
   }
 

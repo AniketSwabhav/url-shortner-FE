@@ -18,6 +18,7 @@ export class ReportsComponent implements OnInit {
 
   // Chart data variables
   newUsersData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
+  paidUsersData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };  // NEW
   activeUsersData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
   totalRevenueData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
   urlsLineChartData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
@@ -32,7 +33,7 @@ export class ReportsComponent implements OnInit {
     },
     plugins: {
       legend: {
-        display: false
+        display: true // show legend for comparison charts
       }
     }
   };
@@ -76,9 +77,11 @@ export class ReportsComponent implements OnInit {
     UrlsGenerated: number;
     UrlsRenewed: number;
     TotalRevenue: number;
+    PaidUser: number;
   }[]): void {
     const len = 12;
     const newUsers = Array(len).fill(0);
+    const paidUsers = Array(len).fill(0);
     const activeUsers = Array(len).fill(0);
     const urlsGenerated = Array(len).fill(0);
     const urlsRenewed = Array(len).fill(0);
@@ -88,6 +91,7 @@ export class ReportsComponent implements OnInit {
       const idx = o.Month - 1;
       if (idx >= 0 && idx < len) {
         newUsers[idx] = o.NewUsers;
+        paidUsers[idx] = o.PaidUser;
         activeUsers[idx] = o.ActiveUsers;
         urlsGenerated[idx] = o.UrlsGenerated;
         urlsRenewed[idx] = o.UrlsRenewed;
@@ -104,6 +108,26 @@ export class ReportsComponent implements OnInit {
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1
       }]
+    };
+
+    this.paidUsersData = {
+      labels: this.labels,
+      datasets: [
+        {
+          label: 'New Users',
+          data: newUsers,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Paid Users',
+          data: paidUsers,
+          backgroundColor: 'rgba(255, 206, 86, 0.5)',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          borderWidth: 1
+        }
+      ]
     };
 
     this.activeUsersData = {

@@ -50,7 +50,7 @@ export class UserdashboardComponent implements OnInit {
           firstName: response.firstName,
           lastName: response.lastName,
           phoneNo: response.phoneNo,
-          email: response.credential?.email
+          email: response.email
         };
       },
       error: (err) => {
@@ -65,7 +65,7 @@ export class UserdashboardComponent implements OnInit {
       firstName: this.userProfile.firstName,
       lastName: this.userProfile.lastName,
       phoneNo: this.userProfile.phoneNo,
-      email: this.userProfile.credential?.email
+      email: this.userProfile.email
     };
     this.showEditModal = true;
   }
@@ -84,17 +84,20 @@ export class UserdashboardComponent implements OnInit {
     const updateData = {
       firstName: this.editData.firstName,
       lastName: this.editData.lastName,
-      phoneNo: this.editData.phoneNo
+      phoneNo: this.editData.phoneNo,
+      email: this.editData.email
     };
 
     this.userService.updateUser(this.userId!, updateData).subscribe({
       next: () => {
-        this.showFlash('success', 'Profile updated successfully');
-        this.getProfile(); // Refresh profile data
+        // this.showFlash('success', 'Profile updated successfully');
+        this.snackbarService.showSuccessSnackbar("Profile updated successfully")
+        this.getProfile();
         this.closeEditModal();
       },
       error: (err) => {
-        this.showFlash('danger', 'Failed to update profile');
+         this.closeEditModal();
+        this.snackbarService.showErrorSnackbar(err?.error?.message || "failed to update profile");
         console.error('Update error:', err);
       }
     });

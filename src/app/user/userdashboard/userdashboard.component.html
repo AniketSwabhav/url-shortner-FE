@@ -1,17 +1,8 @@
 <div class="container py-5">
   <!-- Flash Message -->
-  <div
-    *ngIf="flash.message"
-    class="alert alert-{{ flash.type }} alert-dismissible fade show"
-    role="alert"
-  >
+  <div *ngIf="flash.message" class="alert alert-{{ flash.type }} alert-dismissible fade show" role="alert">
     {{ flash.message }}
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="flash.message = ''"
-    ></button>
+    <button type="button" class="btn-close" aria-label="Close" (click)="flash.message = ''"></button>
   </div>
 
   <div class="card shadow-lg rounded overflow-hidden">
@@ -40,11 +31,8 @@
           </div>
           <div class="col-md-6">
             <strong>Status:</strong>
-            <span
-              class="badge px-3 py-2 fs-6"
-              [class.bg-success]="userProfile.isActive"
-              [class.bg-danger]="!userProfile.isActive"
-            >
+            <span class="badge px-3 py-2 fs-6" [class.bg-success]="userProfile.isActive"
+              [class.bg-danger]="!userProfile.isActive">
               {{ userProfile.isActive ? 'Active' : 'Inactive' }}
             </span>
           </div>
@@ -92,12 +80,7 @@
 </div>
 
 <!-- Edit Profile Modal -->
-<div
-  *ngIf="showEditModal"
-  class="modal show d-block"
-  tabindex="-1"
-  style="background-color: rgba(0,0,0,0.5)"
->
+<div *ngIf="showEditModal" class="modal show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5)">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -108,50 +91,29 @@
         <form #editForm="ngForm">
           <div class="mb-3">
             <label class="form-label">First Name *</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="editData.firstName"
-              name="firstName"
-              required
-            />
+            <input type="text" class="form-control" [(ngModel)]="editData.firstName" name="firstName" required />
           </div>
           <div class="mb-3">
             <label class="form-label">Last Name *</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="editData.lastName"
-              name="lastName"
-              required
-            />
+            <input type="text" class="form-control" [(ngModel)]="editData.lastName" name="lastName" required />
           </div>
           <div class="mb-3">
             <label class="form-label">Phone Number</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="editData.phoneNo"
-              name="phoneNo"
-            />
+            <input type="text" class="form-control" [(ngModel)]="editData.phoneNo" name="phoneNo" />
           </div>
           <div class="mb-3">
             <label class="form-label">Email</label>
-            <input
-              type="email"
-              class="form-control-plaintext"
-              [value]="editData.email"
-              disabled
-            />
-            <small class="text-muted">Email cannot be changed</small>
+            <input type="text" class="form-control" [(ngModel)]="editData.email" name="email" disabled />
           </div>
+
         </form>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-secondary" (click)="closeEditModal()">
           Cancel
         </button>
-        <button class="btn btn-primary" (click)="updateProfile()">
+        <button class="btn btn-primary" [disabled]="!editForm.dirty" (click)="updateProfile()"
+          [attr.title]="!editForm.dirty ? 'Make a change to enable' : null">
           Save Changes
         </button>
       </div>

@@ -18,6 +18,7 @@ import { UserResearchComponent } from './Admin/user-research/user-research.compo
 import { UserStatsComponent } from './Admin/user-stats/user-stats.component';
 import { AddUrlComponent } from './user/add-url/add-url.component';
 import { RedirectUrlComponent } from './user/redirect-url/redirect-url.component';
+import { ReportsComponent } from './Admin/reports/reports.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'admin/revenue', component: RevenueComponent },
   { path: 'admin/userResearch', component: UserResearchComponent },
   { path: 'admin/user-stats', component: UserStatsComponent },
+  { path: 'admin/report', component: ReportsComponent },
   { path: 'admin/transactions/:userId', component: TransactionsComponent },
   { path: 'admin/urls/:userId', component: GetAllUrlComponent },
 

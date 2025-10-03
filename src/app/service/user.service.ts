@@ -8,10 +8,22 @@ import { Observable } from "rxjs";
 export class UserService {
     private userURL = 'http://localhost:8001/api/v1/url-shortner/users';
 
+    getReportStats(year: number) {
+        return this.http.get<{
+            Month: number;
+            NewUsers: number;
+            ActiveUsers: number;
+            UrlsGenerated: number;
+            UrlsRenewed: number;
+            TotalRevenue: number;
+        }[]>(`http://localhost:8001/api/v1/url-shortner/users/report?year=${year}`);
+    }
+
+
     constructor(private http: HttpClient) { }
 
     viewAllUsers(params?: HttpParams): Observable<any> {
-        return this.http.get<any[]>(`${this.userURL}/`,{ params: params, observe: "response" });
+        return this.http.get<any[]>(`${this.userURL}/`, { params: params, observe: "response" });
     }
 
     updateUser(userId: string, userData: any): Observable<any> {
@@ -19,7 +31,7 @@ export class UserService {
     }
 
     deleteUser(userId: string): Observable<any> {
-       return this.http.delete<any>(`${this.userURL}/${userId}`);
+        return this.http.delete<any>(`${this.userURL}/${userId}`);
     }
 
     viewUser(id: string) {
@@ -27,7 +39,7 @@ export class UserService {
     }
 
     getTransactions(userId: string, params?: HttpParams): Observable<any> {
-        return this.http.get<any[]>(`${this.userURL}/${userId}/transactions`,{params: params, observe: "response" });
+        return this.http.get<any[]>(`${this.userURL}/${userId}/transactions`, { params: params, observe: "response" });
     }
 
     fetchWalletAmount(userId: string): Observable<number> {
@@ -36,16 +48,16 @@ export class UserService {
 
 
     addAmount(userId: string, amount: number): Observable<any> {
-        return this.http.post(`${this.userURL}/${userId}/wallet/add`,{ wallet: amount },);
+        return this.http.post(`${this.userURL}/${userId}/wallet/add`, { wallet: amount },);
     }
 
     withdrawAmount(userId: string, amount: number): Observable<any> {
-        return this.http.post(`${this.userURL}/${userId}/wallet/withdraw`,{ wallet: amount },);
+        return this.http.post(`${this.userURL}/${userId}/wallet/withdraw`, { wallet: amount },);
     }
 
     renewUrls(userId: string, count: number): Observable<any> {
         const body = { urlCount: count };
-        return this.http.post<any>(`${this.userURL}/${userId}/renew-urls`,body);
+        return this.http.post<any>(`${this.userURL}/${userId}/renew-urls`, body);
     }
 
     getMonthwiseRecords(value: string, year: number, month: number): Observable<{ month: string, value: number }> {
@@ -60,6 +72,12 @@ export class UserService {
         );
     }
 
-    
+    getYearlyStats(value: string, year: number) {
+        return this.http.get<{ month: number, value: number }[]>(
+            `${this.userURL}/report?value=${value}&year=${year}`
+        );
+    }
+
+
 
 }

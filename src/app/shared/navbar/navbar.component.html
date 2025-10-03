@@ -35,13 +35,19 @@
              routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}">user-stats</a>
         </li>
+        <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
+          <a class="nav-link" 
+             routerLink="/admin/report" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">reports</a>
+        </li>
 
         <!-- User-specific links -->
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
           <a class="nav-link" 
              routerLink="/user/dashboard" 
              routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
+             [routerLinkActiveOptions]="{exact: true}">Profile</a>
         </li>
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
           <a class="nav-link" 

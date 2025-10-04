@@ -1,78 +1,124 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand">url-shortner</a>
+    <a class="navbar-brand">Url-Shortner</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <!-- Navbar items -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-
         <!-- Admin-specific links -->
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" routerLink="/admin/dashboard" 
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">Admin Dashboard</a>
+          <a
+            class="nav-link"
+            routerLink="/admin/dashboard"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Admin Dashboard</a
+          >
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" 
-             routerLink="/admin/subscription" 
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">Manage Subscription</a>
+          <a
+            class="nav-link"
+            routerLink="/admin/subscription"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Manage Subscription</a
+          >
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" 
-             routerLink="/admin/adminRegister" 
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">Add Admin</a>
+          <a
+            class="nav-link"
+            routerLink="/admin/adminRegister"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Add Admin</a
+          >
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" 
-             routerLink="/admin/user-stats" 
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">user-stats</a>
+          <a
+            class="nav-link"
+            routerLink="/admin/user-stats"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >User-stats</a
+          >
         </li>
         <li *ngIf="isAuthenticated && isAdmin" class="nav-item">
-          <a class="nav-link" 
-             routerLink="/admin/report" 
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">reports</a>
+          <a
+            class="nav-link"
+            routerLink="/admin/report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Reports</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+            routerLink="/user/dashboard"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">
+            <!-- Profile Image -->
+            <img src="https://tse4.mm.bing.net/th/id/OIP.audMX4ZGbvT2_GJTx2c4GgHaHw?pid=Api&P=0&h=180"
+              alt="Profile Icon"
+              width="27"
+              height="25"
+              class="rounded-circle"
+            />
+            <!-- Text -->
+            <span>Profile</span>
+          </a>
         </li>
 
         <!-- User-specific links -->
-        <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
+        <!-- <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
           <a class="nav-link" 
              routerLink="/user/dashboard" 
              routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}">Profile</a>
-        </li>
+        </li> -->
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" 
-             routerLink="/user/add-url" 
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">add-URL</a>
+          <a
+            class="nav-link"
+            routerLink="/user/add-url"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Add-URL</a
+          >
         </li>
         <!-- User-specific URL list link with userId -->
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" 
-             [routerLink]="['/user/urls']" 
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">My URLs</a>
+          <a
+            class="nav-link"
+            [routerLink]="['/user/urls']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >My-URLs</a
+          >
         </li>
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
-          <a class="nav-link" 
-             routerLink="/user/wallet" 
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">Wallet</a>
+          <a
+            class="nav-link"
+            routerLink="/user/wallet"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Wallet</a
+          >
         </li>
 
         <li *ngIf="isAuthenticated" class="nav-item">
           <a class="nav-link" (click)="logout()">Logout</a>
         </li>
-
       </ul>
     </div>
   </div>

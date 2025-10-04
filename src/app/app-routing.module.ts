@@ -36,7 +36,7 @@ const routes: Routes = [
 
   { path: 'admin/dashboard', component: AdmindashboardComponent, canActivate: [adminGuard] },
 
-  { path: 'user/dashboard', component: UserdashboardComponent, canActivate: [userGuard] },
+  { path: 'user/dashboard', component: UserdashboardComponent },
   { path: 'user/urls', component: GetAllUrlComponent, canActivate: [userGuard] },
 
   { path: 'user/urls/renew', component: RenewurlComponent, canActivate: [userGuard] },

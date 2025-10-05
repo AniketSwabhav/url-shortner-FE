@@ -64,11 +64,17 @@
         </li>
         <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
           <a class="nav-link" 
+             routerLink="/user/reort" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">user-Stats</a>
+        </li>
+        <li *ngIf="isAuthenticated && !isAdmin" class="nav-item">
+          <a class="nav-link" 
              routerLink="/user/wallet" 
              routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}">Wallet</a>
         </li>
-
+        
         <li *ngIf="isAuthenticated" class="nav-item">
           <a class="nav-link" (click)="logout()">Logout</a>
         </li>

@@ -80,5 +80,9 @@ export class UserService {
     }
 
 
-
+    getUserReportStats(userId: string, year: number) {
+        return this.http.get<{ Month: number; MonthlySpending: number; UrlsRenewed: number; VisitsRenewed: number; }[]>(
+            `${this.userURL}/${userId}/report?year=${year}`
+        );
+    }
 }

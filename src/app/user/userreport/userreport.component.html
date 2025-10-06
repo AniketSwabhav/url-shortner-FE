@@ -1,0 +1,26 @@
+<div class="report-container" style="max-width: 900px; margin: auto; padding: 1rem;">
+  <h2>User Report - {{ selectedYear }}</h2>
+
+  <label for="year">Select Year:</label>
+  <select id="year" [(ngModel)]="selectedYear" (change)="onYearChange()" style="margin-left: 0.5rem;">
+    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+  </select>
+
+  <div style="margin-top: 2rem;">
+    <h3>Monthly Spending</h3>
+    <canvas baseChart
+            [data]="spendingChartData"
+            [options]="barChartOptions"
+            [type]="'bar'">
+    </canvas>
+  </div>
+
+  <div style="margin-top: 2rem;">
+    <h3>Renewals (URLs and Visits)</h3>
+    <canvas baseChart
+            [data]="renewalsChartData"
+            [options]="lineChartOptions"
+            [type]="'line'">
+    </canvas>
+  </div>
+</div>

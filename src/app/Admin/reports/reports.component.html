@@ -1,5 +1,5 @@
 <div class="report-container" style="max-width: 900px; margin: auto; padding: 1rem;">
-  <h2>User & Revenue Reports</h2>
+  <h2>AdminView & Revenue Reports</h2>
 
   <label for="yearSelect">Select Year:</label>
   <select id="yearSelect" [(ngModel)]="selectedYear" (change)="loadReportData()" style="margin-left: 0.5rem;">
@@ -7,16 +7,41 @@
   </select>
 
   <div style="margin-top: 2rem;">
+    <h3>New Users vs Paid Users</h3>
+    <canvas baseChart
+            [data]="paidUsersData"
+            [options]="barChartOptions"
+            [type]="'bar'">
+    </canvas>
+
     <h3>URLs (Generated & Renewed)</h3>
-    <canvas baseChart [data]="urlsLineChartData" [options]="lineChartOptions" [type]="'line'"></canvas>
+    <canvas baseChart
+            [data]="urlsLineChartData"
+            [options]="lineChartOptions"
+            [type]="'line'">
+    </canvas>
+<!-- 
+    <h3>New Users</h3>
+    <canvas baseChart
+            [data]="newUsersData"
+            [options]="barChartOptions"
+            [type]="'bar'">
+    </canvas> -->
 
-    <!-- <h3>New Users</h3>
-    <canvas baseChart [data]="newUsersData" [options]="barChartOptions" [type]="'bar'"></canvas> -->
-
+    <!--
     <h3>Active Users</h3>
-    <canvas baseChart [data]="activeUsersData" [options]="barChartOptions" [type]="'bar'"></canvas>
+    <canvas baseChart
+            [data]="activeUsersData"
+            [options]="barChartOptions"
+            [type]="'bar'">
+    </canvas>
+    -->
 
     <h3>Total Revenue</h3>
-    <canvas baseChart [data]="totalRevenueData" [options]="barChartOptions" [type]="'bar'"></canvas>
+    <canvas baseChart
+            [data]="totalRevenueData"
+            [options]="barChartOptions"
+            [type]="'bar'">
+    </canvas>
   </div>
 </div>

@@ -19,6 +19,7 @@ import { UserStatsComponent } from './Admin/user-stats/user-stats.component';
 import { AddUrlComponent } from './user/add-url/add-url.component';
 import { RedirectUrlComponent } from './user/redirect-url/redirect-url.component';
 import { ReportsComponent } from './Admin/reports/reports.component';
+import { UserReportComponent } from './user/user-report/user-report.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -44,7 +45,7 @@ const routes: Routes = [
   { path: 'user/wallet', component: WalletComponent, canActivate: [userGuard] },
   { path: 'user/url/:urlId/renew-visits', component: RenewurlvisitComponent },
   { path: 'user/add-url', component: AddUrlComponent},
-
+  { path: 'user/report', component: UserReportComponent },
   { path: 'redirect/:shorturl', component: RedirectUrlComponent}
 
   

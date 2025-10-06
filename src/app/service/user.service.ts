@@ -16,6 +16,7 @@ export class UserService {
             UrlsGenerated: number;
             UrlsRenewed: number;
             TotalRevenue: number;
+            PaidUser: number;
         }[]>(`http://localhost:8001/api/v1/url-shortner/users/report?year=${year}`);
     }
 

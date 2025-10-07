@@ -45,7 +45,7 @@ const routes: Routes = [
   { path: 'user/wallet', component: WalletComponent, canActivate: [userGuard] },
   { path: 'user/url/:urlId/renew-visits', component: RenewurlvisitComponent },
   { path: 'user/add-url', component: AddUrlComponent},
-  { path: 'user/reort', component: UserreportComponent},
+  { path: 'user/report', component: UserreportComponent},
 
   { path: 'redirect/:shorturl', component: RedirectUrlComponent}
 

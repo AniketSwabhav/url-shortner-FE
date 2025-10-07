@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterService } from 'src/app/service/register.service';
 import { Router } from '@angular/router';
+import { SnackbarService } from 'src/app/service/snackbar.service';
 
 @Component({
   selector: 'app-register-admin',
@@ -19,7 +20,8 @@ export class RegisterAdminComponent {
   constructor(
     private fb: FormBuilder,
     private registerService: RegisterService,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackbarService
   ) { }
 
 
@@ -70,8 +72,8 @@ export class RegisterAdminComponent {
       },
       error: (error) => {
         console.error('Registration error:', error);
-        this.errorMessage = error.error?.message || 'Failed to egister Admin';
-
+        // this.errorMessage = error.error?.message || 'Failed to egister Admin';
+        this.snackBarService.showErrorMessageSnackbar(error.error?.message || 'Failed to register Admin')
         setTimeout(() => {
           this.successMessage = '';
         }, 2000);

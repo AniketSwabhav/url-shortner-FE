@@ -53,7 +53,7 @@ export class RedirectUrlComponent implements OnInit{
         }
       }, error: (err) => {
         console.error(err);
-        // this.snackbarService.showErrorSnackbar(err)
+        this.snackbarService.showErrorSnackbar(err)
         this.invalidAlias = true
       }
     })

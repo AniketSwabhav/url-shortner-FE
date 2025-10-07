@@ -4,6 +4,8 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
+import { SnackbarComponent } from 'src/app/shared/snackbar/snackbar.component';
+import { SnackbarService } from 'src/app/service/snackbar.service';
 
 @Component({
   selector: 'app-userreport',
@@ -58,7 +60,10 @@ export class UserreportComponent implements OnInit {
     }
   };
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private snackbarService: SnackbarService
+  ) { }
 
   ngOnInit(): void {
     this.userId = localStorage.getItem('userId');
@@ -83,8 +88,11 @@ export class UserreportComponent implements OnInit {
   loadChartData(): void {
     this.userService.getUserReportStats(this.userId!, this.selectedYear).subscribe({
       next: (data) => this.prepareChartData(data),
-      error: (err) => console.error('Error fetching report stats', err)
-    });
+      error: (err) => {
+        this.snackbarService.showErrorSnackbar(err)
+      }
+    },
+    );
   }
 
   prepareChartData(data: {

@@ -49,5 +49,4 @@ export class AdmindashboardService {
     return this.http.delete<void>(`${this.baseUrl}/${userId}`, this.getAuthHeaders());
   }
 
-
 }

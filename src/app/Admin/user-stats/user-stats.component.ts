@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/service/user.service';
 import { FormsModule } from '@angular/forms';
+import { SnackbarService } from 'src/app/service/snackbar.service';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-user-stats',
@@ -41,7 +43,10 @@ export class UserStatsComponent implements OnInit {
 
   result: { month: string, value: number } | null = null;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private snackBarService : SnackbarService
+  ) {}
 
   ngOnInit(): void {
     // Populate last 10 years for dropdown
@@ -56,6 +61,7 @@ export class UserStatsComponent implements OnInit {
           this.result = data;
         },
         error: (err) => {
+          this.snackBarService.showErrorMessageSnackbar(err.error.message)
           console.error('API Error:', err);
           this.result = null;
         }

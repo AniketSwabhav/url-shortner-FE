@@ -47,7 +47,9 @@ export class RevenueComponent implements OnInit {
       next: (res) => {
         this.revenueData = res;
       },
-      error: (err) => console.error('Error fetching revenue', err)
+      error: (err) => {
+        
+        console.error('Error fetching revenue', err)}
     });
   }
 

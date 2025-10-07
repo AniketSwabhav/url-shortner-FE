@@ -38,14 +38,14 @@
             </span>
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="!userProfile?.isAdmin">
             <strong>Wallet Balance:</strong>
-            <div class="fs-5 text-success">₹{{ userProfile.wallet || 0 }}</div>
+            <div class="fs-5 text-success" *ngIf="!userProfile?.isAdmin">₹{{ userProfile.wallet || 0 }}</div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="!userProfile?.isAdmin">
             <strong>URL Limit Remaining:</strong>
             <div class="fs-5">
-              <span class="badge bg-info text-dark px-3 py-2">
+              <span class="badge bg-info text-dark px-3 py-2" *ngIf="!userProfile?.isAdmin">
                 {{ userProfile.urlCount || 0 }}
               </span>
             </div>
@@ -65,6 +65,13 @@
               <i class="bi bi-wallet2"></i> Wallet
             </button>
           </div>
+
+
+
+           <div class="row g-1"><button class="btn btn-sm btn-danger me-2" *ngIf="userProfile?.isAdmin" (click)="deleteUser(userId!)">
+              <i class="fas fa-trash-alt"></i>
+            </button></div>
+           
         </div>
       </div>
 
@@ -84,40 +91,57 @@
 <div *ngIf="showEditModal" class="modal show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5)">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Edit Profile</h5>
-        <button type="button" class="btn-close" (click)="closeEditModal()"></button>
-      </div>
-      <div class="modal-body">
-        <form #editForm="ngForm">
+      <form [formGroup]="editForm" (ngSubmit)="updateProfile()">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Profile</h5>
+          <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+        </div>
+        <div class="modal-body">
+          <!-- First Name -->
           <div class="mb-3">
-            <label class="form-label">First Name *</label>
-            <input type="text" class="form-control" [(ngModel)]="editData.firstName" name="firstName" required />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Last Name *</label>
-            <input type="text" class="form-control" [(ngModel)]="editData.lastName" name="lastName" required />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Phone Number</label>
-            <input type="text" class="form-control" [(ngModel)]="editData.phoneNo" name="phoneNo" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="text" class="form-control" [(ngModel)]="editData.email" name="email" disabled />
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" id="firstName" formControlName="firstName" class="form-control" />
+            <small class="text-danger" *ngIf="f['firstName'].touched && f['firstName'].invalid">
+              <span *ngIf="f['firstName'].errors?.['required']">First name is required.</span>
+              <span *ngIf="f['firstName'].errors?.['minlength']">Minimum 2 characters required.</span>
+              <span *ngIf="f['firstName'].errors?.['maxlength']">Maximum 50 characters allowed.</span>
+            </small>
           </div>
 
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline-secondary" (click)="closeEditModal()">
-          Cancel
-        </button>
-        <button class="btn btn-primary" [disabled]="!editForm.dirty" (click)="updateProfile()"
-          [attr.title]="!editForm.dirty ? 'Make a change to enable' : null">
-          Save Changes
-        </button>
-      </div>
+          <!-- Last Name -->
+          <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" id="lastName" formControlName="lastName" class="form-control" />
+            <small class="text-danger" *ngIf="f['lastName'].touched && f['lastName'].invalid">
+              <span *ngIf="f['lastName'].errors?.['required']">Last name is required.</span>
+              <span *ngIf="f['lastName'].errors?.['minlength']">Minimum 2 characters required.</span>
+              <span *ngIf="f['lastName'].errors?.['maxlength']">Maximum 50 characters allowed.</span>
+            </small>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="mb-3">
+            <label for="phoneNo" class="form-label">Phone Number</label>
+            <input type="text" id="phoneNo" formControlName="phoneNo" class="form-control" />
+            <small class="text-danger" *ngIf="f['phoneNo'].touched && f['phoneNo'].invalid">
+              <span *ngIf="f['phoneNo'].errors?.['required']">Phone number is required.</span>
+              <span *ngIf="f['phoneNo'].errors?.['pattern']">Phone number must be exactly 10 digits.</span>
+            </small>
+          </div>
+
+          <!-- Email (Read-only) -->
+          <!-- <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" id="email" formControlName="email" class="form-control" disabled />
+          </div> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
+            Save Changes
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

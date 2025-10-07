@@ -44,7 +44,7 @@ export class RenewurlComponent implements OnInit {
   }
 
   loadUserWallet(): void {
-    this.userService.fetchWalletAmount(this.userId!).subscribe({
+    this.userService.getWalletAmount(this.userId!).subscribe({
       next: (amount: number) => {
         this.walletBalance = amount;
       },

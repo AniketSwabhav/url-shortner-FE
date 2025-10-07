@@ -76,7 +76,8 @@ export class GetAllUrlComponent implements OnInit {
         this.userProfile = response;
       },
       error: (err) => {
-        this.showFlash('danger', 'Failed to load profile');
+        // this.showFlash('danger', 'Failed to load profile');
+        console.log('Failed to load profile')
       }
     });
   }
@@ -109,7 +110,7 @@ export class GetAllUrlComponent implements OnInit {
         this.totalUrlRecords = totalCountHeader ? +totalCountHeader : 0;
       },
       error: (err) => {
-        this.showFlash('danger', 'Failed to load URLs');
+        this.snackbarService.showErrorSnackbar(err)
       }
     });
   }

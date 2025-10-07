@@ -53,10 +53,9 @@
         <label for="email" class="form-label fw-semibold">Email</label>
         <input type="email" id="email" formControlName="email" class="form-control form-control-lg"
           placeholder="Enter email address" />
-        <small class="text-danger" *ngIf="f['password'].touched && f['password'].errors">
-          <ng-container *ngIf="f['password'].errors['required']">Password is required.</ng-container>
-          <ng-container *ngIf="f['password'].errors['minlength']">Minimum 8 characters required.</ng-container>
-          <ng-container *ngIf="f['password'].errors['maxlength']">Maximum 50 characters allowed.</ng-container>
+        <small class="text-danger" *ngIf="f['email'].touched && f['email'].errors">
+          <ng-container *ngIf="f['email'].errors['required']">Email is required.</ng-container>
+          <ng-container *ngIf="f['email'].errors['maxlength']">Maximum 30 characters allowed.</ng-container>
         </small>
 
       </div>

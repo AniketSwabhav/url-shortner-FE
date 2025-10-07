@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts';
+import { SnackbarService } from 'src/app/service/snackbar.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -52,7 +53,10 @@ export class ReportsComponent implements OnInit {
     }
   };
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private snackBarService: SnackbarService
+  ) {}
 
   ngOnInit(): void {
     this.generateLabels();
@@ -66,7 +70,10 @@ export class ReportsComponent implements OnInit {
   loadReportData(): void {
     this.userService.getReportStats(this.selectedYear).subscribe({
       next: (arr) => this.updateCharts(arr),
-      error: (err) => console.error('Error fetching report stats', err)
+      error: (err) => {
+        this.snackBarService.showErrorMessageSnackbar(err.error.message)
+        console.error('Error fetching report stats', err)
+      }
     });
   }
 

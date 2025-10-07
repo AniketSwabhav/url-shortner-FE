@@ -43,7 +43,7 @@ export class UserService {
         return this.http.get<any[]>(`${this.userURL}/${userId}/transactions`, { params: params, observe: "response" });
     }
 
-    fetchWalletAmount(userId: string): Observable<number> {
+    getWalletAmount(userId: string): Observable<number> {
         return this.http.get<number>(`${this.userURL}/${userId}/amount`,);
     }
 

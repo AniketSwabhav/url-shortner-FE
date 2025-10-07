@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 export class WalletComponent implements OnInit {
   userId: string | null = '';
   userProfile: any;
+  walletAmount: number = 0;
+
 
   constructor(
     private router: Router,
@@ -26,22 +28,38 @@ export class WalletComponent implements OnInit {
   ngOnInit(): void {
     this.userId = localStorage.getItem('userId');
     if (this.userId) {
-      this.getProfile();
+      this.getWalletAmount();
     } else {
-      this.snackbarService.showErrorSnackbar('User ID not found in token.');
+      console.log("userId not present in local storage")
     }
   }
 
-  getProfile(): void {
-    this.userService.viewUser(this.userId!).subscribe({
-      next: (response) => {
-        this.userProfile = response;
-      },
-      error: (err) => {
-        this.snackbarService.showErrorSnackbar(err);
-      }
-    });
-  }
+  // getProfile(): void {
+  //   this.userService.fetchWalletAmount(this.userId!).subscribe({
+  //     next: (response) => {
+  //       this.userProfile = response;
+  //     },
+  //     error: (err) => {
+  //       this.snackbarService.showErrorSnackbar(err);
+  //     }
+  //   });
+  // }
+
+  getWalletAmount(): void {
+  this.userService.getWalletAmount(this.userId!).subscribe({
+    next: (res) => {
+      // Backend returns plain number like 300
+      this.walletAmount = res;
+      console.log('Wallet amount:', res);
+    },
+    error: (err) => {
+      console.error('Error fetching wallet amount:', err);
+      this.walletAmount = 0; // fallback
+      this.snackbarService.showErrorSnackbar(err);
+    }
+  });
+}
+
 
   onTransactionClick(userID: string) {
     this.router.navigate(['user','transactions']);
@@ -63,7 +81,7 @@ export class WalletComponent implements OnInit {
     this.userService.addAmount(this.userId!, this.amount).subscribe({
       next: () => {
         this.snackbarService.showSuccessSnackbar("Amount added successfully!");
-        this.getProfile();
+        this.getWalletAmount();
         this.amount = 0;
         this.isProcessing = false;
       },
@@ -84,7 +102,7 @@ export class WalletComponent implements OnInit {
     this.userService.withdrawAmount(this.userId!, this.amount).subscribe({
       next: () => {
         this.snackbarService.showSuccessSnackbar("Amount withdrawn successfully!");
-        this.getProfile();
+        this.getWalletAmount();
         this.amount = 0;
         this.isProcessing = false;
       },

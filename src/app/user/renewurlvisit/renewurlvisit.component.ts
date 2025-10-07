@@ -50,9 +50,11 @@ export class RenewurlvisitComponent implements OnInit {
   }
 
   loadWallet(): void {
-    this.userService.fetchWalletAmount(this.userId!).subscribe({
+    this.userService.getWalletAmount(this.userId!).subscribe({
       next: (amount: number) => this.walletBalance = amount,
-      error: () => this.snackbarService.showErrorSnackbar('Failed to fetch wallet balance')
+      error: (err) => {
+        this.snackbarService.showErrorSnackbar(err)
+      }
     });
   }
 

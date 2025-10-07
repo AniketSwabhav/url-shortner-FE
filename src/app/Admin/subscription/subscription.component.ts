@@ -24,11 +24,11 @@ export class SubscriptionComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscriptionForm = this.fb.group({
-  freeShortUrls: ['', [Validators.required, Validators.min(1), Validators.max(1000000)]],
-  freeVisits: ['', [Validators.required, Validators.min(1), Validators.max(1000000)]],
-  newUrlPrice: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
-  extraVisitPrice: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
-});
+      freeShortUrls: ['', [Validators.required, Validators.min(1), Validators.max(1000000)]],
+      freeVisits: ['', [Validators.required, Validators.min(1), Validators.max(1000000)]],
+      newUrlPrice: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
+      extraVisitPrice: ['', [Validators.required, Validators.min(1), Validators.max(1000)]],
+    });
 
 
     this.loadSubscription();
@@ -46,7 +46,15 @@ export class SubscriptionComponent implements OnInit {
       error: (err) => {
         console.error('Error loading subscription', err);
         this.subscription = null;
-        // this.snackbarService.showErrorSnackbar(err.error?.message || 'Failed to load subscription');
+          let errorMessage = 'Failed to update subscription';
+
+        if (typeof err.error === 'string') {
+          errorMessage = err.error; // raw string from backend
+        } else if (err.error?.message) {
+          errorMessage = err.error.message; // structured JSON error
+        }
+
+        this.snackbarService.showErrorMessageSnackbar(errorMessage);
       }
     });
   }
@@ -66,7 +74,15 @@ export class SubscriptionComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error setting subscription', err);
-        alert(err.error?.message || 'Failed to set subscription');
+         let errorMessage = 'Failed to update subscription';
+
+        if (typeof err.error === 'string') {
+          errorMessage = err.error; // raw string from backend
+        } else if (err.error?.message) {
+          errorMessage = err.error.message; // structured JSON error
+        }
+
+        this.snackbarService.showErrorMessageSnackbar(errorMessage);
       }
     });
   }
@@ -86,10 +102,21 @@ export class SubscriptionComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error updating subscription', err);
-        alert(err.error?.message || 'Failed to update subscription');
+
+        // Determine the actual error message from raw string or object
+        let errorMessage = 'Failed to update subscription';
+
+        if (typeof err.error === 'string') {
+          errorMessage = err.error; // raw string from backend
+        } else if (err.error?.message) {
+          errorMessage = err.error.message; // structured JSON error
+        }
+
+        this.snackbarService.showErrorMessageSnackbar(errorMessage);
       }
     });
   }
+
 
   preventDecimal(event: KeyboardEvent): void {
     if (event.key === '.' || event.key === ',' || event.key === 'e') {

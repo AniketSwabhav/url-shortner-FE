@@ -18,7 +18,6 @@ export class WalletComponent implements OnInit {
   userProfile: any;
   walletAmount: number = 0;
 
-
   constructor(
     private router: Router,
     private userService: UserService,
@@ -29,21 +28,22 @@ export class WalletComponent implements OnInit {
     this.userId = localStorage.getItem('userId');
     if (this.userId) {
       this.getWalletAmount();
+      this.getProfile();
     } else {
       console.log("userId not present in local storage")
     }
   }
 
-  // getProfile(): void {
-  //   this.userService.fetchWalletAmount(this.userId!).subscribe({
-  //     next: (response) => {
-  //       this.userProfile = response;
-  //     },
-  //     error: (err) => {
-  //       this.snackbarService.showErrorSnackbar(err);
-  //     }
-  //   });
-  // }
+  getProfile(): void {
+    this.userService.getWalletAmount(this.userId!).subscribe({
+      next: (response) => {
+        this.userProfile = response;
+      },
+      error: (err) => {
+        this.snackbarService.showErrorSnackbar(err);
+      }
+    });
+  }
 
   getWalletAmount(): void {
   this.userService.getWalletAmount(this.userId!).subscribe({
